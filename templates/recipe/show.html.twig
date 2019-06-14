@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block title "Ma recette de " ~ recipe.name %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>{{ recipe.name }}</h1>
+        <div class="row">
+            <div class="col-md-4">
+            
+            </div>
+            <div class="col-md-8">
+                <h1>{{ recipe.name }}</h1>
+                <h2>Type de plat : {{recipe.type}} </h2>
+                <h3>Catégorie : {{recipe.category}} </h3>
+                <p>Niveau de difficulté : {{recipe.difficultyType}} </p>
+                <p>Coût : {{recipe.costType}} </p>
+                <div class="row">
+                    <div class="col-4">Temps de préparation : {{recipe.preparationTime}} min</div>
+                    <div class="col-4">Temps de cuisson : {{recipe.cookingTime}} min</div>
+                    <div class="col-4">Temps total : {{recipe.totalTime}} min</div>
+                </div>
+                <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

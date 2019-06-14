@@ -9,4 +9,23 @@
             <p>Plus de temps perdu à faire les listes de recettes pour la semaine !</p>
         </div>
     </div>
+
+    <div class="container">
+        <h2>Les dernières recettes publiées</h2>
+        <div class="row flex">
+            {% for recipe in recipes %}
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ path('recipe.show', {id: recipe.id, slug: recipe.slug}) }}">{{ recipe.name }}</a>
+                            </h5>
+                            <p class="card-text">{{ recipe.type }}</p>
+                            <p class="card-text">{{ recipe.category }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
