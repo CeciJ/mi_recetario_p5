@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Recipe;
-use App\Repository\RecipeRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 

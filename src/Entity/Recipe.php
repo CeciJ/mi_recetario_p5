@@ -37,7 +37,7 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author;
+    private $author = "Cécile";
 
     /**
      * @ORM\Column(type="string", length=255)

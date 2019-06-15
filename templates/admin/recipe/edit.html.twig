@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Éditer la recette' %}
+
+{% block body %}   
+    <div class="container mt-4">
+        <h1>Éditer la recette</h1>
+        {{ include("admin/recipe/_form.html.twig", {form: form, button: 'Éditer'}) }}
+    </div>
+
+{% endblock %}
