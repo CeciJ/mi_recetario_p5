@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\RecipeSearch;
+use App\Form\RecipeSearchType;
 use App\Repository\RecipeRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -30,14 +32,19 @@ class RecipeController extends AbstractController
      */
     public function index(PaginatorInterface $paginator, Request $request): Response
     {
+        $search = new RecipeSearch();
+        $form = $this->createForm(RecipeSearchType::class, $search);
+        $form->handleRequest($request);
+
         $recipes =  $paginator->paginate(
-            $this->repository->findAllQuery(),
+            $this->repository->findAllQuery($search),
             $request->query->getInt('page', 1),
             12 
         );
         return $this->render("recipe/index.html.twig", [
             'current_menu' => 'recipes',
-            'recipes' => $recipes
+            'recipes' => $recipes,
+            'form' => $form->createView()
         ]);
     }
 

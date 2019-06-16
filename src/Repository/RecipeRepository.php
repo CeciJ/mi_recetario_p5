@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Recipe;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\RecipeSearch;
 
 /**
  * @method Recipe|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,10 +23,25 @@ class RecipeRepository extends ServiceEntityRepository
     /**
      * @return Query
      */
-    public function findAllQuery()
+    public function findAllQuery(RecipeSearch $search)
     {
-        return $this->createQueryBuilder('r')
-                    ->getQuery();
+        $query = $this->createQueryBuilder('r');
+
+        if($search->getMaxTotalTime())
+        {
+            $query = $query
+                ->andWhere('r.totalTime <= :maxTotalTime')
+                ->setParameter('maxTotalTime', $search->getMaxTotalTime());
+        }
+
+        if($search->getNumberPersons())
+        {
+            $query = $query
+                ->andWhere('r.numberPersons = :numberPersons')
+                ->setParameter('numberPersons', $search->getNumberPersons());
+        }
+
+        return $query->getQuery();
     }
 
     /**
