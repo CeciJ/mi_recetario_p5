@@ -6,5 +6,17 @@
     <div class="container mt-4">
         <h1>Voir toutes mes recettes</h1>
         <p>Toutes réunies en une seule page</p>
+
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-md-4">
+                    {% include "recipe/_recipe.html.twig" %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {{ knp_pagination_render(recipes) }}
+        </div>
     </div>
 {% endblock %}

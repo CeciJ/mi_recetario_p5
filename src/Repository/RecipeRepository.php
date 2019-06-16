@@ -20,6 +20,15 @@ class RecipeRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Query
+     */
+    public function findAllQuery()
+    {
+        return $this->createQueryBuilder('r')
+                    ->getQuery();
+    }
+
+    /**
      * @return Recipe[] Returns an array of Recipe objects
      */
     public function findLatest()

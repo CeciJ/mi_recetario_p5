@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Recipe;
+use App\Repository\RecipeRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Recipe;
-use App\Repository\RecipeRepository;
-use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Request;
 
 class RecipeController extends AbstractController 
 {
@@ -26,10 +28,16 @@ class RecipeController extends AbstractController
      * @Route("/recettes", name="recipe.index") 
      * @return Response
      */
-    public function index(): Response
+    public function index(PaginatorInterface $paginator, Request $request): Response
     {
+        $recipes =  $paginator->paginate(
+            $this->repository->findAllQuery(),
+            $request->query->getInt('page', 1),
+            12 
+        );
         return $this->render("recipe/index.html.twig", [
-            'current_menu' => 'recipes'
+            'current_menu' => 'recipes',
+            'recipes' => $recipes
         ]);
     }
 
