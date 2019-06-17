@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Entity\DishType;
 
 class RecipeType extends AbstractType
 {
@@ -26,9 +27,8 @@ class RecipeType extends AbstractType
             ->add('numberPersons')
             ->add('preparationTime')
             ->add('totalTime')
-            ->add('type')
-            ->add('options', EntityType::class, [
-                'class' => Option::class,
+            ->add('DishTypes', EntityType::class, [
+                'class' => DishType::class,
                 'choice_label' => 'name',
                 'multiple' => true
             ])

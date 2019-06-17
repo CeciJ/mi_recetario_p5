@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class RecipeSearch 
 {
@@ -37,5 +38,26 @@ class RecipeSearch
     {
         $this->numberPersons = $numberPersons;
         return $this;
-	}
+    }
+    
+    /**
+     * @var ArrayCollection
+     */
+    private $DishTypes;
+
+    public function __construct()
+    {
+      $this->DishTypes = new ArrayCollection();
+    }
+
+    public function getDishTypes(): ArrayCollection
+    {
+		return $this->DishTypes;
+    }
+
+    public function setDishTypes(ArrayCollection $DishTypes): RecipeSearch
+    {
+        $this->DishTypes = $DishTypes;
+        return $this;
+	  }
 }

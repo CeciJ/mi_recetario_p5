@@ -4,12 +4,21 @@
 
 {% block body %}
     <div class="container mt-4">
+
+        <div style="margin-bottom:15px;">
+            <a href="{{ path('admin.dish_type.index') }}" class="btn btn-secondary">Gérer les types de plats</a>
+        </div>
+
         <h1>Gérer les recettes</h1>
 
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">{{ message }}</div>
         {% endfor %}
 
+        <div class="text-right">
+            <a href="{{ path('admin.recipe.new') }}" class="btn btn-primary">Créer une nouvelle recette</a>
+        </div>
+        
         <table class="table table-stripped">
             <thead>
                 <tr>
@@ -34,9 +43,6 @@
             </tbody>
         </table>
 
-        <div class="text-right">
-            <a href="{{ path('admin.recipe.new') }}" class="btn btn-primary">Créer une nouvelle recette</a>
-        </div>
     </div>
     
 {% endblock %}

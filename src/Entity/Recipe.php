@@ -95,19 +95,20 @@ class Recipe
     private $totalTime;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Option", inversedBy="recipes")
      */
     private $options;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\DishType", inversedBy="recipes")
+     */
+    private $DishTypes;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->options = new ArrayCollection();
+        $this->DishTypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -262,18 +263,6 @@ class Recipe
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Option[]
      */
@@ -297,6 +286,32 @@ class Recipe
         if ($this->options->contains($option)) {
             $this->options->removeElement($option);
             $option->removeRecipe($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DishType[]
+     */
+    public function getDishTypes(): Collection
+    {
+        return $this->DishTypes;
+    }
+
+    public function addDishType(DishType $dishType): self
+    {
+        if (!$this->DishTypes->contains($dishType)) {
+            $this->DishTypes[] = $dishType;
+        }
+
+        return $this;
+    }
+
+    public function removeDishType(DishType $dishType): self
+    {
+        if ($this->DishTypes->contains($dishType)) {
+            $this->DishTypes->removeElement($dishType);
         }
 
         return $this;

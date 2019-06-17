@@ -41,6 +41,19 @@ class RecipeRepository extends ServiceEntityRepository
                 ->setParameter('numberPersons', $search->getNumberPersons());
         }
 
+        if($search->getDishTypes()->count() > 0)
+        {
+            $k = 0;
+            foreach($search->getDishTypes() as $k => $DishType)
+            {
+                $k++;
+                $query = $query
+                ->andWhere(":DishType$k MEMBER OF r.DishTypes")
+                ->setParameter("DishType$k", $DishType);
+            }
+            
+        }
+
         return $query->getQuery();
     }
 
