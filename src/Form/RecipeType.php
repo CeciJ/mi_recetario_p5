@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Option;
 use App\Entity\Recipe;
+use App\Entity\DishType;
+use App\Entity\FoodType;
+use App\Form\OptionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use App\Entity\DishType;
 
 class RecipeType extends AbstractType
 {
@@ -17,18 +19,28 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('category')
             ->add('cookingTime')
             ->add('cost', ChoiceType::class, [
-                "choices" => $this->getChoices()
+                "choices" => $this->getCostChoices()
             ])
-            ->add('difficulty')
-            ->add('foodType')
+            ->add('difficulty', ChoiceType::class, [
+                "choices" => $this->getDifficultyChoices()
+            ])
             ->add('numberPersons')
             ->add('preparationTime')
             ->add('totalTime')
             ->add('DishTypes', EntityType::class, [
                 'class' => DishType::class,
+                'choice_label' => 'name',
+                'multiple' => true
+            ])
+            ->add('foodTypes', EntityType::class, [
+                'class' => FoodType::class,
+                'choice_label' => 'name',
+                'multiple' => true
+            ])
+            ->add('options', EntityType::class, [
+                'class' => Option::class,
                 'choice_label' => 'name',
                 'multiple' => true
             ])
@@ -43,14 +55,25 @@ class RecipeType extends AbstractType
         ]);
     }
 
-    private function getChoices()
+    private function getCostChoices()
     {
         $choices = Recipe::COST;
+        return $this->getChoices($choices);
+    }
+
+    private function getDifficultyChoices()
+    {
+        $choices = Recipe::DIFFICULTY;
+        return $this->getChoices($choices);
+    }
+
+    private function getChoices($var)
+    {
         $output = [];
-        foreach($choices as $k => $v)
+        foreach($var as $k => $v)
         {
             $output[$v] = $k;
         }
-        return $output; 
+        return $output;
     }
 }

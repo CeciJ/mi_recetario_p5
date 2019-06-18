@@ -49,11 +49,6 @@ class Recipe
     private $author = "Cécile";
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $category;
-
-    /**
      * @ORM\Column(type="smallint")
      */
     private $cookingTime;
@@ -72,11 +67,6 @@ class Recipe
      * @ORM\Column(type="smallint")
      */
     private $difficulty;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $foodType;
 
     /**
      * @ORM\Column(type="smallint")
@@ -104,11 +94,17 @@ class Recipe
      */
     private $DishTypes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\FoodType", inversedBy="recipes")
+     */
+    private $foodTypes;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->options = new ArrayCollection();
         $this->DishTypes = new ArrayCollection();
+        $this->foodTypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,18 +137,6 @@ class Recipe
     public function setAuthor(string $author): self
     {
         $this->author = $author;
-
-        return $this;
-    }
-
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(string $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }
@@ -211,18 +195,6 @@ class Recipe
     public function setDifficulty(int $difficulty): self
     {
         $this->difficulty = $difficulty;
-
-        return $this;
-    }
-
-    public function getFoodType(): ?string
-    {
-        return $this->foodType;
-    }
-
-    public function setFoodType(string $foodType): self
-    {
-        $this->foodType = $foodType;
 
         return $this;
     }
@@ -316,4 +288,31 @@ class Recipe
 
         return $this;
     }
+
+    /**
+     * @return Collection|FoodType[]
+     */
+    public function getFoodTypes(): Collection
+    {
+        return $this->foodTypes;
+    }
+
+    public function addFoodType(FoodType $foodType): self
+    {
+        if (!$this->foodTypes->contains($foodType)) {
+            $this->foodTypes[] = $foodType;
+        }
+
+        return $this;
+    }
+
+    public function removeFoodType(FoodType $foodType): self
+    {
+        if ($this->foodTypes->contains($foodType)) {
+            $this->foodTypes->removeElement($foodType);
+        }
+
+        return $this;
+    }
+
 }

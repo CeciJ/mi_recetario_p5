@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title 'Gérer les options' %}
+{% block title 'Gérer les types de cuisine' %}
 
 {% block body %}
     <div class="container mt-4">
@@ -9,7 +9,7 @@
             <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary">Retour à la gestion des recettes</a>
         </div>
 
-        <h1>Gérer les options</h1>
+        <h1>Gérer les types de cuisine</h1>
 
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">{{ message }}</div>
@@ -23,14 +23,14 @@
                 </tr>
             </thead>
             <tbody>
-                {% for option in options %}
+                {% for food_type in food_types %}
                 <tr>
-                    <td>{{ option.name }}</td>
+                    <td>{{ food_type.name }}</td>
                     <td>
-                        <a href="{{ path('admin.option.edit', {id: option.id}) }}" class="btn btn-secondary">Éditer</a>    
-                        <form method="post" action="{{ path('admin.option.delete', {id: option.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                        <a href="{{ path('admin.food_type.edit', {id: food_type.id}) }}" class="btn btn-secondary">Éditer</a>    
+                        <form method="post" action="{{ path('admin.food_type.delete', {id: food_type.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ food_type.id) }}">
                             <button class="btn btn-danger">Supprimer</button>
                         </form>
                     </td>
@@ -40,7 +40,7 @@
         </table>
 
         <div class="text-right">
-            <a href="{{ path('admin.option.new') }}" class="btn btn-primary">Créer une nouvelle option</a>
+            <a href="{{ path('admin.food_type.new') }}" class="btn btn-primary">Créer un nouveau type de cuisine</a>
         </div>
     </div>
     
