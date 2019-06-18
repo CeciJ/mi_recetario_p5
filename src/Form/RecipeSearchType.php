@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Option;
 use App\Entity\DishType;
+use App\Entity\FoodType;
 use App\Entity\RecipeSearch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,6 +36,20 @@ class RecipeSearchType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'class' => DishType::class,
+                'choice_label' => 'name',
+                'multiple' => true
+            ])
+            ->add('foodTypes', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'class' => FoodType::class,
+                'choice_label' => 'name',
+                'multiple' => true
+            ])
+            ->add('options', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'class' => Option::class,
                 'choice_label' => 'name',
                 'multiple' => true
             ])

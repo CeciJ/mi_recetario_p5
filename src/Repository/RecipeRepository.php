@@ -54,6 +54,32 @@ class RecipeRepository extends ServiceEntityRepository
             
         }
 
+        if($search->getFoodTypes()->count() > 0)
+        {
+            $k = 0;
+            foreach($search->getFoodTypes() as $k => $foodType)
+            {
+                $k++;
+                $query = $query
+                ->andWhere(":foodType$k MEMBER OF r.foodTypes")
+                ->setParameter("foodType$k", $foodType);
+            }
+            
+        }
+
+        if($search->getOptions()->count() > 0)
+        {
+            $k = 0;
+            foreach($search->getOptions() as $k => $option)
+            {
+                $k++;
+                $query = $query
+                ->andWhere(":option$k MEMBER OF r.options")
+                ->setParameter("option$k", $option);
+            }
+            
+        }
+
         return $query->getQuery();
     }
 

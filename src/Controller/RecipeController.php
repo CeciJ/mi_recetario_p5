@@ -41,6 +41,7 @@ class RecipeController extends AbstractController
             $request->query->getInt('page', 1),
             12 
         );
+
         return $this->render("recipe/index.html.twig", [
             'current_menu' => 'recipes',
             'recipes' => $recipes,
@@ -63,7 +64,7 @@ class RecipeController extends AbstractController
                 'slug' => $slugChecked
             ], 301);
         }
-
+        dump($recipe);
         return $this->render("recipe/show.html.twig", [
             'current_menu' => 'recipes',
             'recipe' => $recipe

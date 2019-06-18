@@ -45,9 +45,21 @@ class RecipeSearch
      */
     private $DishTypes;
 
+    /**
+     * @var ArrayCollection
+     */
+    private $foodTypes;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $options;
+
     public function __construct()
     {
       $this->DishTypes = new ArrayCollection();
+      $this->foodTypes = new ArrayCollection();
+      $this->options = new ArrayCollection();
     }
 
     public function getDishTypes(): ArrayCollection
@@ -58,6 +70,28 @@ class RecipeSearch
     public function setDishTypes(ArrayCollection $DishTypes): RecipeSearch
     {
         $this->DishTypes = $DishTypes;
+        return $this;
+    }
+
+    public function getFoodTypes(): ArrayCollection
+    {
+		return $this->foodTypes;
+    }
+
+    public function setFoodTypes(ArrayCollection $foodTypes): RecipeSearch
+    {
+        $this->foodTypes = $foodTypes;
+        return $this;
+    }
+
+    public function getOptions(): ArrayCollection
+    {
+		return $this->options;
+    }
+
+    public function setOptions(ArrayCollection $options): RecipeSearch
+    {
+        $this->options = $options;
         return $this;
 	  }
 }
