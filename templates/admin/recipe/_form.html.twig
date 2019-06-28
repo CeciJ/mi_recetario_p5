@@ -1,22 +1,37 @@
 {{ form_start(form) }}
+<div class="row">
+  <div class="col-md-8">
     <div class="row">
-        <div class="col-md-4">{{ form_row(form.name) }}</div>
+      <div class="col-md-6">{{ form_row(form.name) }}</div>
+      <div class="col-md-6 ">{{ form_row(form.pictureFiles) }}</div>
     </div>
-    <div class="row">
-        <div class="col-md-4">{{ form_row(form.totalTime) }}</div>
-        <div class="col-md-4">{{ form_row(form.preparationTime) }}</div>
-        <div class="col-md-4">{{ form_row(form.cookingTime) }}</div>
+  </div>
+  <div class="col-md-4">
+    <div class="row flex justify-content-start flex-wrap">
+      {% for picture in recipe.pictures %}
+        <div class="col" style="width: 100px; flex: none; margin: 5px;">
+            <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="">
+            <a href="{{ path('admin.picture.delete', {id: picture.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}">Supprimer</a> 
+        </div>
+      {% endfor %}
     </div>
-    <div class="row">
-        <div class="col-md-4">{{ form_row(form.cost) }}</div>
-        <div class="col-md-4">{{ form_row(form.difficulty) }}</div>
-        <div class="col-md-4">{{ form_row(form.numberPersons) }}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">{{ form_row(form.DishTypes) }}</div>
-        <div class="col-md-4">{{ form_row(form.foodTypes) }}</div>
-        <div class="col-md-4">{{ form_row(form.options) }}</div>
-    </div>
-    {{ form_rest(form) }}
-    <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+  </div>
+</div>
+<div class="row">
+    <div class="col-md-4">{{ form_row(form.totalTime) }}</div>
+    <div class="col-md-4">{{ form_row(form.preparationTime) }}</div>
+    <div class="col-md-4">{{ form_row(form.cookingTime) }}</div>
+</div>
+<div class="row">
+    <div class="col-md-4">{{ form_row(form.cost) }}</div>
+    <div class="col-md-4">{{ form_row(form.difficulty) }}</div>
+    <div class="col-md-4">{{ form_row(form.numberPersons) }}</div>
+</div>
+<div class="row">
+    <div class="col-md-4">{{ form_row(form.DishTypes) }}</div>
+    <div class="col-md-4">{{ form_row(form.foodTypes) }}</div>
+    <div class="col-md-4">{{ form_row(form.options) }}</div>
+</div>
+{{ form_rest(form) }}
+<button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}

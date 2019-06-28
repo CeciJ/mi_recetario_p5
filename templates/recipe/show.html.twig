@@ -4,10 +4,22 @@
 
 {% block body %}
     <div class="container mt-4">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        {% if not form.vars.valid %}
+            <div class="alert alert-danger">Erreur dans les données envoyées</div>
+        {% endif %}
+
         <h1>{{ recipe.name }}</h1>
         <div class="row">
             <div class="col-md-4">
-            
+                {% if recipe.picture %}
+                    <img src="{{ vich_uploader_asset(recipe.picture, 'imageFile') | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                {% else %}
+                    <img src="{{ 'empty.jpg' | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <h1>{{ recipe.name }}</h1>
@@ -18,7 +30,31 @@
                     <div class="col-4">Temps de cuisson : {{recipe.cookingTime}} min</div>
                     <div class="col-4">Temps total : {{recipe.totalTime}} min</div>
                 </div>
+                <div class="row">
+                    <ul class="list-group">
+                        {% for option in recipe.options %}
+                            <li class="list-group-item">{{ option.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
+                <a href="#" class="btn btn-primary" id="contactButton" {% if form.vars.submitted %}style="display: none;"{% endif %}>Envoyer par mail</a>
+                <div id="contactForm" class="mt-4" {% if not form.vars.submitted %}style="display: none;"{% endif %}>
+                    {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col">{{ form_row(form.firstname) }}</div>
+                            <div class="col">{{ form_row(form.lastname) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col">{{ form_row(form.phone) }}</div>
+                            <div class="col">{{ form_row(form.email) }}</div>
+                        </div>
+                        {{ form_rest(form) }}
+                        <div class="form-group">
+                            <button class="btn btn-primary">Envoyer</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>

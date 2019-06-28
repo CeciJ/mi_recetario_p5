@@ -2,9 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Option;
 use App\Entity\Recipe;
-use App\Entity\Property;
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,11 +64,12 @@ class AdminRecipeController extends AbstractController
      * @return Response
      */
     public function edit(Recipe $recipe, Request $request)
-    {    
+    {   
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            dump('form valid and submitted');
             $this->em->flush();
             $this->addFlash('success', 'Recette modifiée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));

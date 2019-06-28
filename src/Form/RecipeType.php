@@ -6,11 +6,11 @@ use App\Entity\Option;
 use App\Entity\Recipe;
 use App\Entity\DishType;
 use App\Entity\FoodType;
-use App\Form\OptionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class RecipeType extends AbstractType
@@ -19,6 +19,10 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('pictureFiles', FileType::class, [
+                'required' => false,
+                'multiple' => true
+            ])
             ->add('cookingTime')
             ->add('cost', ChoiceType::class, [
                 "choices" => $this->getCostChoices()
@@ -42,7 +46,8 @@ class RecipeType extends AbstractType
             ->add('options', EntityType::class, [
                 'class' => Option::class,
                 'choice_label' => 'name',
-                'multiple' => true
+                'multiple' => true,
+                'required' => false
             ])
         ;
     }
