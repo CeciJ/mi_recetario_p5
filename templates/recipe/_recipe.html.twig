@@ -8,7 +8,14 @@
         <h5 class="card-title">
             <a href="{{ path('recipe.show', {id: recipe.id, slug: recipe.slug}) }}">{{ recipe.name }}</a>
         </h5>
-        <p class="card-text">Temps total de préparation : {{ recipe.totalTime }} minutes</p>
-        <p class="card-text">Nombre de personnes : {{ recipe.numberPersons }}</p>
+        <ul>
+            <li class="card-text">
+                {% for dishType in recipe.DishTypes %}
+                    {{ dishType.name }}
+                {% endfor %}
+            </li>
+            <li class="card-text">Temps de préparation : {{ recipe.totalTime }} minutes</li>
+            <li class="card-text">Pour {{ recipe.numberPersons }} {% if recipe.numberPersons > 1 %} personnes {% else %} personne {% endif %}</li>
+        </ul>
     </div>
 </div>

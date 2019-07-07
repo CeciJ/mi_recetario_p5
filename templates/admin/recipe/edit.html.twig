@@ -2,7 +2,12 @@
 
 {% block title 'Éditer la recette' %}
 
-{% block body %}   
+{% block body %} 
+
+    <div style="margin-bottom:15px;">
+        <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary">Retour à la liste de recettes</a>
+    </div>
+
     <div class="container mt-4">
         <h1>Éditer la recette</h1>
         {{ include("admin/recipe/_form.html.twig", {form: form, button: 'Éditer'}) }}

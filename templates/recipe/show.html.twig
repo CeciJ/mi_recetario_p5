@@ -12,16 +12,19 @@
             <div class="alert alert-danger">Erreur dans les données envoyées</div>
         {% endif %}
 
-        <h1>{{ recipe.name }}</h1>
         <div class="row">
-            <div class="col-md-4">
-                {% if recipe.picture %}
-                    <img src="{{ vich_uploader_asset(recipe.picture, 'imageFile') | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
-                {% else %}
-                    <img src="{{ 'empty.jpg' | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
-                {% endif %}
+            <div class="col-md-5">
+                <div data-slider>
+                    {% if recipe.pictures is empty %}
+                        <img src="{{ 'empty.jpg' | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                    {% else %}
+                        {% for picture in recipe.pictures %}
+                            <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                        {% endfor %}
+                    {% endif %}
+                </div> 
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <h1>{{ recipe.name }}</h1>
                 <p>Niveau de difficulté : {{recipe.difficultyType}} </p>
                 <p>Coût : {{recipe.costType}} </p>
@@ -34,6 +37,16 @@
                     <ul class="list-group">
                         {% for option in recipe.options %}
                             <li class="list-group-item">{{ option.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="list-group">
+                        {% for dishType in recipe.DishTypes %}
+                            <li class="list-group-item">{{ dishType.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="list-group">
+                        {% for foodType in recipe.foodTypes %}
+                            <li class="list-group-item">{{ foodType.name }}</li>
                         {% endfor %}
                     </ul>
                 </div>

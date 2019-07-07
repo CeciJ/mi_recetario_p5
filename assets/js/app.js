@@ -4,6 +4,10 @@
  * We recommend including the built version of this JavaScript file
  * (and its CSS file) in your base layout (base.html.twig).
  */
+import 'slick-carousel';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 let $ = require('jquery');
 require('../css/app.css');
 require('select2');
@@ -38,6 +42,21 @@ document.querySelectorAll('[data-delete]').forEach(a => {
       .catch(e => alert(e))
   })
 });
+
+$('[data-slider]').slick({
+  dots: true,
+  arrows: true
+});
+
+/*
+// To associate ingredients to the recipe
+var recipeName = document.getElementById("recipeId").value;
+console.log(recipeName);
+
+var valueId = document.querySelector('#recipe_ingredients_recipeId').value;
+valueId = recipeName;
+console.log(valueId);
+*/
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');

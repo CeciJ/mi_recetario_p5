@@ -122,6 +122,16 @@ class Recipe
      */
     private $picture;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $steps;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipeId")
+     */
+    private $recipeIngredients;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -129,6 +139,7 @@ class Recipe
         $this->DishTypes = new ArrayCollection();
         $this->foodTypes = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->recipeIngredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -409,6 +420,51 @@ class Recipe
             if ($picture->getRecipe() === $this) {
                 $picture->setRecipe(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getSteps(): ?string
+    {
+        return $this->steps;
+    }
+
+    public function setSteps(string $steps): self
+    {
+        $this->steps = $steps;
+
+        return $this;
+    }
+
+    public function __toString() 
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Collection|RecipeIngredients[]
+     */
+    public function getRecipeIngredients(): Collection
+    {
+        return $this->recipeIngredients;
+    }
+
+    public function addRecipeIngredient(RecipeIngredients $recipeIngredient): self
+    {
+        if (!$this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients[] = $recipeIngredient;
+            $recipeIngredient->addRecipeId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipeIngredient(RecipeIngredients $recipeIngredient): self
+    {
+        if ($this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients->removeElement($recipeIngredient);
+            $recipeIngredient->removeRecipeId($this);
         }
 
         return $this;
