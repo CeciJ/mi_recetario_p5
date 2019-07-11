@@ -1,36 +1,14 @@
-{% extends "base.html.twig" %}
-
-{% block title 'Bienvenue!' %}
+{# templates/meal_planning/calendar.html.twig #}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="jumbotron text-center">
-        <div class="container">
-            <h1>Mes menus faciles</h1>
-            <p>Plus de temps perdu à faire les listes de recettes pour la semaine !</p>
-        </div>
-    </div>
-
     <div class="container">
-        <h2 class="home">Mes dernières recettes publiées</h2>
-        <div class="row flex">
-            {% for recipe in recipes %}
-                <div class="col-3">
-                    {% include 'recipe/_recipe.html.twig' %}
-                </div>
-            {% endfor %}
-        </div>
-
-
-        <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Create new planning</a>
+        <a href="{{ path('meal_planning.new') }}" class="btn btn-primary">Create new planning</a>
 
         <div id="calendar" margin: 25px;>
             {% include '@Calendar/calendar.html' %}
         </div>
-    
     </div>
-
-    <footer class="jumbotron" style="margin-top:30px;">Pied de page de mon semainier de recettes</footer>
-
 {% endblock %}
 
 {% block stylesheets %}
@@ -44,7 +22,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
-    <script src='fullcalendar/core/locales/es.js'></script>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
@@ -76,9 +53,7 @@
                     alert('a day has been clicked!');
                     e.dayEl.style.backgroundColor = 'yellow';
                 },
-                selectable: true,
-                locale: 'fr',
-                firstDay: 1
+                selectable: true
             });
             calendar.render();
         });
