@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 let $ = require('jquery');
+
 require('../css/app.css');
 require('select2');
 

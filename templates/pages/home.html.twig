@@ -20,14 +20,50 @@
             {% endfor %}
         </div>
 
+        <div class="row">
+            <div class="col-3" id='external-events'>
+                <p>
+                    <strong>Mes recettes</strong>
+                </p>
+                <div id="accordion">
+                    {% for categorie in foodCategories %}
+                        <div class="card">
+                            <div class="card-header" id="heading{{ categorie.id }}">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{ categorie.id }}" aria-expanded="true" aria-controls="collapse{{ categorie.id }}">
+                                    {{ categorie.id ~ ' - ' ~ categorie.name }}
+                                    </button>
+                                </h5>
+                            </div>
 
-        <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Create new planning</a>
+                            <div id="collapse{{ categorie.id }}" class="collapse" aria-labelledby="heading{{ categorie.id }}" data-parent="#accordion">
+                                <div class="card-body">
+                                    {% for key, recipeCategory in recipeCategories %}
+                                        {% if key == categorie.id %}
+                                            {% for recipe in recipeCategory %}
+                                                <div class='fc-event'>{{ recipe.name }}</div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <p>
+                                        <input type='checkbox' id='drop-remove' />
+                                        <label for='drop-remove'>remove after drop</label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+            <div class="col-9" id='calendar-container'>
+                <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Create new planning</a>
 
-        <div id="calendar" margin: 25px;>
-            {% include '@Calendar/calendar.html' %}
+                <div id="calendar" margin: 25px;>
+                    {% include '@Calendar/calendar.html' %}
+                </div>
+            </div>
         </div>
-    
-    </div>
 
     <footer class="jumbotron" style="margin-top:30px;">Pied de page de mon semainier de recettes</footer>
 
@@ -47,12 +83,53 @@
     <script src='fullcalendar/core/locales/es.js'></script>
 
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            var calendarEl = document.getElementById('calendar-holder');
+        document.addEventListener('DOMContentLoaded', function() {
+            var Calendar = FullCalendar.Calendar;
+            var Draggable = FullCalendarInteraction.Draggable;
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                defaultView: 'dayGridMonth',
+            var containerEl = document.getElementById('external-events');
+            var calendarEl = document.getElementById('calendar');
+            var checkbox = document.getElementById('drop-remove');
+
+            // initialize the external events
+            // -----------------------------------------------------------------
+
+            new Draggable(containerEl, {
+                itemSelector: '.fc-event',
+                eventData: function(eventEl) {
+                return {
+                    title: eventEl.innerText
+                };
+                }
+            });
+
+            // initialize the calendar
+            // -----------------------------------------------------------------
+
+            var calendar = new Calendar(calendarEl, {
+                plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                timeZone: 'UTC',
+                dateClick: function(e) {
+                    prompt('Add a recipe');
+                    e.dayEl.style.backgroundColor = 'yellow';
+                },
                 editable: true,
+                defaultView: 'dayGridMonth',
+                selectable: true,
+                locale: 'fr',
+                firstDay: 1,
+                buttonText: {
+                    today:    'Aujourd\'hui',
+                    month:    'mois',
+                    week:     'semaine',
+                    day:      'jour'            
+                },
+                droppable: true, // this allows things to be dropped onto the calendar
                 eventSources: [
                     {
                         url: "{{ path('fc_load_events') }}",
@@ -65,21 +142,15 @@
                         },
                     },
                 ],
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                },
-                plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
-                timeZone: 'UTC',
-                dateClick: function(e) {
-                    alert('a day has been clicked!');
-                    e.dayEl.style.backgroundColor = 'yellow';
-                },
-                selectable: true,
-                locale: 'fr',
-                firstDay: 1
+                drop: function(info) {
+                // is the "remove after drop" checkbox checked?
+                if (checkbox.checked) {
+                    // if so, remove the element from the "Draggable Events" list
+                    info.draggedEl.parentNode.removeChild(info.draggedEl);
+                }
+                }
             });
+
             calendar.render();
         });
     </script>

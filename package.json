@@ -5,6 +5,8 @@
         "@symfony/webpack-encore": "^0.27.0",
         "babel-loader": "^8.0.6",
         "core-js": "^3.0.0",
+        "css-loader": "^3.0.0",
+        "style-loader": "^0.23.1",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",

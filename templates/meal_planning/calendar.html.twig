@@ -50,10 +50,18 @@
                 plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
                 timeZone: 'UTC',
                 dateClick: function(e) {
-                    alert('a day has been clicked!');
+                    prompt('Add a recipe');
                     e.dayEl.style.backgroundColor = 'yellow';
                 },
-                selectable: true
+                selectable: true,
+                locale: 'fr',
+                firstDay: 1,
+                buttonText: {
+                    today:    'Aujourd\'hui',
+                    month:    'mois',
+                    week:     'semaine',
+                    day:      'jour'            
+                }
             });
             calendar.render();
         });

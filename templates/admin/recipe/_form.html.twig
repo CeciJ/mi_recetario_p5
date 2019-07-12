@@ -33,7 +33,7 @@
     <div class="col-md-4">{{ form_row(form.options) }}</div>
 </div>
 
-<a href="{{ path('admin.recipe_ingredients.index', {id: recipe.id, name: recipe.name}) }}" class="btn btn-info" style="margin-bottom: 15px;">Ajouter les ingrédients de la recette</a>
+<a href="{{ path('admin.recipe_ingredients.index') }}" class="btn btn-info" style="margin-bottom: 15px;">Ajouter les ingrédients de la recette</a>
 {{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}
