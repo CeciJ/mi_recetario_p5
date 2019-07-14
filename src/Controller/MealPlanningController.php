@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateTimeInterface;
 use App\Entity\MealPlanning;
 use App\Form\MealPlanningType;
+use Doctrine\Common\Util\Debug;
 use App\Repository\MealPlanningRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+//use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/meal_planning")
@@ -22,6 +26,7 @@ class MealPlanningController extends AbstractController
      */
     public function index(MealPlanningRepository $mealPlanningRepository): Response
     {
+        dump($mealPlanningRepository->findAll());
         return $this->render('meal_planning/index.html.twig', [
             'meal_plannings' => $mealPlanningRepository->findAll(),
         ]);
@@ -40,7 +45,40 @@ class MealPlanningController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $data = urldecode($data);
+            $datas = explode('&', $data);
+            $dataStart = $datas[0];
+            $datastart = explode('=', $dataStart);
+            $dataStart = $datastart[1];
+            $dataStart = explode('(', $dataStart);
+            $dateStart = trim($dataStart[0]);
+            $start = new DateTime($dateStart);
+
+            $dataTitle = $datas[1];
+            $datatitle = explode('=', $dataTitle);
+            $dataTitle = $datatitle[1];
+
+            $mealPlanning = new MealPlanning();
+            $mealPlanning->setTitle($dataTitle);
+            $mealPlanning->setBeginAt($start);
+            
+            //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($mealPlanning);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                ],
+                JsonResponse::HTTP_CREATED
+            );
+        }
+        
         $mealPlanning = new MealPlanning();
+
         $form = $this->createForm(MealPlanningType::class, $mealPlanning);
         $form->handleRequest($request);
 
@@ -51,7 +89,7 @@ class MealPlanningController extends AbstractController
 
             return $this->redirectToRoute('meal_planning.index');
         }
-
+        
         return $this->render('meal_planning/new.html.twig', [
             'meal_planning' => $mealPlanning,
             'form' => $form->createView(),

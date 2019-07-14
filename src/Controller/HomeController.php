@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\DishType;
+use App\Entity\MealPlanning;
 use App\Repository\RecipeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\DishTypeRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\DishTypeRepository;
-use App\Entity\DishType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController 
 {
@@ -17,8 +19,9 @@ class HomeController extends AbstractController
      * @param RecipeRepository $repository
      * @return Response
      */
-    public function index(RecipeRepository $repository, DishTypeRepository $dishTypeRepository): Response
+    public function index(RecipeRepository $repository, DishTypeRepository $dishTypeRepository, Request $request): Response
     {
+
         $recipes = $repository->findLatest();
         $allRecipes = $repository->findAll();
         $foodCategories = $dishTypeRepository->findAll();

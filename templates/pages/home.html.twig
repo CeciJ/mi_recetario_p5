@@ -31,7 +31,7 @@
                             <div class="card-header" id="heading{{ categorie.id }}">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{ categorie.id }}" aria-expanded="true" aria-controls="collapse{{ categorie.id }}">
-                                    {{ categorie.id ~ ' - ' ~ categorie.name }}
+                                    {{ categorie.name }}
                                     </button>
                                 </h5>
                             </div>
@@ -47,7 +47,7 @@
                                     {% endfor %}
                                     <p>
                                         <input type='checkbox' id='drop-remove' />
-                                        <label for='drop-remove'>remove after drop</label>
+                                        <label for='drop-remove'>Enlever de la liste après sélection</label>
                                     </p>
                                 </div>
                             </div>
@@ -57,15 +57,57 @@
                 
             </div>
             <div class="col-9" id='calendar-container'>
-                <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Create new planning</a>
+                <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Ajouter une recette</a>
 
                 <div id="calendar" margin: 25px;>
                     {% include '@Calendar/calendar.html' %}
                 </div>
             </div>
         </div>
+    </div>
 
-    <footer class="jumbotron" style="margin-top:30px;">Pied de page de mon semainier de recettes</footer>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouvel ajout de recette à mon semainier</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ path('meal_planning.new') }}" method="post">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recette:</label>
+                            <select class="form-control" id="recipient-name">
+                                {% for recipe in allRecipes %}
+                                    <option value={{ recipe.name }}>{{ recipe.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Horaire:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                            <select class="form-control" id="recipient-name">
+                                <option value="petit-dej">Petit déjeuner</option>
+                                <option value="dej">Déjeuner</option>
+                                <option value="gouter">Goûter</option>
+                                <option value="diner">Dîner</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="jumbotron" style="margin-top:30px;">
+        <div class="container">Pied de page de mon semainier de recettes</div>
+    </footer>
 
 {% endblock %}
 
@@ -97,9 +139,9 @@
             new Draggable(containerEl, {
                 itemSelector: '.fc-event',
                 eventData: function(eventEl) {
-                return {
-                    title: eventEl.innerText
-                };
+                    return {
+                        title: eventEl.innerText
+                    };
                 }
             });
 
@@ -114,10 +156,6 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 timeZone: 'UTC',
-                dateClick: function(e) {
-                    prompt('Add a recipe');
-                    e.dayEl.style.backgroundColor = 'yellow';
-                },
                 editable: true,
                 defaultView: 'dayGridMonth',
                 selectable: true,
@@ -140,15 +178,103 @@
                         failure: () => {
                             // alert("There was an error while fetching FullCalendar!");
                         },
-                    },
+                    }
                 ],
-                drop: function(info) {
+                dateClick: function(event) {
+                    console.log(event);
+                    $('#exampleModal').modal('show');
+                    
+                    $('#exampleModal').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget) // Button that triggered the modal
+                        console.log(button);
+                        var recipient = button.data('whatever') // Extract info from data-* attributes
+                        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                        var modal = $(this)
+                        modal.find('.modal-title').text('New message to ' + recipient)
+                        modal.find('.modal-body input').val(recipient)
+                    })
+                },
+                drop: function(event) {
                 // is the "remove after drop" checkbox checked?
-                if (checkbox.checked) {
-                    // if so, remove the element from the "Draggable Events" list
-                    info.draggedEl.parentNode.removeChild(info.draggedEl);
-                }
-                }
+                    if (checkbox.checked) {
+                        // if so, remove the element from the "Draggable Events" list
+                        event.draggedEl.parentNode.removeChild(event.draggedEl);
+                    }
+                    console.log(event);
+                    console.log(event.date);
+
+                    var eventTitle = event.draggedEl.innerText;
+                    var eventDate = event.date;
+                    var eventDateStart = new Date(eventDate);
+                    var eventSources = calendar.getEventSources();
+
+                    console.log(eventSources);
+
+                    $.ajax({
+                        url: "/meal_planning/new",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            beginAt: eventDateStart, 
+                            title: eventTitle 
+                         },
+                        success: function (event) {                            
+                            //eventSources[0].refetch();
+                            alert('Recette ajoutée avec succès !');
+                            window.location.reload(true);
+                        }
+                    });
+                    //eventSources[0].refetch();
+                },
+                eventReceive: function(event) {
+                    console.log(event);
+                    //console.log(event.event.title);
+                    //console.log(event.event.start);
+                    /*
+                    date = moment.format();
+
+                    $.ajax({
+                    url: "/echo/json/",
+                    type: "post",
+                    data: {
+                        json: json
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function(retour) {
+                        console.log("moment :" + date);
+                        $(".dragged,br").remove();
+                        $.each(retour, function(a, b) {
+                            $(".external")
+                            .append("<p class='dragged' />")
+                            .find(".dragged")
+                            .eq(a)
+                            .data("event", {
+                                "id": a,
+                                "stick": true,
+                                "title": "Evenement" + (a + 1)
+                            })
+                            .text(retour[a].name)
+                            .draggable({
+                                zIndex: 999,
+                                revert: true, // autoriser l'element de revenir a sa place initiale
+                                revertDuration: false //  temps original après libération de drag
+                            });
+                        });
+                        } //fin success
+                    }); //fin ajax
+                    */
+                } //fin eventAfterAllRender
+                
+                //eventRender: function(info) {
+                //    var tooltip = new Tooltip(info.el, {
+                //        title: info.event.extendedProps.description,
+                //        placement: 'top',
+                //        trigger: 'hover',
+                //        container: 'body'
+                //    });
+                //}
             });
 
             calendar.render();
