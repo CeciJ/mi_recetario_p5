@@ -132,6 +132,11 @@ class Recipe
      */
     private $recipeIngredients;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\MealPlanning", inversedBy="recipesData")
+     */
+    private $mealPlanning;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -140,6 +145,7 @@ class Recipe
         $this->foodTypes = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->recipeIngredients = new ArrayCollection();
+        $this->mealPlanning = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -465,6 +471,34 @@ class Recipe
         if ($this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients->removeElement($recipeIngredient);
             $recipeIngredient->removeRecipeId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MealPlanning[]
+     */
+    public function getMealPlanning(): Collection
+    {
+        return $this->mealPlanning;
+    }
+
+    public function addMealPlanning(MealPlanning $mealPlanning): self
+    {
+        if (!$this->mealPlanning->contains($mealPlanning)) {
+            $this->mealPlanning[] = $mealPlanning;
+            $mealPlanning->addRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMealPlanning(MealPlanning $mealPlanning): self
+    {
+        if ($this->mealPlanning->contains($mealPlanning)) {
+            $this->mealPlanning->removeElement($mealPlanning);
+            $mealPlanning->removeRecipe($this);
         }
 
         return $this;

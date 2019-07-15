@@ -66,6 +66,7 @@
         </div>
     </div>
 
+<!-- MODALE ADD AN EVENT -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -81,25 +82,41 @@
                             <label for="recipient-name" class="col-form-label">Recette:</label>
                             <select class="form-control" id="recipient-name">
                                 {% for recipe in allRecipes %}
-                                    <option value={{ recipe.name }}>{{ recipe.name }}</option>
+                                    <option value={{ recipe.id }}>{{ recipe.name }}</option>
                                 {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Horaire:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                            <select class="form-control" id="recipient-name">
-                                <option value="petit-dej">Petit déjeuner</option>
-                                <option value="dej">Déjeuner</option>
-                                <option value="gouter">Goûter</option>
-                                <option value="diner">Dîner</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary">Ajouter</button>
+                    <button type="submit" class="btn btn-primary" id="addButtonModal">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- MODALE SHOW A RECIPE -->
+    <div class="modal fade" id="showRecipeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Voir la recette ?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!--<div class="modal-body">
+                    <form action="{{ path('meal_planning.new') }}" method="post">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Voir la recette ?</label>
+                        </div>
+                    </form>
+                </div>-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-secondary">Supprimer</button>
+                    <button type="submit" class="btn btn-primary" id="addButtonRecipeModal">Voir la recette</button>
                 </div>
             </div>
         </div>
@@ -133,6 +150,8 @@
             var calendarEl = document.getElementById('calendar');
             var checkbox = document.getElementById('drop-remove');
 
+            var today = new Date();
+
             // initialize the external events
             // -----------------------------------------------------------------
 
@@ -154,6 +173,9 @@
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                validRange: {
+                    start: today
                 },
                 timeZone: 'UTC',
                 editable: true,
@@ -183,17 +205,38 @@
                 dateClick: function(event) {
                     console.log(event);
                     $('#exampleModal').modal('show');
+
+                    var dateEvent = event.date;
+                    console.log(dateEvent);
+                    var titleEvent;
+                    console.log(titleEvent);
+                    var eventSources = calendar.getEventSources();
+
+                    $('#recipient-name').change(function(){
+                        titleEvent = $('select').val();
+                        titleName = $('select option:selected').text();
+                        console.log(titleName);
+                    });
                     
-                    $('#exampleModal').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget) // Button that triggered the modal
-                        console.log(button);
-                        var recipient = button.data('whatever') // Extract info from data-* attributes
-                        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-                        var modal = $(this)
-                        modal.find('.modal-title').text('New message to ' + recipient)
-                        modal.find('.modal-body input').val(recipient)
-                    })
+                    $('#addButtonModal').click(function(){
+                            $.ajax({
+                                url: "/meal_planning/new",
+                                type: "POST",
+                                dataType: 'json',
+                                data: {
+                                    beginAt: dateEvent, 
+                                    title: titleEvent 
+                                    },
+                                success: function (event) {                            
+                                    //eventSources[0].refetch();
+                                    alert('Recette ajoutée avec succès !');
+                                    $('#exampleModal').modal('hide');
+                                    eventSources[0].refetch();
+                                    //window.location.reload(true);
+                                }
+                            });
+                        });
+
                 },
                 drop: function(event) {
                 // is the "remove after drop" checkbox checked?
@@ -222,10 +265,20 @@
                         success: function (event) {                            
                             //eventSources[0].refetch();
                             alert('Recette ajoutée avec succès !');
-                            window.location.reload(true);
+                            //window.location.reload(true);
                         }
                     });
                     //eventSources[0].refetch();
+                },
+                eventClick: function(info) {
+                    //info.jsEvent.preventDefault();
+                    //$('#showRecipeModal').modal('show');
+                    //$('#addButtonRecipeModal').click(function(){
+                    //    $('#addButtonRecipeModal').modal('hide');
+                    //});
+                    //alert('Event: ' + info.event.title);
+                    //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                    //alert('View: ' + info.view.type);
                 },
                 eventReceive: function(event) {
                     console.log(event);

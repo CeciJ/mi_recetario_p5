@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use DateTime;
-use DateTimeInterface;
 use App\Entity\MealPlanning;
 use App\Form\MealPlanningType;
 use Doctrine\Common\Util\Debug;
@@ -14,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Recipe;
+use App\Repository\RecipeRepository;
 
 /**
  * @Route("/meal_planning")
@@ -43,10 +44,11 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/new", name="meal_planning.new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, RecipeRepository $recipeRepo): Response
     {
         if($request->isXmlHttpRequest()) {
             $data = $request->getContent();
+            exit(\Doctrine\Common\Util\Debug::dump($data));
             $data = urldecode($data);
             $datas = explode('&', $data);
             $dataStart = $datas[0];
@@ -60,10 +62,25 @@ class MealPlanningController extends AbstractController
             $datatitle = explode('=', $dataTitle);
             $dataTitle = $datatitle[1];
 
-            $mealPlanning = new MealPlanning();
-            $mealPlanning->setTitle($dataTitle);
-            $mealPlanning->setBeginAt($start);
-            
+            if(strlen($dataTitle) < 5)
+            {
+                $dataTitle = (int) $dataTitle;
+                $recipe = $recipeRepo->find($dataTitle);
+                $recipeNameOk = $recipe->getname();
+
+                $mealPlanning = new MealPlanning();
+                $mealPlanning->setTitle($recipeNameOk);
+                $mealPlanning->setBeginAt($start);
+                //$mealPlanning->addRecipesData($recipe);
+            }
+            else
+            {
+                $mealPlanning = new MealPlanning();
+                $mealPlanning->setTitle($dataTitle);
+                $mealPlanning->setBeginAt($start);
+                //$mealPlanning->addRecipesData($recipe);
+            }
+
             //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($mealPlanning);
@@ -90,7 +107,7 @@ class MealPlanningController extends AbstractController
             return $this->redirectToRoute('meal_planning.index');
         }
         
-        return $this->render('meal_planning/new.html.twig', [
+        return $this->render('pages/home.html.twig', [
             'meal_planning' => $mealPlanning,
             'form' => $form->createView(),
         ]);
@@ -99,8 +116,11 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/{id}", name="meal_planning.show", methods={"GET"})
      */
-    public function show(MealPlanning $mealPlanning): Response
+    public function show(MealPlanning $mealPlanning, Recipe $recipe): Response
     {
+        dump($mealPlanning);
+        dump($mealPlanning->getRecipesData());
+        dump($recipe->getMealPlanning());
         return $this->render('meal_planning/show.html.twig', [
             'meal_planning' => $mealPlanning,
         ]);

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,17 @@ class MealPlanning
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $endAt;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Recipe", mappedBy="mealPlanning")
+     */
+    private $recipesData;
+
+    public function __construct()
+    {
+        $this->recipes = new ArrayCollection();
+        $this->recipesData = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -68,6 +81,34 @@ class MealPlanning
     public function setEndAt(?\DateTimeInterface $endAt): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Recipe[]
+     */
+    public function getRecipesData(): Collection
+    {
+        return $this->recipesData;
+    }
+
+    public function addRecipesData(Recipe $recipesData): self
+    {
+        if (!$this->recipesData->contains($recipesData)) {
+            $this->recipesData[] = $recipesData;
+            $recipesData->addMealPlanning($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipesData(Recipe $recipesData): self
+    {
+        if ($this->recipesData->contains($recipesData)) {
+            $this->recipesData->removeElement($recipesData);
+            $recipesData->removeMealPlanning($this);
+        }
 
         return $this;
     }

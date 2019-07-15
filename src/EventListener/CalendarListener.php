@@ -59,9 +59,15 @@ class CalendarListener
             ]);
             $mealPlanningEvent->addOption(
                 'url',
+                /*
+                $this->router->generate('recipe.show', [
+                    'id' => $mealPlanning->getId(),
+                ])
+                */
                 $this->router->generate('meal_planning.show', [
                     'id' => $mealPlanning->getId(),
                 ])
+                
             );
 
             // finally, add the event to the CalendarEvent to fill the calendar
