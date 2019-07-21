@@ -110,15 +110,15 @@ class RecipeRepository extends ServiceEntityRepository
           ;
       }
 
-    /*
-    public function findOneBySomeField($value): ?Recipe
+    
+    public function findOneByName($value): ?Recipe
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
+            ->andWhere('r.name = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+    
 }

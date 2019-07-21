@@ -34,14 +34,14 @@ class MealPlanning
     private $endAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Recipe", mappedBy="mealPlanning")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="mealPlannings")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $recipesData;
+    private $recipe;
 
     public function __construct()
     {
         $this->recipes = new ArrayCollection();
-        $this->recipesData = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,31 +85,16 @@ class MealPlanning
         return $this;
     }
 
-    /**
-     * @return Collection|Recipe[]
-     */
-    public function getRecipesData(): Collection
+    public function getRecipe(): ?Recipe
     {
-        return $this->recipesData;
+        return $this->recipe;
     }
 
-    public function addRecipesData(Recipe $recipesData): self
+    public function setRecipe(?Recipe $recipe): self
     {
-        if (!$this->recipesData->contains($recipesData)) {
-            $this->recipesData[] = $recipesData;
-            $recipesData->addMealPlanning($this);
-        }
+        $this->recipe = $recipe;
 
         return $this;
     }
 
-    public function removeRecipesData(Recipe $recipesData): self
-    {
-        if ($this->recipesData->contains($recipesData)) {
-            $this->recipesData->removeElement($recipesData);
-            $recipesData->removeMealPlanning($this);
-        }
-
-        return $this;
-    }
 }

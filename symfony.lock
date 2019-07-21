@@ -566,7 +566,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "1.0",
-            "ref": "052f6a3782cb7ac3506f21c2f0a05403a69247c4"
+            "ref": "15d61b2277cedff81e57cad9e66d2f28959e6058"
         },
         "files": [
             "assets/css/app.css",

@@ -21,7 +21,7 @@ Encore
      * (including one that's included on every page - e.g. "app")
      *
      * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
     //.addEntry('page1', './assets/js/page1.js')
@@ -71,8 +71,4 @@ Encore
     //.addEntry('admin', './assets/js/admin.js')
 ;
 
-var config = Encore.getWebpackConfig();
-
-config.externals.jquery = 'jQuery';
-
-module.exports = config;
+module.exports = Encore.getWebpackConfig();

@@ -48,7 +48,7 @@ class MealPlanningController extends AbstractController
     {
         if($request->isXmlHttpRequest()) {
             $data = $request->getContent();
-            exit(\Doctrine\Common\Util\Debug::dump($data));
+            //exit(\Doctrine\Common\Util\Debug::dump($data));
             $data = urldecode($data);
             $datas = explode('&', $data);
             $dataStart = $datas[0];
@@ -61,6 +61,8 @@ class MealPlanningController extends AbstractController
             $dataTitle = $datas[1];
             $datatitle = explode('=', $dataTitle);
             $dataTitle = $datatitle[1];
+
+            //exit(\Doctrine\Common\Util\Debug::dump($dataTitle));
 
             if(strlen($dataTitle) < 5)
             {
@@ -75,10 +77,12 @@ class MealPlanningController extends AbstractController
             }
             else
             {
+                $recipe = $recipeRepo->findOneByName($dataTitle);
+
                 $mealPlanning = new MealPlanning();
                 $mealPlanning->setTitle($dataTitle);
                 $mealPlanning->setBeginAt($start);
-                //$mealPlanning->addRecipesData($recipe);
+                $mealPlanning->setRecipe($recipe);
             }
 
             //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
@@ -153,6 +157,7 @@ class MealPlanningController extends AbstractController
      */
     public function delete(Request $request, MealPlanning $mealPlanning): Response
     {
+
         if ($this->isCsrfTokenValid('delete'.$mealPlanning->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($mealPlanning);
@@ -160,6 +165,28 @@ class MealPlanningController extends AbstractController
         }
 
         return $this->redirectToRoute('meal_planning.index');
+    }
+
+    /**
+     * @Route("/deletedragnout/{id}", name="meal_planning.deleteDragnOut", methods={"DELETE"})
+     */
+    public function deleteDragnOut(Request $request, MealPlanning $mealPlanning): Response
+    {
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($mealPlanning);
+            $entityManager->flush();
+            //exit(\Doctrine\Common\Util\Debug::dump($data));
+        }
+
+        return new JsonResponse(
+            [
+                'status' => 'ok',
+            ],
+            JsonResponse::HTTP_CREATED
+        );
+        //return $this->redirectToRoute('home');
     }
 
 }
