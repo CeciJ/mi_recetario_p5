@@ -27,7 +27,6 @@ class MealPlanningController extends AbstractController
      */
     public function index(MealPlanningRepository $mealPlanningRepository): Response
     {
-        dump($mealPlanningRepository->findAll());
         return $this->render('meal_planning/index.html.twig', [
             'meal_plannings' => $mealPlanningRepository->findAll(),
         ]);
@@ -120,13 +119,13 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/{id}", name="meal_planning.show", methods={"GET"})
      */
-    public function show(MealPlanning $mealPlanning, Recipe $recipe): Response
+    public function show(MealPlanning $mealPlanning, Request $request): Response
     {
-        dump($mealPlanning);
-        dump($mealPlanning->getRecipesData());
-        dump($recipe->getMealPlanning());
+        $recipe = $mealPlanning->getRecipe();
+        
         return $this->render('meal_planning/show.html.twig', [
             'meal_planning' => $mealPlanning,
+            'recipe' => $recipe
         ]);
     }
 

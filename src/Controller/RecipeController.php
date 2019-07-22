@@ -7,6 +7,7 @@ use App\Entity\ContactMail;
 use App\Entity\RecipeSearch;
 use App\Form\ContactMailType;
 use App\Form\RecipeSearchType;
+use Doctrine\Common\Util\Debug;
 use App\Repository\RecipeRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Notification\ContactMailNotification;
@@ -15,6 +16,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class RecipeController extends AbstractController 
 {
@@ -58,6 +60,7 @@ class RecipeController extends AbstractController
      */
     public function show(Recipe $recipe, string $slug, Request $request, ContactMailNotification $notification): Response
     {
+
         $slugChecked = $recipe->getSlug();
 
         if($slugChecked != $slug)

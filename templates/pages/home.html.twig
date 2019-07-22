@@ -136,7 +136,6 @@
                     </form>
                 </div>-->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     <button type="button" class="btn btn-secondary">Supprimer</button>
                     <button type="submit" class="btn btn-primary" id="addButtonRecipeModal">Voir la recette</button>
                 </div>
@@ -233,13 +232,16 @@
                     var titleEvent;
                     var eventSources = calendar.getEventSources();
 
-                    $('#recipient-name').change(function(){
+                    $('#recipient-name').change(function(e){
+                        e.preventDefault();
                         titleEvent = $('select').val();
                         titleName = $('select option:selected').text();
                         console.log(titleName);
+                        e.stopPropagation();
                     });
                     
                     $('#addButtonModal').click(function(e){
+                        e.preventDefault();
                         $.ajax({
                             url: "/meal_planning/new",
                             type: "POST",
@@ -253,11 +255,14 @@
                                 alert('Recette ajoutée avec succès !');
                                 $('#exampleModal').modal('hide');
                                 eventSources[0].refetch();
+                                titleName = '';
+                                dateEvent = '';
                                 //window.location.reload(true);
                             }
                         });
+                        e.stopPropagation();
                     });
-                    event.stopPropagation();
+                    event.jsEvent.preventDefault();
                 },
                 drop: function(event) {
                 // is the "remove after drop" checkbox checked?
@@ -293,10 +298,6 @@
                 },
                 eventClick: function(info) {
                     //info.jsEvent.preventDefault();
-                    //$('#showRecipeModal').modal('show');
-                    //$('#addButtonRecipeModal').click(function(){
-                    //    $('#addButtonRecipeModal').modal('hide');
-                    //});
                     //alert('Event: ' + info.event.title);
                     //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                     //alert('View: ' + info.view.type);
