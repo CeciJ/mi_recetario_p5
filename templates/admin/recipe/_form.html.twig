@@ -32,8 +32,15 @@
     <div class="col-md-4">{{ form_row(form.foodTypes) }}</div>
     <div class="col-md-4">{{ form_row(form.options) }}</div>
 </div>
-
-<a href="{{ path('admin.recipe_ingredients.index') }}" class="btn btn-info" style="margin-bottom: 15px;">Ajouter les ingrédients de la recette</a>
+<div>{{ form_row(form.steps) }}</div>
+<a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Ajouter un ingrédient</a>
+{% for ingredient in form.recipeIngredients %}
+  <div class="row">
+    <div class="col-md-2">{{ form_row(ingredient.quantity) }}</div>
+    <div class="col-md-2">{{ form_row(ingredient.unit) }}</div>
+    <div class="col-md-4">{{ form_row(ingredient.ingredient) }}</div>
+  </div>
+{% endfor %}
 {{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}

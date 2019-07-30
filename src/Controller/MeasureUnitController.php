@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Entity\MeasureUnit;
 use App\Form\MeasureUnitType;
@@ -11,16 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/measureUnit")
+ * @Route("/measure_unit")
  */
-class AdminMeasureUnitController extends AbstractController
+class MeasureUnitController extends AbstractController
 {
     /**
      * @Route("/", name="admin.measure_unit.index", methods={"GET"})
      */
     public function index(MeasureUnitRepository $measureUnitRepository): Response
     {
-        return $this->render('admin/measure_unit/index.html.twig', [
+        return $this->render('measure_unit/index.html.twig', [
             'measure_units' => $measureUnitRepository->findAll(),
         ]);
     }
@@ -42,7 +42,7 @@ class AdminMeasureUnitController extends AbstractController
             return $this->redirectToRoute('admin.measure_unit.index');
         }
 
-        return $this->render('admin/measure_unit/new.html.twig', [
+        return $this->render('measure_unit/new.html.twig', [
             'measure_unit' => $measureUnit,
             'form' => $form->createView(),
         ]);
@@ -53,7 +53,7 @@ class AdminMeasureUnitController extends AbstractController
      */
     public function show(MeasureUnit $measureUnit): Response
     {
-        return $this->render('admin/measure_unit/show.html.twig', [
+        return $this->render('measure_unit/show.html.twig', [
             'measure_unit' => $measureUnit,
         ]);
     }
@@ -74,7 +74,7 @@ class AdminMeasureUnitController extends AbstractController
             ]);
         }
 
-        return $this->render('admin/measure_unit/edit.html.twig', [
+        return $this->render('measure_unit/edit.html.twig', [
             'measure_unit' => $measureUnit,
             'form' => $form->createView(),
         ]);

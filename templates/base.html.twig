@@ -19,10 +19,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if current_menu is defined and current_menu == 'recipes' %}active{% endif %}" href="{{ path('recipe.index') }}">Recettes</a>
+                        <a class="nav-link {% if current_menu is defined and current_menu == 'recipes' %}active{% endif %}" href="{{ path('recipe.index') }}">Toutes les recettes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('meal_planning.calendar') }}">Semainier</a>
+                        <a class="nav-link" href="{{ path('admin.recipe.index') }}">Administrer mes recettes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('meal_planning.calendar') }}">Voir ma liste de courses</a>
                     </li>
                 </ul>
                 {% if app.user %}
@@ -32,11 +35,6 @@
                         </li>
                     </ul>
                 {% endif %}
-                
-                <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
             </div>
             </nav>
         {% block body %}

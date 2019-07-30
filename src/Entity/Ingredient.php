@@ -24,7 +24,7 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="ingredient", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="ingredient")
      */
     private $recipeIngredients;
 

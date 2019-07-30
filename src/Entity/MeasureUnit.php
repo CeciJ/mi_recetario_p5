@@ -21,10 +21,10 @@ class MeasureUnit
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $unit;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="unit", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="unit")
      */
     private $recipeIngredients;
 
@@ -38,14 +38,14 @@ class MeasureUnit
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUnit(): ?string
     {
-        return $this->name;
+        return $this->unit;
     }
 
-    public function setName(string $name): self
+    public function setUnit(string $unit): self
     {
-        $this->name = $name;
+        $this->unit = $unit;
 
         return $this;
     }
@@ -62,7 +62,7 @@ class MeasureUnit
     {
         if (!$this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients[] = $recipeIngredient;
-            $recipeIngredient->addUnit($this);
+            $recipeIngredient->setUnit($this);
         }
 
         return $this;
@@ -72,7 +72,10 @@ class MeasureUnit
     {
         if ($this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients->removeElement($recipeIngredient);
-            $recipeIngredient->removeUnit($this);
+            // set the owning side to null (unless already changed)
+            if ($recipeIngredient->getUnit() === $this) {
+                $recipeIngredient->setUnit(null);
+            }
         }
 
         return $this;
@@ -80,6 +83,6 @@ class MeasureUnit
 
     public function __toString() 
     {
-        return $this->name;
+        return $this->unit;
     }
 }

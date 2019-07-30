@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des ingrédients{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <div style="margin-bottom:15px;">
+            <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary">Retour à la gestion des recettes</a>
+        </div>
+
+        <h1>Liste des ingrédients</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ ingredient.id }}</td>
+                    <td>{{ ingredient.name }}</td>
+                    <td>
+                        <a href="{{ path('admin.ingredient.edit', {'id': ingredient.id}) }}" class="btn btn-primary">Éditer</a>
+                        <a href="{{ path('admin.ingredient.delete', {'id': ingredient.id}) }}" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Pas d'ingrédients en base de données</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('admin.ingredient.new') }}" class="btn btn-primary">Ajouter un ingrédient</a>
+    </div>
+{% endblock %}

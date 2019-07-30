@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Entity\DishType;
 use App\Form\DishTypeType;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/dishtype")
+ * @Route("/dishtype")
  */
-class AdminDishTypeController extends AbstractController
+class DishTypeController extends AbstractController
 {
     /**
      * @Route("/", name="admin.dish_type.index", methods={"GET"})

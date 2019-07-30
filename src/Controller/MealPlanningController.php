@@ -130,7 +130,7 @@ class MealPlanningController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="meal_planning.edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="meal_planning.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, MealPlanning $mealPlanning): Response
     {

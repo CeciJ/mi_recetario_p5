@@ -19,31 +19,30 @@ class RecipeIngredients
     private $id;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      */
     private $quantity;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $unit;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients")
      */
     private $ingredient;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $recipeId;
-
+    private $recipe;
 
     public function __construct()
     {
-        $this->unit = new ArrayCollection();
         $this->ingredient = new ArrayCollection();
-        $this->recipeId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,40 +50,26 @@ class RecipeIngredients
         return $this->id;
     }
 
-    public function getQuantity(): ?float
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity(float $quantity): self
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
         return $this;
     }
 
-    /**
-     * @return Collection|MeasureUnit[]
-     */
-    public function getUnit(): Collection
+    public function getUnit(): ?MeasureUnit
     {
         return $this->unit;
     }
 
-    public function addUnit(MeasureUnit $unit): self
+    public function setUnit(?MeasureUnit $unit): self
     {
-        if (!$this->unit->contains($unit)) {
-            $this->unit[] = $unit;
-        }
-
-        return $this;
-    }
-
-    public function removeUnit(MeasureUnit $unit): self
-    {
-        if ($this->unit->contains($unit)) {
-            $this->unit->removeElement($unit);
-        }
+        $this->unit = $unit;
 
         return $this;
     }
@@ -115,35 +100,20 @@ class RecipeIngredients
         return $this;
     }
 
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): self
+    {
+        $this->recipe = $recipe;
+
+        return $this;
+    }
+
     public function __toString() 
     {
         return $this->name;
     }
-
-    /**
-     * @return Collection|Recipe[]
-     */
-    public function getRecipeId(): Collection
-    {
-        return $this->recipeId;
-    }
-
-    public function addRecipeId(Recipe $recipeId): self
-    {
-        if (!$this->recipeId->contains($recipeId)) {
-            $this->recipeId[] = $recipeId;
-        }
-
-        return $this;
-    }
-
-    public function removeRecipeId(Recipe $recipeId): self
-    {
-        if ($this->recipeId->contains($recipeId)) {
-            $this->recipeId->removeElement($recipeId);
-        }
-
-        return $this;
-    }
-
 }

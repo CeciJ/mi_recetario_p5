@@ -128,14 +128,14 @@ class Recipe
     private $steps;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipeId")
-     */
-    private $recipeIngredients;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\MealPlanning", mappedBy="recipe")
      */
     private $mealPlannings;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe")
+     */
+    private $recipeIngredients;
 
     public function __construct()
     {
@@ -144,8 +144,8 @@ class Recipe
         $this->DishTypes = new ArrayCollection();
         $this->foodTypes = new ArrayCollection();
         $this->pictures = new ArrayCollection();
-        $this->recipeIngredients = new ArrayCollection();
         $this->mealPlannings = new ArrayCollection();
+        $this->recipeIngredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -449,34 +449,6 @@ class Recipe
     }
 
     /**
-     * @return Collection|RecipeIngredients[]
-     */
-    public function getRecipeIngredients(): Collection
-    {
-        return $this->recipeIngredients;
-    }
-
-    public function addRecipeIngredient(RecipeIngredients $recipeIngredient): self
-    {
-        if (!$this->recipeIngredients->contains($recipeIngredient)) {
-            $this->recipeIngredients[] = $recipeIngredient;
-            $recipeIngredient->addRecipeId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecipeIngredient(RecipeIngredients $recipeIngredient): self
-    {
-        if ($this->recipeIngredients->contains($recipeIngredient)) {
-            $this->recipeIngredients->removeElement($recipeIngredient);
-            $recipeIngredient->removeRecipeId($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|MealPlanning[]
      */
     public function getMealPlannings(): Collection
@@ -501,6 +473,37 @@ class Recipe
             // set the owning side to null (unless already changed)
             if ($mealPlanning->getRecipe() === $this) {
                 $mealPlanning->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RecipeIngredients[]
+     */
+    public function getRecipeIngredients(): Collection
+    {
+        return $this->recipeIngredients;
+    }
+
+    public function addRecipeIngredient(RecipeIngredients $recipeIngredient): self
+    {
+        if (!$this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients[] = $recipeIngredient;
+            $recipeIngredient->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipeIngredient(RecipeIngredients $recipeIngredient): self
+    {
+        if ($this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients->removeElement($recipeIngredient);
+            // set the owning side to null (unless already changed)
+            if ($recipeIngredient->getRecipe() === $this) {
+                $recipeIngredient->setRecipe(null);
             }
         }
 

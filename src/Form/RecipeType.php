@@ -7,6 +7,7 @@ use App\Entity\Recipe;
 use App\Entity\DishType;
 use App\Entity\FoodType;
 use App\Entity\MeasureUnit;
+use App\Entity\RecipeIngredients;
 use App\Form\RecipeIngredientsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +15,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class RecipeType extends AbstractType
 {
@@ -52,6 +54,10 @@ class RecipeType extends AbstractType
                 'required' => false
             ])
             ->add('steps')
+            ->add('recipeIngredients', CollectionType::class, [
+                'entry_type' => RecipeIngredientsType::class,
+                'entry_options' => ['label' => false],
+            ]);
         ;
     }
 

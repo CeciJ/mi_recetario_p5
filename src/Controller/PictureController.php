@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Entity\Picture;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/picture")
+ * @Route("/picture")
  */
-class AdminPictureController extends AbstractController {
+class PictureController extends AbstractController {
 
     /**
      * @Route("/{id}", name="admin.picture.delete", methods="DELETE")

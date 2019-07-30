@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Entity\Option;
 use App\Form\OptionType;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/option")
+ * @Route("/option")
  */
-class AdminOptionController extends AbstractController
+class OptionController extends AbstractController
 {
     /**
      * @Route("/", name="admin.option.index", methods={"GET"})

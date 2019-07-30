@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des unités de mesure{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <div style="margin-bottom:15px;">
+            <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary">Retour à la gestion des recettes</a>
+        </div>
+        <h1>Liste des unités de mesure</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Unité</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for measure_unit in measure_units %}
+                <tr>
+                    <td>{{ measure_unit.id }}</td>
+                    <td>{{ measure_unit.unit }}</td>
+                    <td>
+                        <a href="{{ path('admin.measure_unit.edit', {'id': measure_unit.id}) }}" class="btn btn-primary">Éditer</a>
+                        <a href="{{ path('admin.measure_unit.delete', {'id': measure_unit.id}) }}" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Pas d'unités enregistrées</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    <a href="{{ path('admin.measure_unit.new') }}" class="btn btn-primary">Ajouter une unité</a>
+    </div>
+{% endblock %}

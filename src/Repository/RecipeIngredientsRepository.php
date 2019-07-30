@@ -19,20 +19,22 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
         parent::__construct($registry, RecipeIngredients::class);
     }
 
-    /**
-      * @return RecipeIngredients[] Returns an array of RecipeIngredients objects
-      */
-    public function findByRecipeId($value)
+    // /**
+    //  * @return RecipeIngredients[] Returns an array of RecipeIngredients objects
+    //  */
+    /*
+    public function findByExampleField($value)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere(":recipeId MEMBER OF r.recipeId")
-            ->setParameter("recipeId", $value)
-            //->orderBy('r.id', 'ASC')
-            //->setMaxResults(10)
+            ->andWhere('r.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
+    */
 
     /*
     public function findOneBySomeField($value): ?RecipeIngredients

@@ -50,6 +50,15 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <div class="row">
+                    <ul class="list-group">
+                        {% for ingredient in recipe.recipeIngredients %}
+                            {% for ing in ingredient %}
+                                <li class="list-group-item">{{ ing.name }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
                 <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
                 <a href="#" class="btn btn-primary" id="contactButton" {% if form.vars.submitted %}style="display: none;"{% endif %}>Envoyer par mail</a>
                 <div id="contactForm" class="mt-4" {% if not form.vars.submitted %}style="display: none;"{% endif %}>
