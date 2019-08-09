@@ -16,12 +16,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class IngredientController extends AbstractController
 {
     /**
-     * @Route("/", name="admin.ingredient.index", methods={"GET"})
+     * @Route("/", name="admin.ingredient.index", methods={"GET", "POST"})
      */
-    public function index(IngredientRepository $ingredientRepository): Response
+    public function index(IngredientRepository $ingredientRepository, Request $request): Response
     {
+        $ingredient = new Ingredient();
+        $form = $this->createForm(IngredientType::class, $ingredient);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($ingredient);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin.ingredient.index');
+        }
+
         return $this->render('ingredient/index.html.twig', [
             'ingredients' => $ingredientRepository->findAll(),
+            'ingredient' => $ingredient,
+            'form' => $form->createView(),
         ]);
     }
 

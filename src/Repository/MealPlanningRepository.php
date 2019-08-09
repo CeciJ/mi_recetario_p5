@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method MealPlanning|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,33 @@ class MealPlanningRepository extends ServiceEntityRepository
         parent::__construct($registry, MealPlanning::class);
     }
 
+    /**
+     * @return Query
+     */
+    public function findAllQuery(ListSearch $search)
+    {
+        $startDate = $search->getStartPeriod();
+        $endDate = $search->getEndPeriod();
+
+        $query = $this->createQueryBuilder('r');
+
+        if(isset($startDate) && empty($endDate)){
+            $query = $query 
+                ->andWhere('r.beginAt >= :begin_at')
+                ->setParameter('begin_at', $startDate)
+                ->orderBy('r.beginAt', 'ASC');
+        }
+        elseif (isset($startDate) && isset($endDate)){
+            $query = $query
+                ->andWhere('r.beginAt BETWEEN :begin_at AND :end_at')
+                ->setParameter('begin_at', $startDate)
+                ->setParameter('end_at', $endDate)
+                ->orderBy('r.beginAt', 'ASC');
+        }
+        
+        return $query->getQuery()->execute();
+    }
+    
     // /**
     //  * @return MealPlanning[] Returns an array of MealPanning objects
     //  */

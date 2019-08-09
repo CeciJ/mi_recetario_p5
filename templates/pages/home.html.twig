@@ -101,6 +101,9 @@
                 <div class="modal-body">
                     <form action="{{ path('meal_planning.new') }}" method="post">
                         <div class="form-group">
+                            <label for="recipient-day" class="col-form-label">Jour: <span id="dayModal"></span></label>
+                        </div>
+                        <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Recette:</label>
                             <select class="form-control" id="recipient-name">
                                 {% for recipe in allRecipes %}
@@ -173,6 +176,14 @@
 
             var today = new Date();
 
+            var titleName;
+
+            $('#recipient-name').change(function(e){
+                titleEvent = $('select').val();
+                titleName = $('select option:selected').text();
+                //console.log(titleName);
+            });
+
             // initialize the external events
             // -----------------------------------------------------------------
 
@@ -226,44 +237,72 @@
                 dateClick: function(event) {
                     console.log(event);
                     $('#exampleModal').modal('show');
+                    $('#dayModal').html(event.dateStr);
+                },
+                /*
+                dateClick: function(event) {
+                    console.log(event);
+                    console.log(event.jsEvent);
+                    $('#exampleModal').modal('show');
 
                     var dateEvent = event.date;
                     console.log(dateEvent);
-                    var titleEvent;
-                    var eventSources = calendar.getEventSources();
-
-                    $('#recipient-name').change(function(e){
-                        e.preventDefault();
-                        titleEvent = $('select').val();
-                        titleName = $('select option:selected').text();
-                        console.log(titleName);
-                        e.stopPropagation();
-                    });
+                    console.log(titleName);
+                
+                    //var eventSources = calendar.getEventSources();
+                    //event.jsEvent.preventDefault();
                     
                     $('#addButtonModal').click(function(e){
-                        e.preventDefault();
+                        if(titleName == null) {
+                            alert('Veuillez sélectionner votre recette');
+                        }
+
                         $.ajax({
                             url: "/meal_planning/new",
                             type: "POST",
                             dataType: 'json',
                             data: {
                                 beginAt: dateEvent, 
-                                title: titleName 
+                                title: titleName,
+                                origin: 'dateClick', 
                                 },
-                            success: function (event) {                            
-                                //eventSources[0].refetch();
+                            success: function (data, response, event, date) {
                                 alert('Recette ajoutée avec succès !');
                                 $('#exampleModal').modal('hide');
-                                eventSources[0].refetch();
-                                titleName = '';
-                                dateEvent = '';
-                                //window.location.reload(true);
+                                calendar.refetchEvents();
+                                /*calendar.fullCalendar('renderEvent',
+                                {
+                                    title: titleName,
+                                    start: dateEvent,
+                                    //end: thedate1
+                                }, true);
                             }
+                        /*
+                        }).done(function(event) {
+                            //eventSources[0].refetch();
+                            alert('Recette ajoutée avec succès !');
+                            $('#exampleModal').modal('hide');
+                            //eventSources[0].refetch();
+                            titleName = '';
+                            dateEvent = '';
+                            console.log(event);
+                            //event.jsEvent.stopPropagation();
+                            //window.location.reload(true)
+                            
                         });
-                        e.stopPropagation();
+                        
+                        //event.jsEvent.stopPropagation();
+                        //eventSources[0].refetch();
+                        //calendar.refetchEvents();
                     });
-                    event.jsEvent.preventDefault();
+
+                    //calendar.refetchEvents();
+                    //var eventSources = calendar.getEventSources();
+                    //eventSources[0].refetch();
+                    //event.jsEvent.preventDefault();
+                    //event.jsEvent.stopPropagation();
                 },
+                */
                 drop: function(event) {
                 // is the "remove after drop" checkbox checked?
                     if (checkbox.checked) {
@@ -288,7 +327,7 @@
                             beginAt: eventDateStart, 
                             title: eventTitle 
                          },
-                        success: function (event) {                            
+                        success: function (event) {   
                             //eventSources[0].refetch();
                             alert('Recette ajoutée avec succès !');
                             //window.location.reload(true);
@@ -345,46 +384,57 @@
                 },
                 eventReceive: function(event) {
                     console.log(event);
-                    //console.log(event.event.title);
-                    //console.log(event.event.start);
-                    /*
-                    date = moment.format();
-
-                    $.ajax({
-                    url: "/echo/json/",
-                    type: "post",
-                    data: {
-                        json: json
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function(retour) {
-                        console.log("moment :" + date);
-                        $(".dragged,br").remove();
-                        $.each(retour, function(a, b) {
-                            $(".external")
-                            .append("<p class='dragged' />")
-                            .find(".dragged")
-                            .eq(a)
-                            .data("event", {
-                                "id": a,
-                                "stick": true,
-                                "title": "Evenement" + (a + 1)
-                            })
-                            .text(retour[a].name)
-                            .draggable({
-                                zIndex: 999,
-                                revert: true, // autoriser l'element de revenir a sa place initiale
-                                revertDuration: false //  temps original après libération de drag
-                            });
-                        });
-                        } //fin success
-                    }); //fin ajax
-                    */
+                    console.log(event.view.el);
+                    //event.view.el.style.color = 'white';
                 }
             });
 
             calendar.render();
+            //calendar.refetchEvents();
+
+            $('#addButtonModal').click(function(e){
+            // We don't want this to act as a link so cancel the link action
+                e.preventDefault();
+
+                doSubmit();
+            });
+
+            function doSubmit(){
+                console.log(titleName);
+                var dateEvent = $('#dayModal').text();
+                console.log(dateEvent);
+                $("#exampleModal").modal('hide');
+                
+                $.ajax({
+                    url: "/meal_planning/new",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        beginAt: dateEvent, 
+                        title: titleName,
+                    },
+                    success: function (data, response, event, date) {
+                        alert('Recette ajoutée avec succès !');
+                        calendar.refetchEvents();
+                    },
+                    error: function (data) {
+                        alert('Erreur dans l\'ajout de la recette');
+                    }
+                });
+                /*.done(function(event) {
+                    //eventSources[0].refetch();
+                    alert('Recette ajoutée avec succès !');
+                    $('#exampleModal').modal('hide');
+                    //eventSources[0].refetch();
+                    titleName = '';
+                    dateEvent = '';
+                    console.log(event);
+                    //event.jsEvent.stopPropagation();
+                    //window.location.reload(true)
+                    
+                });
+                */
+            }
         });
     </script>
 {% endblock %}

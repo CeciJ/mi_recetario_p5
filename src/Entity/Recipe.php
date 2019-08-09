@@ -133,7 +133,7 @@ class Recipe
     private $mealPlannings;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe", fetch="EAGER")
      */
     private $recipeIngredients;
 

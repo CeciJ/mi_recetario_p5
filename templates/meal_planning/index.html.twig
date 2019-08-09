@@ -3,7 +3,26 @@
 {% block title %}MealPlanning index{% endblock %}
 
 {% block body %}
-    <h1>MealPlanning index</h1>
+    <h1>Mes recettes sur une période</h1>
+
+    <div class="container">
+        {{ form_start(form) }}
+        <div class="form-row align-items-end">
+            <div class="col">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <button class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    {% for meal_planning in meal_plannings %}
+        <div>{{ meal_planning.title}}</div>
+    {% endfor %}
 
     <table class="table">
         <thead>

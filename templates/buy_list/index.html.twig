@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BuyList index{% endblock %}
+
+{% block body %}
+    <h1>Mes recettes sur une période</h1>
+
+    <div class="container">
+        {{ form_start(form) }}
+        <div class="form-row align-items-end">
+            <div class="col">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <button class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Duration</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for buy_list in buy_lists %}
+            <tr>
+                <td>{{ buy_list.id }}</td>
+                <td>{{ buy_list.duration }}</td>
+                <td>
+                    <a href="{{ path('buy_list.show', {'id': buy_list.id}) }}">show</a>
+                    <a href="{{ path('buy_list.edit', {'id': buy_list.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('buy_list.new') }}">Create new</a>
+{% endblock %}

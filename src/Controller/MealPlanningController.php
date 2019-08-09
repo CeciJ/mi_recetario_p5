@@ -3,18 +3,20 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Recipe;
+use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
+use App\Form\ListSearchType;
 use App\Form\MealPlanningType;
+//use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\Common\Util\Debug;
+use App\Repository\RecipeRepository;
 use App\Repository\MealPlanningRepository;
 use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Recipe;
-use App\Repository\RecipeRepository;
 
 /**
  * @Route("/meal_planning")
@@ -25,11 +27,29 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/", name="meal_planning.index", methods={"GET"})
      */
-    public function index(MealPlanningRepository $mealPlanningRepository): Response
+    public function index(MealPlanningRepository $mealPlanningRepository, Request $request): Response
     {
-        return $this->render('meal_planning/index.html.twig', [
-            'meal_plannings' => $mealPlanningRepository->findAll(),
+        $search = new ListSearch();
+        $form = $this->createForm(ListSearchType::class, $search);
+        $form->handleRequest($request);
+
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+        //dump($mealPlannings);
+
+        foreach($mealPlannings as $meal){
+            $recipe = $meal->getRecipe();
+            $ingredients = $recipe->getRecipeIngredients();
+            //dump($recipe);
+            dump($ingredients);
+        }
+
+        return $this->render("meal_planning/index.html.twig", [
+            'current_menu' => 'recipes',
+            'meal_plannings' => $mealPlannings,
+            'form' => $form->createView(),
+            'ingredients'=> $ingredients,      
         ]);
+       
     }
 
     /**
@@ -45,9 +65,9 @@ class MealPlanningController extends AbstractController
      */
     public function new(Request $request, RecipeRepository $recipeRepo): Response
     {
+        
         if($request->isXmlHttpRequest()) {
             $data = $request->getContent();
-            //exit(\Doctrine\Common\Util\Debug::dump($data));
             $data = urldecode($data);
             $datas = explode('&', $data);
             $dataStart = $datas[0];
@@ -63,6 +83,15 @@ class MealPlanningController extends AbstractController
 
             //exit(\Doctrine\Common\Util\Debug::dump($dataTitle));
 
+            /*
+            if($detailOrigin == 'dateClick') {
+
+            } else {
+
+            }
+            exit(\Doctrine\Common\Util\Debug::dump($detailOrigin));
+            */
+            /*
             if(strlen($dataTitle) < 5)
             {
                 $dataTitle = (int) $dataTitle;
@@ -76,13 +105,14 @@ class MealPlanningController extends AbstractController
             }
             else
             {
+            */
                 $recipe = $recipeRepo->findOneByName($dataTitle);
 
                 $mealPlanning = new MealPlanning();
                 $mealPlanning->setTitle($dataTitle);
                 $mealPlanning->setBeginAt($start);
                 $mealPlanning->setRecipe($recipe);
-            }
+            //}
 
             //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
             $entityManager = $this->getDoctrine()->getManager();
@@ -96,24 +126,41 @@ class MealPlanningController extends AbstractController
                 JsonResponse::HTTP_CREATED
             );
         }
-        
+        /*
+        else {
+            $mealPlanning = new MealPlanning();
+
+            $form = $this->createForm(MealPlanningType::class, $mealPlanning);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($mealPlanning);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('meal_planning.index');
+            }
+        }
+        */
+        /*
         $mealPlanning = new MealPlanning();
 
-        $form = $this->createForm(MealPlanningType::class, $mealPlanning);
-        $form->handleRequest($request);
+            $form = $this->createForm(MealPlanningType::class, $mealPlanning);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($mealPlanning);
-            $entityManager->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($mealPlanning);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('meal_planning.index');
-        }
+                return $this->redirectToRoute('meal_planning.index');
+            }
         
         return $this->render('pages/home.html.twig', [
             'meal_planning' => $mealPlanning,
             'form' => $form->createView(),
         ]);
+        */
     }
 
     /**

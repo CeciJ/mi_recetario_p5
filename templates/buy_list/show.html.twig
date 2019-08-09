@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BuyList{% endblock %}
+
+{% block body %}
+    <h1>BuyList</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ buy_list.id }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ buy_list.duration }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('buy_list.index') }}">back to list</a>
+
+    <a href="{{ path('buy_list.edit', {'id': buy_list.id}) }}">edit</a>
+
+    {{ include('buy_list/_delete_form.html.twig') }}
+{% endblock %}
