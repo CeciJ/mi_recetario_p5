@@ -30,15 +30,17 @@ class RecipeIngredients
     private $unit;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients")
-     */
-    private $ingredient;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
      * @ORM\JoinColumn(nullable=false)
      */
     private $recipe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $nameIngredient;
+
 
     public function __construct()
     {
@@ -74,32 +76,6 @@ class RecipeIngredients
         return $this;
     }
 
-    /**
-     * @return Collection|Ingredient[]
-     */
-    public function getIngredient(): Collection
-    {
-        return $this->ingredient;
-    }
-
-    public function addIngredient(Ingredient $ingredient): self
-    {
-        if (!$this->ingredient->contains($ingredient)) {
-            $this->ingredient[] = $ingredient;
-        }
-
-        return $this;
-    }
-
-    public function removeIngredient(Ingredient $ingredient): self
-    {
-        if ($this->ingredient->contains($ingredient)) {
-            $this->ingredient->removeElement($ingredient);
-        }
-
-        return $this;
-    }
-
     public function getRecipe(): ?Recipe
     {
         return $this->recipe;
@@ -116,4 +92,17 @@ class RecipeIngredients
     {
         return $this->name;
     }
+
+    public function getNameIngredient(): ?Ingredient
+    {
+        return $this->nameIngredient;
+    }
+
+    public function setNameIngredient(?Ingredient $nameIngredient): self
+    {
+        $this->nameIngredient = $nameIngredient;
+
+        return $this;
+    }
+
 }

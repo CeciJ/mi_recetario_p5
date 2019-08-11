@@ -23,7 +23,7 @@ class RecipeIngredientsType extends AbstractType
         $builder
             ->add('quantity')
             ->add('unit')
-            ->add('ingredient')
+            ->add('nameIngredient')
         ;
     }
 

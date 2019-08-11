@@ -36,18 +36,22 @@ class MealPlanningController extends AbstractController
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
         //dump($mealPlannings);
 
+        $allIngredients = [];
+
         foreach($mealPlannings as $meal){
             $recipe = $meal->getRecipe();
             $ingredients = $recipe->getRecipeIngredients();
-            //dump($recipe);
-            dump($ingredients);
+            $allIngredients[] = $ingredients;
+            //dump($ingredients);
         }
+
+        //dump($allIngredients);
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
-            'ingredients'=> $ingredients,      
+            'allIngredients'=> $allIngredients,      
         ]);
        
     }

@@ -53,9 +53,7 @@
                 <div class="row">
                     <ul class="list-group">
                         {% for ingredient in recipe.recipeIngredients %}
-                            {% for ing in ingredient %}
-                                <li class="list-group-item">{{ ing.name }}</li>
-                            {% endfor %}
+                            <div>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</div>
                         {% endfor %}
                     </ul>
                 </div>

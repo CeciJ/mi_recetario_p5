@@ -24,10 +24,11 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="ingredient")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="nameIngredient")
      */
     private $recipeIngredients;
 
+    
     public function __construct()
     {
         $this->recipeIngredients = new ArrayCollection();
@@ -50,6 +51,11 @@ class Ingredient
         return $this;
     }
 
+    public function __toString() 
+    {
+        return $this->name;
+    }
+
     /**
      * @return Collection|RecipeIngredients[]
      */
@@ -62,7 +68,7 @@ class Ingredient
     {
         if (!$this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients[] = $recipeIngredient;
-            $recipeIngredient->addIngredient($this);
+            $recipeIngredient->setNameIngredient($this);
         }
 
         return $this;
@@ -72,14 +78,13 @@ class Ingredient
     {
         if ($this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients->removeElement($recipeIngredient);
-            $recipeIngredient->removeIngredient($this);
+            // set the owning side to null (unless already changed)
+            if ($recipeIngredient->getNameIngredient() === $this) {
+                $recipeIngredient->setNameIngredient(null);
+            }
         }
 
         return $this;
     }
 
-    public function __toString() 
-    {
-        return $this->name;
-    }
 }
