@@ -36,7 +36,7 @@ class RecipeIngredients
     private $recipe;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $nameIngredient;

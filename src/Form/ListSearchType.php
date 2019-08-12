@@ -18,16 +18,12 @@ class ListSearchType extends AbstractType
             ->add('startPeriod', DateTimeType::class, [
                 'required' => false,
                 'label' => 'Du',
-                'attr' => [
-                    'placeholder' => 'Du'
-                ]
+                'date_format' => 'dd-MM-yyyy',
             ])
             ->add('endPeriod', DateTimeType::class, [
                 'required' => false,
                 'label' => 'Au',
-                'attr' => [
-                    'placeholder' => 'AU'
-                ]
+                'date_format' => 'dd-MM-yyyy',
             ])
         ;
     }

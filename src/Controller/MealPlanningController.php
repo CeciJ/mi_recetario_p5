@@ -14,6 +14,7 @@ use App\Repository\RecipeRepository;
 use App\Repository\MealPlanningRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\RecipeIngredientsRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +28,7 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/", name="meal_planning.index", methods={"GET"})
      */
-    public function index(MealPlanningRepository $mealPlanningRepository, Request $request): Response
+    public function index(MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request): Response
     {
         $search = new ListSearch();
         $form = $this->createForm(ListSearchType::class, $search);
@@ -37,21 +38,40 @@ class MealPlanningController extends AbstractController
         //dump($mealPlannings);
 
         $allIngredients = [];
+        //$allRecipes = [];
 
         foreach($mealPlannings as $meal){
             $recipe = $meal->getRecipe();
             $ingredients = $recipe->getRecipeIngredients();
             $allIngredients[] = $ingredients;
-            //dump($ingredients);
         }
+        
+        $tabNames = [];
+        foreach($allIngredients as $ingredients){
+            foreach($ingredients as $ingredient){
+                $name = $ingredient->getNameIngredient();
+                if(!in_array($name, $tabNames)){
+                    $tabNames[] = $name;
+                } 
+            }
+        }
+        //dump($tabNames);
 
+        $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
+        dump($listIngredients);
+
+        /*
+        $listIngredients = $recipeIngRepository->findByIngredientName($tabNames);
+        dump($listIngredients);
+        */
         //dump($allIngredients);
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
-            'allIngredients'=> $allIngredients,      
+            'allIngredients'=> $allIngredients,   
+            'listIngredients' => $listIngredients   
         ]);
        
     }
