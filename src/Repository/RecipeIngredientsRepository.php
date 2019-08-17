@@ -25,13 +25,38 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
     */
     public function compileIngredients(ListSearch $search, $tabNames, $allIngredients)
     {
-        dump($search);
+        dump($search); 
         $startDate = $search->getStartPeriod();
         $endDate = $search->getEndPeriod();
 
         $query = $this->createQueryBuilder('ri');
 
-        $query = $query 
+        if(empty($endDate)){
+            $query = $query 
+            //Jointure sur Recipe
+            ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
+            ->innerJoin('ri.recipe', 'r')
+            ->addSelect('r')
+            //Jointure sur Ingredient
+            ->innerJoin('ri.nameIngredient', 'i')
+            ->addSelect('i')
+            //Jointure sur Unit
+            ->innerJoin('ri.unit', 'u')
+            ->addSelect('u')
+            //Jointure sur MealPlanning
+            ->innerJoin('r.mealPlannings', 'mp')
+            ->addSelect('mp')
+            //Conditions
+            ->andWhere('ri.nameIngredient IN(:tabNames)')
+            //->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
+            ->andWhere('mp.beginAt >= :begin_at')
+            ->setParameter('begin_at', $startDate)
+            //->setParameter('end_at', $endDate)
+            ->setParameter('tabNames', $tabNames)
+            ->addGroupBy('ri.nameIngredient');
+        }
+        else {
+            $query = $query 
             //Jointure sur Recipe
             ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
             ->innerJoin('ri.recipe', 'r')
@@ -48,11 +73,12 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             //Conditions
             ->andWhere('ri.nameIngredient IN(:tabNames)')
             ->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
-            //->andWhere('mp.endAt <= :endAt')
+            //->andWhere('mp.beginAt >= :begin_at')
             ->setParameter('begin_at', $startDate)
             ->setParameter('end_at', $endDate)
             ->setParameter('tabNames', $tabNames)
             ->addGroupBy('ri.nameIngredient');
+        }
 
         return $query->getQuery()->execute();
     }

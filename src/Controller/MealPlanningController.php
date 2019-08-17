@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use DateTime;
-use App\Entity\Recipe;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
+//use Symfony\Component\Validator\Constraints\DateTime;
 use App\Form\ListSearchType;
 use App\Form\MealPlanningType;
-//use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\Common\Util\Debug;
 use App\Repository\RecipeRepository;
 use App\Repository\MealPlanningRepository;
@@ -26,13 +27,103 @@ class MealPlanningController extends AbstractController
 {
 
     /**
+     * @Route("/savetopdf/{startDate}/{endDate}", name="meal_planning.saveToPdf", methods={"GET","POST"})
+     */
+    public function saveToPdf($startDate, $endDate, MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request)
+    {
+        $search = new ListSearch();
+        $startDay = new DateTime($startDate);
+        $startDatePeriod = $search->setStartPeriod($startDay);
+        //$startDate = $startDatePeriod->format('Y-m-d');
+        $endDay = new DateTime($endDate);
+        $endDatePeriod = $search->setEndPeriod($endDay);
+        //$endDate = $endDatePeriod->format('Y-m-d');
+
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+        dump($mealPlannings);
+
+        
+        $allIngredients = [];
+        //$allRecipes = [];
+
+        foreach($mealPlannings as $meal){
+            $recipe = $meal->getRecipe();
+            $ingredients = $recipe->getRecipeIngredients();
+            $allIngredients[] = $ingredients;
+        }
+        
+        
+        $tabNames = [];
+        foreach($allIngredients as $ingredients){
+            foreach($ingredients as $ingredient){
+                $name = $ingredient->getNameIngredient();
+                if(!in_array($name, $tabNames)){
+                    $tabNames[] = $name;
+                } 
+            }
+        }
+        dump($tabNames);
+
+        
+        $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
+        dump($listIngredients);
+
+        dump($search); 
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        $dompdf->set_option('isPhpEnabled', true);
+        $dompdf->set_option('isRemoteEnabled', true);
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView("print/mypdf.html.twig", [
+            'title' => "Welcome to our PDF Test",   
+            'meal_plannings' => $mealPlannings,
+            //'allIngredients' => $allIngredients,
+            //'tabNames' => $tabNames,
+            'listIngredients' => $listIngredients
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => false
+        ]);
+        
+    }
+
+    /**
      * @Route("/", name="meal_planning.index", methods={"GET"})
      */
     public function index(MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request): Response
     {
         $search = new ListSearch();
+
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+            $startDate = $search->getStartPeriod();
+            $startDate = $startDate->format('Y-m-d H:i:s');
+            $endDate = $search->getEndPeriod();
+            $endDate = $endDate->format('Y-m-d H:i:s');
+        } else {
+            $startDate = null;
+            $endDate = null;
+        }
 
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
         //dump($mealPlannings);
@@ -60,30 +151,19 @@ class MealPlanningController extends AbstractController
         $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
         dump($listIngredients);
 
-        /*
-        $listIngredients = $recipeIngRepository->findByIngredientName($tabNames);
-        dump($listIngredients);
-        */
-        //dump($allIngredients);
-
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
             'allIngredients'=> $allIngredients,   
-            'listIngredients' => $listIngredients   
+            'listIngredients' => $listIngredients,
+            'startDate' => $startDate,
+            'endDate' => $endDate  
         ]);
        
     }
 
-    /**
-     * @Route("/calendar", name="meal_planning.calendar", methods={"GET"})
-     */
-    public function calendar(): Response
-    {
-        return $this->render('meal_planning/calendar.html.twig');
-    }
-    
+
     /**
      * @Route("/new", name="meal_planning.new", methods={"GET","POST"})
      */

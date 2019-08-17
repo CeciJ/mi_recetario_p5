@@ -34,15 +34,11 @@
         {% endfor %}
         </ul>
     -->
+    {% if listIngredients %}
         <div class="row">
             <div class="col-md-6">
-                <h2>Ma liste de courses</h2>
-                <ul>
-                    {% for ingredient in listIngredients %}
-                        <li>{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</li>
-                    {% endfor %}
-                </ul>
-                <a class="btn btn-primary">Imprimer</a> <a class="btn btn-primary">Envoyer par mail</a>
+                {{ include('meal_planning/_list.html.twig') }}
+                <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate, endDate: endDate}) }}" id="saveToPdfButton">Imprimer</a> <a class="btn btn-primary">Envoyer par mail</a>
             </div>
 
             <div class="col-md-6">
@@ -69,6 +65,9 @@
                 </table>
             </div>
         </div>
+    {% endif %}
+    
+        
 
     </div>
 {% endblock %}

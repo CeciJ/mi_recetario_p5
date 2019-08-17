@@ -1,0 +1,6 @@
+<h2>Ma liste de courses</h2>
+    <ul>
+        {% for ingredient in listIngredients %}
+            <li>{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</li>
+        {% endfor %}
+    </ul>
