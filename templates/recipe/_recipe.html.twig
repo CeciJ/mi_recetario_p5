@@ -14,13 +14,8 @@
                     {{ dishType.name }}
                 {% endfor %}
             </li>
-            <li class="card-text">Temps de préparation : {{ recipe.totalTime }} minutes</li>
-            <li class="card-text">Pour {{ recipe.numberPersons }} {% if recipe.numberPersons > 1 %} personnes {% else %} personne {% endif %}</li>
-        </ul>
-        <ul>
-            {% for ingredient in recipe.recipeIngredients %}
-                <li>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</li>
-            {% endfor %}
+            <li class="card-text">{{ recipe.totalTime }} minutes</li>
+            <li class="card-text">{{ recipe.numberPersons }} {% if recipe.numberPersons > 1 %} personnes {% else %} personne {% endif %}</li>
         </ul>
     </div>
 </div>

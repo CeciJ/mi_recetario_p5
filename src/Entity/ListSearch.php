@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ListSearch 
 {
@@ -12,6 +14,13 @@ class ListSearch
 
     private $endPeriod;
 
+    public function __construct()
+    {
+        $fecha = new DateTime();
+        $dateStart = $fecha->format('d-m-Y H:i:s');
+        $this->startPeriod = new \DateTime($dateStart);
+        $this->endPeriod = new \DateTime();
+    }
 
     public function getStartPeriod(): ?\DateTime
     {

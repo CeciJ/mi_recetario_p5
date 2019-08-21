@@ -12,7 +12,7 @@
             <div class="form-row align-items-end">
                 <div class="col-md-5">{{ form_row(form.startPeriod) }}</div>
                 <div class="col-md-5">{{ form_row(form.endPeriod) }}</div>
-                <div class="col-md-2"><button class="btn btn-primary">Rechercher</button></div>
+                <div class="col-md-2"><div class="form-group"><button class="btn btn-primary">Rechercher</button></div></div>
             </div>
             {{ form_end(form) }}
         </div>
@@ -38,7 +38,9 @@
         <div class="row">
             <div class="col-md-6">
                 {{ include('meal_planning/_list.html.twig') }}
-                <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate, endDate: endDate}) }}" id="saveToPdfButton">Imprimer</a> <a class="btn btn-primary">Envoyer par mail</a>
+                <div>
+                    <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate, endDate: endDate}) }}" id="saveToPdfButton">Imprimer</a> <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate, endDate: endDate}) }}" id="sendMailButton">Envoyer par mail</a>
+                </div>
             </div>
 
             <div class="col-md-6">
@@ -70,4 +72,39 @@
         
 
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $( function() {
+            $( "#startPeriod" ).datepicker({
+                dateFormat: "dd-mm-yy",
+                closeText: 'Fermer',
+                prevText: 'Précédent',
+                nextText: 'Suivant',
+                currentText: 'Aujourd\'hui',
+                monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                weekHeader: 'Sem.',
+                firstDay: 1
+            });
+            $( "#endPeriod" ).datepicker({
+                dateFormat: "dd-mm-yy",
+                closeText: 'Fermer',
+                prevText: 'Précédent',
+                nextText: 'Suivant',
+                currentText: 'Aujourd\'hui',
+                monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                weekHeader: 'Sem.',
+                firstDay: 1
+            });
+        } );
+    </script>
 {% endblock %}

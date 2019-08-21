@@ -5,9 +5,10 @@ namespace App\Controller;
 use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Twig\Environment;
 use App\Entity\ListSearch;
-use App\Entity\MealPlanning;
 //use Symfony\Component\Validator\Constraints\DateTime;
+use App\Entity\MealPlanning;
 use App\Form\ListSearchType;
 use App\Form\MealPlanningType;
 use Doctrine\Common\Util\Debug;
@@ -103,6 +104,76 @@ class MealPlanningController extends AbstractController
             "Attachment" => false
         ]);
         
+    }
+
+    /**
+     * @Route("/sendbymail/{startDate}/{endDate}", name="meal_planning.sendByMail", methods={"GET","POST"})
+     */
+    public function sendByMail($startDate, $endDate, MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request, \Swift_Mailer $mailer, Environment $renderer)
+    {
+        $search = new ListSearch();
+
+        $form = $this->createForm(ListSearchType::class, $search);
+        $form->handleRequest($request);
+
+
+        $search = new ListSearch();
+        $startDay = new DateTime($startDate);
+        $startDatePeriod = $search->setStartPeriod($startDay);
+        //$startDate = $startDatePeriod->format('Y-m-d');
+        $endDay = new DateTime($endDate);
+        $endDatePeriod = $search->setEndPeriod($endDay);
+        //$endDate = $endDatePeriod->format('Y-m-d');
+
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+        dump($mealPlannings);
+        
+        $allIngredients = [];
+        //$allRecipes = [];
+
+        foreach($mealPlannings as $meal){
+            $recipe = $meal->getRecipe();
+            $ingredients = $recipe->getRecipeIngredients();
+            $allIngredients[] = $ingredients;
+        }
+        
+        $tabNames = [];
+        foreach($allIngredients as $ingredients){
+            foreach($ingredients as $ingredient){
+                $name = $ingredient->getNameIngredient();
+                if(!in_array($name, $tabNames)){
+                    $tabNames[] = $name;
+                } 
+            }
+        }
+        dump($tabNames);
+
+        $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
+        dump($listIngredients);
+
+        dump($search); 
+
+        $message = (new \Swift_Message('Liste d\'ingrédients'))
+            ->setFrom('cec.jourdan@gmail.com')
+            ->setTo('cec.jourdan@gmail.com')
+            //->setReplyTo($contactMail->getEmail())
+            ->setBody($renderer->render('emails/list.html.twig', [
+                'listIngredients' => $listIngredients,
+                'startDate' => $startDate,
+                'endDate' => $endDate 
+
+            ]), 'text/html');
+        $mailer->send($message);
+
+        return $this->render("meal_planning/index.html.twig", [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'current_menu' => 'recipes',
+            'meal_plannings' => $mealPlannings,
+            'form' => $form->createView(),
+            'allIngredients'=> $allIngredients,   
+            'listIngredients' => $listIngredients, 
+        ]);
     }
 
     /**
