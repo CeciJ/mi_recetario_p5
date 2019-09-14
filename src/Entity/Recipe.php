@@ -133,7 +133,7 @@ class Recipe
     private $mealPlannings;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe", fetch="EAGER", cascade={"persist"})
      */
     private $recipeIngredients;
 
@@ -508,6 +508,11 @@ class Recipe
         }
 
         return $this;
+    }
+
+    public function addRecipeIngredients(RecipeIngredients $recipeIngredients)
+    {
+        $this->recipeIngredients->add($recipeIngredients);
     }
 
 }

@@ -88,10 +88,13 @@ class RecipeIngredients
         return $this;
     }
 
+    /*
     public function __toString() 
     {
-        return $this->name;
+        return $this->nameIngredient;
     }
+    */
+    
 
     public function getNameIngredient(): ?Ingredient
     {

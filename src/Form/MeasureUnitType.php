@@ -20,6 +20,7 @@ class MeasureUnitType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => MeasureUnit::class,
+            'translation_domain' => 'forms'
         ]);
     }
 }

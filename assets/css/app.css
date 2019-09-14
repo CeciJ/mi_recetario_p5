@@ -1,4 +1,12 @@
+/*Homepage*/
+#bandeauTitre{
+    background-color: #5ee5a1 !important;
+}
+h1{
+    color: white;
+}
 /*Liste de courses*/
 h2{
     margin-top: 20px;
 }
+

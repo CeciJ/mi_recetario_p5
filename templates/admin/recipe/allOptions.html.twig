@@ -1,0 +1,174 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Gérer les options des recettes' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <a href="{{ path('admin.recipe.index') }}" class="btn btn-info" style="margin-bottom:15px;">Revenir à la liste de recettes</a>
+        <div id="dishTypes" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
+            <h3 style="margin-bottom: 20px;">Types de plats</h3>
+            <div class="row">
+                {% for dishType in dish_types %}
+                    <div style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 14px 16px; border: 1px solid black; border-radius: 3px;">
+                        <div>
+                            <div>{{ dishType.name }}</div>
+                            <div class="row" style="font-size: 10px;">
+                                <div class="col-md-12">
+                                    <span data-toggle="modal" data-target="{{ path('admin.dish_type.edit', {'id': dishType.id}) }}" class="modal-trigger edit" id="buttonSubmitEditDishType" style="cursor:pointer;">Modifier</span> |
+                                    <form method="post" action="{{ path('admin.dish_type.delete', {id: dishType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dishType.id) }}">
+                                        <button>Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button id="buttonSubmitDishType" data-toggle="modal" data-target="{{ path('admin.dish_type.new') }}" class="modal-trigger add btn btn-primary" style="margin-top: 25px;">Ajouter un type de plat</button>
+            <div id="formDishType" style="display:none;" class="formAddOption">
+                {% include "admin/dish_type/_form.html.twig" %}
+            </div>
+        </div>
+        <div id="foodTypes" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
+            <h3 style="margin-bottom: 20px;">Types de cuisine</h3>
+            <ul style="list-style-type: none; margin: 0; padding: 0;">
+                {% for food_type in food_types %}
+                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ food_type.name }}</li>
+                {% endfor %}
+            </ul>
+            <button id="buttonSubmitFoodType" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter un type de cuisine</button>
+            <div id="formFoodType" style="display:none;" class="formAddOption">
+                {% include "admin/food_type/_form.html.twig" %}
+            </div>
+        </div>
+        <div id="options" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
+            <h3 style="margin-bottom: 20px;">Options supplémentaires</h3>
+            <ul style="list-style-type: none; margin: 0; padding: 0;">
+                {% for option in options %}
+                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ option.name }}</li>
+                {% endfor %}
+            </ul>
+            <button id="buttonSubmitOption" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une option</button>
+            <div id="formOption" style="display:none;" class="formAddOption">
+                {% include "admin/option/_form.html.twig" %}
+            </div>
+        </div>
+        <div id="units" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
+            <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
+            <ul style="list-style-type: none; margin: 0; padding: 0;">
+                {% for measure_unit in measure_units %}
+                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ measure_unit.unit }}</li>
+                {% endfor %}
+            </ul>
+            <button id="buttonSubmitMeasureUnit" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une unité de mesure</button>
+            <div id="formMeasureUnit" style="display:none;" class="formAddOption">
+                {% include "admin/measure_unit/_form.html.twig" %}
+            </div>
+        </div>
+
+    </div>
+
+<div class="modal fade modalAddDishType" id="modalAddDishType" tabindex="-1" role="dialog" aria-labelledby="modalAddDishTypeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter un nouveau type de plat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalEditDishType" id="modalEditDishType" tabindex="-1" role="dialog" aria-labelledby="modalAddDishTypeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Modifier un type de plat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
+            $('.modal-trigger.add').click(function () {
+            //On initialise les modales materialize
+                $('.modalAddDishType').modal();
+                //On récupère l'url depuis la propriété "Data-target" de la balise html a
+                url = $(this).attr('data-target');
+                //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
+                $.get(url, function (data) {
+                    //on injecte le html dans la modale
+                    $('.modal-body').html(data);
+                    //on ouvre la modale
+                    $('#modalAddDishType').modal('open');
+                });
+            })
+        });
+
+        $(document).ready(function() {
+            //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
+            $('.modal-trigger.edit').click(function () {
+            //On initialise les modales materialize
+                $('.modalEditDishType').modal();
+                //On récupère l'url depuis la propriété "Data-target" de la balise html a
+                url = $(this).attr('data-target');
+                //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
+                $.get(url, function (data) {
+                    //on injecte le html dans la modale
+                    $('.modal-body').html(data);
+                    //on ouvre la modale
+                    $('#modalEditDishType').modal('open');
+                });
+            })
+        });
+        //$('#modalAddDishType').modal();
+        //$('#modalAddDishType').modal('hide');
+        //$('#buttonSubmitDishType').click(function(e){
+        //    $('#modalAddDishType').modal('show');
+            //$('#formDishType').css('display', 'block');
+        //});
+        /*
+        $('#buttonSubmitFoodType').click(function(e){
+            $('#formFoodType').css('display', 'block');
+        });
+        $('#buttonSubmitOption').click(function(e){
+            $('#formOption').css('display', 'block');
+        });
+        $('#buttonSubmitMeasureUnit').click(function(e){
+            $('#formMeasureUnit').css('display', 'block');
+        });
+        */
+        /*
+        $('.closeForm').click(function(e){
+            $('.formAddOption').css('display', 'none');
+        });
+        */
+        
+    </script>
+{% endblock %}

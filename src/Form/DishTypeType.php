@@ -20,6 +20,7 @@ class DishTypeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DishType::class,
+            'translation_domain' => 'forms'
         ]);
     }
 }

@@ -1,3 +1,4 @@
+{% block body %}
 {{ form_start(form) }}
 <div class="row">
   <div class="col-md-8">
@@ -33,14 +34,21 @@
     <div class="col-md-4">{{ form_row(form.options) }}</div>
 </div>
 <div>{{ form_row(form.steps) }}</div>
-<a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Ajouter un ingrédient</a>
-{% for ingredient in form.recipeIngredients %}
-  <div class="row">
-    <div class="col-md-2">{{ form_row(ingredient.quantity) }}</div>
-    <div class="col-md-2">{{ form_row(ingredient.unit) }}</div>
-    <div class="col-md-4">{{ form_row(ingredient.nameIngredient) }}</div>
-  </div>
-{% endfor %}
+<div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
+  {% for ingredient in form.recipeIngredients %}
+    <div class="row rowIngredient">
+      <div class="col-md-2 ingQuantity">{{ form_row(ingredient.quantity) }}</div>
+      <div class="col-md-2 ingUnit">{{ form_row(ingredient.unit) }}</div>
+      <div class="col-md-4 ingNameIngredient">{{ form_row(ingredient.nameIngredient) }}</div>
+    </div>
+  {% endfor %}
+</div>
 {{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+  <script type="text/javascript">
+  </script>
+{% endblock %}

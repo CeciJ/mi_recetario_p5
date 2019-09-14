@@ -61,3 +61,62 @@ pdfButton.click(function(e){
 // const $ = require('jquery');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+
+var $collectionHolder;
+    // setup an "add a tag" link
+    var $addIngredientButton = $('<button type="button" class="add_ingredient_link btn btn-primary">Ajouter un ingrédient</button>');
+    var $newLinkDiv = $('<div></div>').append($addIngredientButton);
+
+    jQuery(document).ready(function() {
+        // Get the ul that holds the collection of tags
+        $collectionHolder = $('div.manageIngredients');
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkDiv);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        var compteur = 0;
+        $addIngredientButton.on('click', function(e) {
+          //console.log(compteur);
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkDiv);
+
+            /*
+            console.log($collectionHolder[0].children[1]);
+            */
+            var divToAddClass = $collectionHolder[0].children[1].childNodes[compteur];
+            //console.log(divToAddClass);
+            $(divToAddClass).css('display', 'flex');
+            compteur = compteur + 1;
+        });
+    });
+
+    function addTagForm($collectionHolder, $newLinkDiv) {
+      // Get the data-prototype explained earlier
+      var prototype = $collectionHolder.data('prototype');
+
+      // get the new index
+      var index = $collectionHolder.data('index');
+
+      var newForm = prototype;
+      // You need this only if you didn't set 'label' => false in your tags field in TaskType
+      // Replace '__name__label__' in the prototype's HTML to
+      // instead be a number based on how many items we have
+      // newForm = newForm.replace(/__name__label__/g, index);
+
+      // Replace '__name__' in the prototype's HTML to
+      // instead be a number based on how many items we have
+      newForm = newForm.replace(/__name__/g, index);
+
+      // increase the index with one for the next item
+      $collectionHolder.data('index', index + 1);
+
+      // Display the form in the page in an li, before the "Add a tag" link li
+      var $newFormDiv = $('<div></div>').append(newForm);
+
+      $newLinkDiv.before($newFormDiv);
+
+    }

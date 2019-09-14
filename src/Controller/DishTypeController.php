@@ -31,20 +31,20 @@ class DishTypeController extends AbstractController
     public function new(Request $request): Response
     {
         $dishType = new DishType();
-        $form = $this->createForm(DishTypeType::class, $dishType);
-        $form->handleRequest($request);
+        $formDishType = $this->createForm(DishTypeType::class, $dishType);
+        $formDishType->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDishType->isSubmitted() && $formDishType->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($dishType);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin.dish_type.index');
+            return $this->redirectToRoute('admin.all_options');
         }
 
-        return $this->render('admin/dish_type/new.html.twig', [
+        return $this->render('admin/dish_type/_form.html.twig', [
             'dish_type' => $dishType,
-            'form' => $form->createView(),
+            'formDishType' => $formDishType->createView(),
         ]);
     }
 
@@ -63,20 +63,19 @@ class DishTypeController extends AbstractController
      */
     public function edit(Request $request, DishType $dishType): Response
     {
-        $form = $this->createForm(DishTypeType::class, $dishType);
-        $form->handleRequest($request);
+        $formDishType = $this->createForm(DishTypeType::class, $dishType);
+        $formDishType->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDishType->isSubmitted() && $formDishType->isValid()) {
+            dump('test');
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('admin.dish_type.index', [
-                'id' => $dishType->getId(),
-            ]);
+            return $this->redirectToRoute('admin.all_options');
         }
 
-        return $this->render('admin/dish_type/edit.html.twig', [
+        return $this->render('admin/dish_type/_form.html.twig', [
             'dish_type' => $dishType,
-            'form' => $form->createView(),
+            'formDishType' => $formDishType->createView(),
         ]);
     }
 
@@ -91,6 +90,6 @@ class DishTypeController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin.dish_type.index');
+        return $this->redirectToRoute('admin.all_options');
     }
 }
