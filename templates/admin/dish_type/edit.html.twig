@@ -1,11 +1,63 @@
-{% extends "base.html.twig" %}
 
-{% block title 'Éditer ce type de plat' %}
-
-{% block body %}   
-    <div class="container mt-4">
-        <h1>Éditer le type de plat</h1>
-        {{ include("admin/dish_type/_form.html.twig", {form: form, button: 'Éditer'}) }}
+ {# {{ form_start(formEditDishType) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(formEditDishType.name) }}</div>
     </div>
+    {{ form_widget(formEditDishType) }}
+    <button id="submitEditDishType" class="btn btn-primary" data-target-id="" data-target-name="">{{ button|default('Modifier') }}</button>
+{{ form_end(formEditDishType) }} #}
 
-{% endblock %}
+<div class="modal fade modalEditDishType" id="modalEditDishType-{{dishType.id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditDishTypeLabel" aria-hidden="true">
+    {{ form_start(formEditDishType) }}
+    <div class="modal-dialog" role="document">
+        <input id="editDishTypeID-{{dishType.id}}" type="hidden" value="{{dishType.id}}">
+        <input id="editDishTypeName-{{dishType.id}}" type="hidden" value="{{dishType.name|replace({' ': '_'})}}">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Modifier un type de plat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body edit">
+            <p>Modifier : {{dishType.name}}</p>
+            <div class="row">
+                <div id="rowModal" class="col-md-6">{{ form_row(formEditDishType.name, {'id':'formDishType-' ~ dishType.name|replace({' ': '_'})}) }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {# <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button> #}
+            <button type="button" class="btn btn-primary" id="submitDishTypeEdit-{{dishType.id}}" onclick="submitEditDishType({{dishType.id}})">Ajouter</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+    {{ form_end(formEditDishType) }}
+</div>
+
+<script>
+
+function submitEditDishType(id){
+    var oldName = $('#editDishTypeName-'+id).val();
+    var path = "/dishtype/" + id + "/edit";
+
+    var inputName = $('#formDishType-'+oldName);
+
+    var newName = inputName.val();
+
+    $.ajax({
+        url: path,
+        method: "POST",
+        data: {
+            id: id,
+            newName: newName
+        },
+        success: function(data){
+            alert('Modification effectuée avec succès');
+            $('#modalEditDishType-'+id).modal('hide');
+            window.location.reload();
+        }
+    });
+}
+
+</script>

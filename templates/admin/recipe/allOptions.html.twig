@@ -3,73 +3,137 @@
 {% block title 'Gérer les options des recettes' %}
 
 {% block body %}
-    <div class="container mt-4">
-        <a href="{{ path('admin.recipe.index') }}" class="btn btn-info" style="margin-bottom:15px;">Revenir à la liste de recettes</a>
-        <div id="dishTypes" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
-            <h3 style="margin-bottom: 20px;">Types de plats</h3>
-            <div class="row">
-                {% for dishType in dish_types %}
-                    <div style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 14px 16px; border: 1px solid black; border-radius: 3px;">
-                        <div>
-                            <div>{{ dishType.name }}</div>
-                            <div class="row" style="font-size: 10px;">
-                                <div class="col-md-12">
-                                    <span data-toggle="modal" data-target="{{ path('admin.dish_type.edit', {'id': dishType.id}) }}" class="modal-trigger edit" id="buttonSubmitEditDishType" style="cursor:pointer;">Modifier</span> |
-                                    <form method="post" action="{{ path('admin.dish_type.delete', {id: dishType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dishType.id) }}">
-                                        <button>Supprimer</button>
-                                    </form>
-                                </div>
+<div class="container mt-4">
+    <a href="{{ path('admin.recipe.index') }}" class="btn btn-info" style="margin-bottom:15px;">Revenir à la liste de recettes</a>
+    
+    <div id="dishTypes" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
+        <h3 style="margin-bottom: 20px;">Types de plats</h3>
+        <div class="row">
+            {% for dishType in dish_types %}
+                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                    <div>
+                        <div>{{ dishType.name }}</div>
+                        <div class="row" style="font-size: 10px;">
+                            <div class="col-md-12">
+                                <a data-toggle="modal" data-target="#modalEditDishType-{{dishType.id}}" href="{{ path('admin.dish_type.edit', {id: dishType.id}) }}" data-id="{{dishType.id}}" data-name="{{dishType.name}}"  class="modal-trigger edit" id="buttonEditDishType-{{dishType.id}}" style="cursor:pointer;" onclick="openModalEditDishType({{dishType.id}})">Modifier</a>
+                                <form method="post" action="{{ path('admin.dish_type.delete', {id: dishType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dishType.id) }}">
+                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-            <button id="buttonSubmitDishType" data-toggle="modal" data-target="{{ path('admin.dish_type.new') }}" class="modal-trigger add btn btn-primary" style="margin-top: 25px;">Ajouter un type de plat</button>
-            <div id="formDishType" style="display:none;" class="formAddOption">
-                {% include "admin/dish_type/_form.html.twig" %}
-            </div>
+                </div>
+                {{ render(controller(
+                    'App\\Controller\\DishTypeController::edit',
+                    { 'id': dishType.id }
+                )) }}
+            {% endfor %}
         </div>
-        <div id="foodTypes" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
-            <h3 style="margin-bottom: 20px;">Types de cuisine</h3>
-            <ul style="list-style-type: none; margin: 0; padding: 0;">
-                {% for food_type in food_types %}
-                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ food_type.name }}</li>
-                {% endfor %}
-            </ul>
-            <button id="buttonSubmitFoodType" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter un type de cuisine</button>
-            <div id="formFoodType" style="display:none;" class="formAddOption">
-                {% include "admin/food_type/_form.html.twig" %}
-            </div>
-        </div>
-        <div id="options" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
-            <h3 style="margin-bottom: 20px;">Options supplémentaires</h3>
-            <ul style="list-style-type: none; margin: 0; padding: 0;">
-                {% for option in options %}
-                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ option.name }}</li>
-                {% endfor %}
-            </ul>
-            <button id="buttonSubmitOption" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une option</button>
-            <div id="formOption" style="display:none;" class="formAddOption">
-                {% include "admin/option/_form.html.twig" %}
-            </div>
-        </div>
-        <div id="units" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
-            <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
-            <ul style="list-style-type: none; margin: 0; padding: 0;">
-                {% for measure_unit in measure_units %}
-                    <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ measure_unit.unit }}</li>
-                {% endfor %}
-            </ul>
-            <button id="buttonSubmitMeasureUnit" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une unité de mesure</button>
-            <div id="formMeasureUnit" style="display:none;" class="formAddOption">
-                {% include "admin/measure_unit/_form.html.twig" %}
-            </div>
-        </div>
-
+        <button id="buttonSubmitDishType" data-toggle="modal" data-target="{{ path('admin.dish_type.new') }}" class="modal-trigger add dishType btn btn-primary" style="margin-top: 25px;">Ajouter un type de plat</button>            
     </div>
 
+    <div id="foodTypes" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
+        <h3 style="margin-bottom: 20px;">Types de cuisine</h3>
+        <div class="row">
+            {% for foodType in food_types %}
+                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                    <div>
+                        <div>{{ foodType.name }}</div>
+                        <div class="row" style="font-size: 10px;">
+                            <div class="col-md-12">
+                                <a data-toggle="modal" data-target="#modalEditFoodType-{{foodType.id}}" href="{{ path('admin.food_type.edit', {id: foodType.id}) }}" data-id="{{foodType.id}}" data-name="{{foodType.name}}"  class="modal-trigger edit foodType" id="buttonEditFoodType-{{foodType.id}}" style="cursor:pointer;" onclick="openModalEditFoodType({{foodType.id}})">Modifier</a>
+                                <form method="post" action="{{ path('admin.food_type.delete', {id: foodType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ foodType.id) }}">
+                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ render(controller(
+                    'App\\Controller\\FoodTypeController::edit',
+                    { 'id': foodType.id }
+                )) }}
+            {% endfor %}
+        </div>
+        <button id="buttonSubmitFoodType" data-toggle="modal" data-target="{{ path('admin.food_type.new') }}" class="modal-trigger add foodType btn btn-primary" style="margin-top: 25px;">Ajouter un type de cuisine</button>            
+    </div>
+
+    <div id="options" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
+        <h3 style="margin-bottom: 20px;">Options supplémentaires</h3>
+        <div class="row">
+            {% for option in options %}
+                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                    <div>
+                        <div>{{ option.name }}</div>
+                        <div class="row" style="font-size: 10px;">
+                            <div class="col-md-12">
+                                <a data-toggle="modal" data-target="#modalEditOption-{{option.id}}" href="{{ path('admin.option.edit', {id: option.id}) }}" data-id="{{option.id}}" data-name="{{option.name}}"  class="modal-trigger edit option" id="buttonEditOption-{{option.id}}" style="cursor:pointer;" onclick="openModalEditOption({{option.id}})">Modifier</a>
+                                <form method="post" action="{{ path('admin.option.delete', {id: option.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
+                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ render(controller(
+                    'App\\Controller\\OptionController::edit',
+                    { 'id': option.id }
+                )) }}
+            {% endfor %}
+        </div>
+        <button id="buttonSubmitOption" data-toggle="modal" data-target="{{ path('admin.option.new') }}" class="modal-trigger add option btn btn-primary" style="margin-top: 25px;">Ajouter une option</button>
+    </div>
+
+{#     <div id="units" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
+        <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
+        <div class="row">
+            {% for measure_unit in measure_units %}
+                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                    <div>
+                        <div>{{ measure_unit.unit }}</div>
+                        <div class="row" style="font-size: 10px;">
+                            <div class="col-md-12">
+                                <a data-toggle="modal" data-target="#modalEditMeasureUnit-{{measure_unit.id}}" href="{{ path('admin.measure_unit.edit', {id: measure_unit.id}) }}" data-id="{{measure_unit.id}}" data-name="{{measure_unit.unit}}"  class="modal-trigger edit measure_unit" id="buttonEditMeasureUnit-{{measure_unit.id}}" style="cursor:pointer;" onclick="openModalEditMeasureUnit({{measure_unit.id}})">Modifier</a>
+                                <form method="post" action="{{ path('admin.measure_unit.delete', {id: measure_unit.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ measure_unit.id) }}">
+                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ render(controller(
+                    'App\\Controller\\MeasureUnitController::edit',
+                    { 'id': measure_unit.id }
+                )) }}
+            {% endfor %}
+        </div>
+        <button id="buttonSubmitMeasureUnit" data-toggle="modal" data-target="{{ path('admin.measure_unit.new') }}" class="modal-trigger add measureUnit btn btn-primary" style="margin-top: 25px;">Ajouter une unité</button>
+    </div> #}
+    
+    {# <div id="units" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
+        <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
+        <ul style="list-style-type: none; margin: 0; padding: 0;">
+            {% for measure_unit in measure_units %}
+                <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ measure_unit.unit }}</li>
+            {% endfor %}
+        </ul>
+        <button id="buttonSubmitMeasureUnit" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une unité de mesure</button>
+        <div id="formMeasureUnit" class="formAddOption">
+            {% include "admin/measure_unit/_form.html.twig" %}
+        </div>
+    </div> #}
+
+</div>
+
+<!-- MODAL ADD DISH TYPE -->
 <div class="modal fade modalAddDishType" id="modalAddDishType" tabindex="-1" role="dialog" aria-labelledby="modalAddDishTypeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -79,8 +143,8 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body">
-            
+        <div class="modal-body add">
+            {{ render(path('admin.dish_type.new')) }}
         </div>
         <div class="modal-footer">
             <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
@@ -90,17 +154,60 @@
     </div>
 </div>
 
-<div class="modal fade modalEditDishType" id="modalEditDishType" tabindex="-1" role="dialog" aria-labelledby="modalAddDishTypeLabel" aria-hidden="true">
+<!-- MODAL ADD FOOD TYPE -->
+<div class="modal fade modalAddFoodType" id="modalAddFoodType" tabindex="-1" role="dialog" aria-labelledby="modalAddFoodTypeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Modifier un type de plat</h5>
+            <h5 class="modal-title">Ajouter un nouveau type de cuisine</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body">
-            
+        <div class="modal-body add">
+            {{ render(path('admin.food_type.new')) }}
+        </div>
+        <div class="modal-footer">
+            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ADD OPTION -->
+<div class="modal fade modalAddOption" id="modalAddOption" tabindex="-1" role="dialog" aria-labelledby="modalAddOptionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter une nouvelle option</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body add">
+            {{ render(path('admin.option.new')) }}
+        </div>
+        <div class="modal-footer">
+            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ADD MEASURE UNIT -->
+<div class="modal fade modalAddMeasureUnit" id="modalAddMeasureUnit" tabindex="-1" role="dialog" aria-labelledby="modalAddMeasureUnitLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter une nouvelle unité</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body add">
+            {{ render(path('admin.measure_unit.new')) }}
         </div>
         <div class="modal-footer">
             <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
@@ -114,61 +221,105 @@
 
 {% block javascripts %}
     <script>
-        $(document).ready(function() {
-            //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-            $('.modal-trigger.add').click(function () {
-            //On initialise les modales materialize
-                $('.modalAddDishType').modal();
-                //On récupère l'url depuis la propriété "Data-target" de la balise html a
-                url = $(this).attr('data-target');
-                //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
-                $.get(url, function (data) {
-                    //on injecte le html dans la modale
-                    $('.modal-body').html(data);
-                    //on ouvre la modale
-                    $('#modalAddDishType').modal('open');
-                });
-            })
+
+    function openModalEditDishType(id){
+        var oldName = $('#editDishTypeName-'+id).val();
+        var indexOfFirst = oldName.indexOf(' ');
+        if(indexOfFirst < 0){
+            var inputName = $('#formDishType-'+oldName);
+            inputName.val('');
+        } 
+        $(inputName).on("click", function(){
+            if ($(this).is( ":focus" )) {
+                if($(this).on( "keydown")){
+                    console.log($('#formDishType-'+oldName).val());
+                }
+            }else{
+                $(this).focus();
+            }
+        });
+    }
+
+    function openModalEditFoodType(id){
+        var oldName = $('#editFoodTypeName-'+id).val();
+        var indexOfFirst = oldName.indexOf(' ');
+        if(indexOfFirst < 0){
+            var inputName = $('#formFoodType-'+oldName);
+            inputName.val('');
+        } 
+        $(inputName).on("click", function(){
+            if ($(this).is( ":focus" )) {
+                if($(this).on( "keydown")){
+                    console.log($('#formFoodType-'+oldName).val());
+                }
+            }else{
+                $(this).focus();
+            }
+        });
+    }
+
+    function openModalEditOption(id){
+        var oldName = $('#editOptionName-'+id).val();
+        var indexOfFirst = oldName.indexOf(' ');
+        if(indexOfFirst < 0){
+            var inputName = $('#formOption-'+oldName);
+            inputName.val('');
+        } 
+        $(inputName).on("click", function(){
+            if ($(this).is( ":focus" )) {
+                if($(this).on( "keydown")){
+                    console.log($('#formOption-'+oldName).val());
+                }
+            }else{
+                $(this).focus();
+            }
+        });
+    }
+
+    function openModalEditMeasureUnit(id){
+        var oldName = $('#editMeasureUnitName-'+id).val();
+        console.log(oldName);
+        var indexOfFirst = oldName.indexOf(' ');
+        console.log(indexOfFirst);
+        if(indexOfFirst < 0){
+            var inputName = $('#formMeasureUnit-'+oldName);
+            console.log(inputName);
+            inputName.val('');
+        } 
+        $(inputName).on("click", function(){
+            if ($(this).is( ":focus" )) {
+                if($(this).on( "keydown")){
+                    console.log($('#formMeasureUnit-'+oldName).val());
+                }
+            }else{
+                $(this).focus();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+
+        $('.modal-trigger.add.dishType').click(function () {
+            $('.modalAddDishType').modal();
+            $('.modalAddDishType').modal('show');
         });
 
-        $(document).ready(function() {
-            //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-            $('.modal-trigger.edit').click(function () {
-            //On initialise les modales materialize
-                $('.modalEditDishType').modal();
-                //On récupère l'url depuis la propriété "Data-target" de la balise html a
-                url = $(this).attr('data-target');
-                //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
-                $.get(url, function (data) {
-                    //on injecte le html dans la modale
-                    $('.modal-body').html(data);
-                    //on ouvre la modale
-                    $('#modalEditDishType').modal('open');
-                });
-            })
+        $('.modal-trigger.add.foodType').click(function () {
+            $('.modalAddFoodType').modal();
+            $('.modalAddFoodType').modal('show');
         });
-        //$('#modalAddDishType').modal();
-        //$('#modalAddDishType').modal('hide');
-        //$('#buttonSubmitDishType').click(function(e){
-        //    $('#modalAddDishType').modal('show');
-            //$('#formDishType').css('display', 'block');
-        //});
-        /*
-        $('#buttonSubmitFoodType').click(function(e){
-            $('#formFoodType').css('display', 'block');
+
+        $('.modal-trigger.add.option').click(function () {
+            $('.modalAddOption').modal();
+            $('.modalAddOption').modal('show');
         });
-        $('#buttonSubmitOption').click(function(e){
-            $('#formOption').css('display', 'block');
+
+        $('.modal-trigger.add.measureUnit').click(function () {
+            $('.modalAddMeasureUnit').modal();
+            $('.modalAddMeasureUnit').modal('show');
         });
-        $('#buttonSubmitMeasureUnit').click(function(e){
-            $('#formMeasureUnit').css('display', 'block');
-        });
-        */
-        /*
-        $('.closeForm').click(function(e){
-            $('.formAddOption').css('display', 'none');
-        });
-        */
+
+    });
         
     </script>
 {% endblock %}

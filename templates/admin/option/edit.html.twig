@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{# {% extends "base.html.twig" %}
 
 {% block title 'Éditer cette option' %}
 
@@ -8,4 +8,59 @@
         {{ include("admin/option/_form.html.twig", {form: form, button: 'Éditer'}) }}
     </div>
 
-{% endblock %}
+{% endblock %} #}
+
+<div class="modal fade modalEditOption" id="modalEditOption-{{option.id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditOptionLabel" aria-hidden="true">
+    {{ form_start(formEditOption) }}
+    <div class="modal-dialog" role="document">
+        <input id="editOptionID-{{option.id}}" type="hidden" value="{{option.id}}">
+        <input id="editOptionName-{{option.id}}" type="hidden" value="{{option.name|replace({' ': '_'})}}">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Modifier une option</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body edit">
+            <p>Modifier : {{option.name}}</p>
+            <div class="row">
+                <div id="rowModal" class="col-md-6">{{ form_row(formEditOption.name, {'id':'formOption-' ~ option.name|replace({' ': '_'})}) }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {# <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button> #}
+            <button type="button" class="btn btn-primary" id="submitOptionEdit-{{option.id}}" onclick="submitEditOption({{option.id}})">Ajouter</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+    {{ form_end(formEditOption) }}
+</div>
+
+<script>
+
+function submitEditOption(id){
+    var oldName = $('#editOptionName-'+id).val();
+    var path = "/option/" + id + "/edit";
+
+    var inputName = $('#formOption-'+oldName);
+
+    var newName = inputName.val();
+
+    $.ajax({
+        url: path,
+        method: "POST",
+        data: {
+            id: id,
+            newName: newName
+        },
+        success: function(data){
+            alert('Modification effectuée avec succès');
+            $('#modalEditOption-'+id).modal('hide');
+            window.location.reload();
+        }
+    });
+}
+
+</script>

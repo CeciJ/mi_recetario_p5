@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\FoodType;
 use App\Form\FoodTypeType;
 use App\Repository\FoodTypeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("foodtype")
@@ -31,20 +32,19 @@ class FoodTypeController extends AbstractController
     public function new(Request $request): Response
     {
         $foodType = new FoodType();
-        $form = $this->createForm(FoodTypeType::class, $foodType);
-        $form->handleRequest($request);
+        $formAddFoodType = $this->createForm(FoodTypeType::class, $foodType);
+        $formAddFoodType->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formAddFoodType->isSubmitted() && $formAddFoodType->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($foodType);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin.food_type.index');
+            return $this->redirectToRoute('admin.all_options');
         }
 
         return $this->render('admin/food_type/new.html.twig', [
-            'food_type' => $foodType,
-            'form' => $form->createView(),
+            'formAddFoodType' => $formAddFoodType->createView(),
         ]);
     }
 
@@ -61,9 +61,9 @@ class FoodTypeController extends AbstractController
     /**
      * @Route("/{id}/edit", name="admin.food_type.edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, FoodType $foodType): Response
+    public function edit(Request $request, FoodType $foodType, FoodTypeRepository $foodTypeRepo): Response
     {
-        $form = $this->createForm(FoodTypeType::class, $foodType);
+        /* $form = $this->createForm(FoodTypeType::class, $foodType);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -77,6 +77,44 @@ class FoodTypeController extends AbstractController
         return $this->render('admin/food_type/edit.html.twig', [
             'food_type' => $foodType,
             'form' => $form->createView(),
+        ]); */
+        $formEditFoodType = $this->createForm(FoodTypeType::class, $foodType);
+        $formEditFoodType->handleRequest($request);
+
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $dataArray = explode('&', $data);
+            $idArray = explode('=', $dataArray[0]);
+            $id = $idArray[1];
+            $newNameArray = explode('=', $dataArray[1]);
+            $newName = $newNameArray[1];
+            $newName = urldecode($newName);
+
+            $foodType = $foodTypeRepo->find($id);
+            $foodType->setName($newName);
+
+            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                ],
+                JsonResponse::HTTP_CREATED
+            );
+        }
+
+        /* if ($formEditFoodType->isSubmitted() && $formEditFoodType->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin.all_options');
+        } */
+
+        return $this->render('admin/food_type/edit.html.twig', [
+            'formEditFoodType' => $formEditFoodType->createView(),
+            'foodType' => $foodType
         ]);
     }
 
@@ -91,6 +129,6 @@ class FoodTypeController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin.food_type.index');
+        return $this->redirectToRoute('admin.all_options');
     }
 }

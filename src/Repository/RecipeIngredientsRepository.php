@@ -29,6 +29,7 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
         $startDate = $search->getStartPeriod();
         $endDate = $search->getEndPeriod();
 
+        dump($tabNames); 
         $query = $this->createQueryBuilder('ri');
 
         if(empty($endDate)){
@@ -36,7 +37,7 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             //Jointure sur Recipe
             ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
             ->innerJoin('ri.recipe', 'r')
-            ->addSelect('r')
+            ->addSelect('r.id')
             //Jointure sur Ingredient
             ->innerJoin('ri.nameIngredient', 'i')
             ->addSelect('i')
@@ -53,12 +54,13 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             ->setParameter('begin_at', $startDate)
             //->setParameter('end_at', $endDate)
             ->setParameter('tabNames', $tabNames)
+            //->addGroupBy('ri');
             ->addGroupBy('ri.nameIngredient');
         }
         else {
             $query = $query 
             //Jointure sur Recipe
-            ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
+            ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit')
             ->innerJoin('ri.recipe', 'r')
             ->addSelect('r')
             //Jointure sur Ingredient
@@ -77,10 +79,12 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             ->setParameter('begin_at', $startDate)
             ->setParameter('end_at', $endDate)
             ->setParameter('tabNames', $tabNames)
+            //->addGroupBy('ri');
             ->addGroupBy('ri.nameIngredient');
         }
 
         return $query->getQuery()->execute();
+        
     }
 
     // /**

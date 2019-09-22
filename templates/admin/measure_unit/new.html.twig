@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title %}New MeasureUnit{% endblock %}
 
@@ -8,4 +8,12 @@
     {{ include('measure_unit/_form.html.twig') }}
 
     <a href="{{ path('admin.measure_unit.index') }}">back to list</a>
-{% endblock %}
+{% endblock %} #}
+
+{{ form_start(formAddMeasureUnit) }}
+    <div class="row">
+        <div class="col-md-4">{{ form_row(formAddMeasureUnit.unit) }}</div>
+    </div>
+    {{ form_widget(formAddMeasureUnit) }}
+    <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+{{ form_end(formAddMeasureUnit) }}

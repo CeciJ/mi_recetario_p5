@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\DishType;
 use App\Form\DishTypeType;
+use Doctrine\Common\Util\Debug;
 use App\Repository\DishTypeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 /**
  * @Route("/dishtype")
@@ -31,10 +34,10 @@ class DishTypeController extends AbstractController
     public function new(Request $request): Response
     {
         $dishType = new DishType();
-        $formDishType = $this->createForm(DishTypeType::class, $dishType);
-        $formDishType->handleRequest($request);
+        $formAddDishType = $this->createForm(DishTypeType::class, $dishType);
+        $formAddDishType->handleRequest($request);
 
-        if ($formDishType->isSubmitted() && $formDishType->isValid()) {
+        if ($formAddDishType->isSubmitted() && $formAddDishType->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($dishType);
             $entityManager->flush();
@@ -42,9 +45,8 @@ class DishTypeController extends AbstractController
             return $this->redirectToRoute('admin.all_options');
         }
 
-        return $this->render('admin/dish_type/_form.html.twig', [
-            'dish_type' => $dishType,
-            'formDishType' => $formDishType->createView(),
+        return $this->render('admin/dish_type/new.html.twig', [
+            'formAddDishType' => $formAddDishType->createView(),
         ]);
     }
 
@@ -59,25 +61,52 @@ class DishTypeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin.dish_type.edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="admin.dish_type.edit", methods={"GET","POST"}, options={"expose"=true})
      */
-    public function edit(Request $request, DishType $dishType): Response
+    public function edit(Request $request, DishType $dishType, DishTypeRepository $dishTypeRepo): Response
     {
-        $formDishType = $this->createForm(DishTypeType::class, $dishType);
-        $formDishType->handleRequest($request);
+        $formEditDishType = $this->createForm(DishTypeType::class, $dishType);
+        $formEditDishType->handleRequest($request);
 
-        if ($formDishType->isSubmitted() && $formDishType->isValid()) {
-            dump('test');
-            $this->getDoctrine()->getManager()->flush();
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $dataArray = explode('&', $data);
+            $idArray = explode('=', $dataArray[0]);
+            $id = $idArray[1];
+            $newNameArray = explode('=', $dataArray[1]);
+            $newName = $newNameArray[1];
+            $newName = urldecode($newName);
 
-            return $this->redirectToRoute('admin.all_options');
+            $dishType = $dishTypeRepo->find($id);
+            $dishType->setName($newName);
+
+            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                ],
+                JsonResponse::HTTP_CREATED
+            );
         }
 
-        return $this->render('admin/dish_type/_form.html.twig', [
-            'dish_type' => $dishType,
-            'formDishType' => $formDishType->createView(),
+        /* if ($formEditDishType->isSubmitted() && $formEditDishType->isValid()) {
+            dump($request); die;
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin.allOptions');
+        } */
+
+        return $this->render('admin/dish_type/edit.html.twig', [
+            'formEditDishType' => $formEditDishType->createView(),
+            'dishType' => $dishType
         ]);
     }
+
+    
 
     /**
      * @Route("/{id}", name="admin.dish_type.delete", methods={"DELETE"})

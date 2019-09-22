@@ -20,7 +20,7 @@ class MeasureUnitController extends AbstractController
      */
     public function index(MeasureUnitRepository $measureUnitRepository): Response
     {
-        return $this->render('measure_unit/index.html.twig', [
+        return $this->render('admin/measure_unit/index.html.twig', [
             'measure_units' => $measureUnitRepository->findAll(),
         ]);
     }
@@ -39,12 +39,12 @@ class MeasureUnitController extends AbstractController
             $entityManager->persist($measureUnit);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin.measure_unit.index');
+            return $this->redirectToRoute('admin.all_options');
         }
 
-        return $this->render('measure_unit/new.html.twig', [
+        return $this->render('admin/measure_unit/new.html.twig', [
             'measure_unit' => $measureUnit,
-            'form' => $form->createView(),
+            'formAddMeasureUnit' => $form->createView(),
         ]);
     }
 
@@ -53,7 +53,7 @@ class MeasureUnitController extends AbstractController
      */
     public function show(MeasureUnit $measureUnit): Response
     {
-        return $this->render('measure_unit/show.html.twig', [
+        return $this->render('admin/measure_unit/show.html.twig', [
             'measure_unit' => $measureUnit,
         ]);
     }
@@ -61,9 +61,42 @@ class MeasureUnitController extends AbstractController
     /**
      * @Route("/{id}/edit", name="admin.measure_unit.edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, MeasureUnit $measureUnit): Response
+    public function edit(Request $request, MeasureUnit $measureUnit, MeasureUnitRepository $measureUnitRepo): Response
     {
-        $form = $this->createForm(MeasureUnitType::class, $measureUnit);
+        $formEditMeasureUnit = $this->createForm(MeasureUnitType::class, $measureUnit);
+        $formEditMeasureUnit->handleRequest($request);
+
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $dataArray = explode('&', $data);
+            $idArray = explode('=', $dataArray[0]);
+            $id = $idArray[1];
+            $newNameArray = explode('=', $dataArray[1]);
+            $newName = $newNameArray[1];
+            $newName = urldecode($newName);
+
+            $measureUnit = $measureUnitRepo->find($id);
+            $measureUnit->setName($newName);
+
+            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                ],
+                JsonResponse::HTTP_CREATED
+            );
+        }
+
+        return $this->render('admin/measure_unit/edit.html.twig', [
+            'formEditMeasureUnit' => $formEditMeasureUnit->createView(),
+            'measure_unit' => $measureUnit
+        ]);
+
+
+        /* $form = $this->createForm(MeasureUnitType::class, $measureUnit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,10 +107,10 @@ class MeasureUnitController extends AbstractController
             ]);
         }
 
-        return $this->render('measure_unit/edit.html.twig', [
+        return $this->render('admin/measure_unit/edit.html.twig', [
             'measure_unit' => $measureUnit,
-            'form' => $form->createView(),
-        ]);
+            'formEditMeasureUnit' => $form->createView(),
+        ]); */
     }
 
     /**
@@ -91,6 +124,6 @@ class MeasureUnitController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin.measure_unit.index');
+        return $this->redirectToRoute('admin.all_options');
     }
 }

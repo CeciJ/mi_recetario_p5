@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{# {% extends "base.html.twig" %}
 
 {% block title 'Ajouter un nouveau type de cuisine' %}
 
@@ -8,4 +8,12 @@
         {{ include("admin/food_type/_form.html.twig", {form: form, button: 'Créer'}) }}
     </div>
 
-{% endblock %}
+{% endblock %} #}
+
+{{ form_start(formAddFoodType) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(formAddFoodType.name) }}</div>
+    </div>
+    {{ form_widget(formAddFoodType) }}
+    <button id="buttonSubmitAddFoodType" class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+{{ form_end(formAddFoodType) }}

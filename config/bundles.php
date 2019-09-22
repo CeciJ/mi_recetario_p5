@@ -20,4 +20,5 @@ return [
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     CalendarBundle\CalendarBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 ];

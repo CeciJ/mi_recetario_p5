@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{# {% extends "base.html.twig" %}
 
 {% block title 'Ajouter une nouvelle option' %}
 
@@ -8,4 +8,12 @@
         {{ include("admin/option/_form.html.twig", {form: form, button: 'Créer'}) }}
     </div>
 
-{% endblock %}
+{% endblock %} #}
+
+{{ form_start(formAddOption) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(formAddOption.name) }}</div>
+    </div>
+    {{ form_widget(formAddOption) }}
+    <button id="buttonSubmitAddOption" class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+{{ form_end(formAddOption) }}
