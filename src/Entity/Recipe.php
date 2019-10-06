@@ -128,7 +128,7 @@ class Recipe
     private $steps;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MealPlanning", mappedBy="recipe")
+     * @ORM\OneToMany(targetEntity="App\Entity\MealPlanning", mappedBy="recipe", orphanRemoval=true)
      */
     private $mealPlannings;
 

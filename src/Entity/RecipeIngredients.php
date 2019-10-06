@@ -24,7 +24,7 @@ class RecipeIngredients
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $unit;

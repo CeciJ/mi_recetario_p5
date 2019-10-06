@@ -24,42 +24,42 @@
                     {% endif %}
                 </div> 
             </div>
-            <div class="col-md-7">
+            <div id="contentRecipe" class="col-md-7">
                 <h1>{{ recipe.name }}</h1>
-                <p>Type : 
-                    {% for dishType in recipe.DishTypes %}
-                            <span>{{ dishType.name }}</span>
-                    {% endfor %}
-                </p>
-                <p>Cuisine : 
-                    {% for foodType in recipe.foodTypes %}
-                        <span >{{ foodType.name }}</span>
-                    {% endfor %}
-                </p>
-                <p>Niveau de difficulté : {{recipe.difficultyType}} </p>
-                <p>Coût : {{recipe.costType}} </p>
-                <div class="row">
-                    <p class="col-4">Total : {{recipe.totalTime}} min</p>
-                    <p class="col-4">Préparation : {{recipe.preparationTime}} min</p>
-                    <p class="col-4">Cuisson : {{recipe.cookingTime}} min</p>
-                </div>
-                <div class="row">     
+                <div id="detailsRecipe">
+                    <p>Type : 
+                        {% for dishType in recipe.DishTypes %}
+                                <span>{{ dishType.name }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>Cuisine : 
+                        {% for foodType in recipe.foodTypes %}
+                            <span >{{ foodType.name }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>Niveau de difficulté : {{recipe.difficultyType}} </p>
+                    <p>Coût : {{recipe.costType}} </p>
+                    <div class="row">
+                        <p class="col-4">Total :</br>{{recipe.totalTime}} min</p>
+                        <p class="col-4">Préparation :</br>{{recipe.preparationTime}} min</p>
+                        <p class="col-4">Cuisson :</br>{{recipe.cookingTime}} min</p>
+                    </div>
                     {% for option in recipe.options %}
                         <p>{{ option.name }}</p>
                     {% endfor %}
+                    <div class="row">
+                        <p class="col-12">Ingrédients : </p>
+                    </div>
+                    <div class="row">
+                        <ul>
+                            {% for ingredient in recipe.recipeIngredients %}
+                                <li>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <p>Description de la recette :<br>{{recipe.steps|nl2br}} </p>
                 </div>
-                <div class="row">
-                    <p class="col-12">Ingrédients : </p>
-                </div>
-                <div class="row">
-                    <ul>
-                        {% for ingredient in recipe.recipeIngredients %}
-                            <li>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <p>Description de la recette :<br>{{recipe.steps|nl2br}} </p>
-                <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
+                {# <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
                 <a href="#" class="btn btn-primary" id="contactButton" {% if form.vars.submitted %}style="display: none;"{% endif %}>Envoyer par mail</a>
                 <div id="contactForm" class="mt-4" {% if not form.vars.submitted %}style="display: none;"{% endif %}>
                     {{ form_start(form) }}
@@ -76,7 +76,7 @@
                             <button class="btn btn-primary">Envoyer</button>
                         </div>
                     {{ form_end(form) }}
-                </div>
+                </div> #}
             </div>
         </div>
     </div>

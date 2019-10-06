@@ -1,7 +1,20 @@
-<h2>Ma liste de courses</h2>
+{# <h2>Ma liste de courses</h2>
 {% for ingredient in listIngredients %}
     <div>
         <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"> 
         <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</label>
+    </div>
+{% endfor %} #}
+
+<h2>Ma liste de courses</h2>
+{% for ingredient in finalIngredients %}
+    <div>
+        {# {{ dump(ingredient) }} #}
+        <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}">
+        <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</label><br>
+        {# {% for ingred in ingredient %}
+            <input type="checkbox" id="{{ingred.name}}" name="{{ingred.name}}">
+            <label for="{{ingred.name}}">{{ ingred.name}} : {{ ingred.quantity }} {{ ingred.unit }}</label><br>
+        {% endfor %} #}
     </div>
 {% endfor %}

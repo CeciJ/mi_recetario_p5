@@ -32,7 +32,7 @@
         <h2 class="home">Mes dernières recettes publiées</h2>
         <div class="row flex">
             {% for recipe in recipes %}
-                <div class="col-3">
+                <div class="col-md-3 col-sm-5 col-6">
                     {% include 'recipe/_recipe.html.twig' %}
                 </div>
             {% endfor %}
@@ -40,7 +40,7 @@
 
         <h2 class="home">Mon calendrier de recettes</h2>
         <div class="row">
-            <div class="col-3" id='external-events'>
+            <div class="col-md-3 col-12" id='external-events'>
                 <p>
                     <strong>Mes recettes</strong>
                 </p>
@@ -75,7 +75,7 @@
                 </div>
                 
             </div>
-            <div class="col-9" id='calendar-container'>
+            <div class="col-md-9 col-12" id='calendar-container'>
                 <div id="linksCalendar" style="display:flex;">
                     <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Ajouter une recette</a>
                     <div id="calendarTrash" class="calendar-trash">

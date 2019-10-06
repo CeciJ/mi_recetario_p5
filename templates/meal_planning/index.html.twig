@@ -17,24 +17,8 @@
             {{ form_end(form) }}
         </div>
 
-        <!--
-        <ul>
-        {% for meal_planning in meal_plannings %}
-            <li>{{meal_planning.title}}</li>
-        {% endfor %}
-        </ul>
-        -->
-
-    <!--
-        <ul>
-        {% for ingredient in allIngredients %}
-            {% for ing in ingredient %}
-                <li>{{ ing.quantity }} {{ ing.unit }} {{ ing.nameIngredient }}</li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
-    -->
-    {% if listIngredients %}
+    {# {% if listIngredients %} #}
+    {% if finalIngredients %}
         <div class="row">
             <div class="col-md-6">
                 {{ include('meal_planning/_list.html.twig') }}

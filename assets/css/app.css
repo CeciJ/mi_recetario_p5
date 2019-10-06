@@ -3,10 +3,47 @@
     background-color: #5ee5a1 !important;
 }
 h1{
-    color: white;
+    color: black;
 }
 /*Liste de courses*/
 h2{
     margin-top: 20px;
+    margin-bottom: 10px !important;
 }
-
+/*Recipe details*/
+#contentRecipe{
+    background-color: rgb(4, 202, 202);
+    border-radius: 3px;
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+#detailsRecipe{
+    background-color: cadetblue;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 10px;
+    border-radius: 3px; 
+}
+/*Liste de courses*/
+h2.home{
+    margin-top: 20px;
+    margin-bottom: 10px !important;
+}
+@media screen and (max-width: 600px) {
+    #accordion {
+      display: none;
+    }
+    body .fc{
+        font-size: 0.9rem;
+    }
+    .fc-today-button{
+        display: none;
+    }
+    .fc-toolbar h2{
+        font-size: 1.1rem;
+    }
+    .fc-button .fc-icon{
+        font-size: 0.9rem;
+    }
+  }

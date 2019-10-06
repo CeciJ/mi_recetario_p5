@@ -29,13 +29,15 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
         $startDate = $search->getStartPeriod();
         $endDate = $search->getEndPeriod();
 
-        dump($tabNames); 
-        $query = $this->createQueryBuilder('ri');
+        dump($tabNames);
+        dump($allIngredients);
 
-        if(empty($endDate)){
+        //$query = $this->createQueryBuilder('ri');
+        
+/*         if(empty($endDate)){
             $query = $query 
             //Jointure sur Recipe
-            ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
+            ->select('IDENTITY(ri)', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
             ->innerJoin('ri.recipe', 'r')
             ->addSelect('r.id')
             //Jointure sur Ingredient
@@ -43,10 +45,10 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             ->addSelect('i')
             //Jointure sur Unit
             ->innerJoin('ri.unit', 'u')
-            ->addSelect('u')
+            ->addSelect('u.id', 'u.unit')
             //Jointure sur MealPlanning
             ->innerJoin('r.mealPlannings', 'mp')
-            ->addSelect('mp')
+            ->addSelect('mp.id', 'mp.beginAt', 'mp.endAt')
             //Conditions
             ->andWhere('ri.nameIngredient IN(:tabNames)')
             //->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
@@ -68,10 +70,10 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             ->addSelect('i')
             //Jointure sur Unit
             ->innerJoin('ri.unit', 'u')
-            ->addSelect('u')
+            ->addSelect('u.id', 'u.unit')
             //Jointure sur MealPlanning
             ->innerJoin('r.mealPlannings', 'mp')
-            ->addSelect('mp')
+            ->addSelect('mp.id', 'mp.beginAt', 'mp.endAt')
             //Conditions
             ->andWhere('ri.nameIngredient IN(:tabNames)')
             ->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
@@ -81,10 +83,20 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
             ->setParameter('tabNames', $tabNames)
             //->addGroupBy('ri');
             ->addGroupBy('ri.nameIngredient');
-        }
+        } */
 
-        return $query->getQuery()->execute();
-        
+        //$ingredients = $query->getQuery()->execute(); 
+
+        //return $ingredients;
+
+        /* foreach($ingredients as $ingredient){
+            dump($ingredient);
+            $name = $ingredient[0]->getNameIngredient();
+            dump($name);
+            $unit = $ingredient[0]->getUnit();
+            dump($unit);
+        }
+        dump($ingredients); die; */
     }
 
     // /**

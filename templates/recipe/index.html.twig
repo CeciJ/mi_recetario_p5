@@ -7,22 +7,22 @@
         <div class="container">
             {{ form_start(form) }}
             <div class="form-row align-items-end">
-                <div class="col">
+                <div class="col-md-2 col-4">
                     {{ form_row(form.maxTotalTime) }}
                 </div>
-                <div class="col">
+                <div class="col-md-2 col-4">
                     {{ form_row(form.numberPersons) }}
                 </div>
-                <div class="col">
+                <div class="col-md-2 col-4">
                     {{ form_row(form.DishTypes) }}
                 </div>
-                <div class="col">
+                <div class="col-md-2 col-4">
                     {{ form_row(form.foodTypes) }}
                 </div>
-                <div class="col">
+                <div class="col-md-2 col-4">
                     {{ form_row(form.options) }}
                 </div>
-                <div class="col">
+                <div class="col-md-2 col-4">
                     <div class="form-group">
                         <button class="btn btn-primary">Rechercher</button>
                     </div>
@@ -37,7 +37,7 @@
 
         <div class="row">
             {% for recipe in recipes %}
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-6 col-6">
                     {% include "recipe/_recipe.html.twig" %}
                 </div>
             {% endfor %}
