@@ -34,6 +34,9 @@
     <div class="col-md-4">{{ form_row(form.options) }}</div>
 </div>
 <div>{{ form_row(form.steps) }}</div>
+
+<a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Gérer les ingrédients</a>
+
 <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
   {% for ingredient in form.recipeIngredients %}
     <div class="row rowIngredient">
@@ -49,6 +52,5 @@
 {% endblock %}
 
 {% block javascripts %}
-  <script type="text/javascript">
-  </script>
+    <script></script>
 {% endblock %}

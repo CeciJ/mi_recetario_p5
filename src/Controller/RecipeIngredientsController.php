@@ -11,6 +11,7 @@ use App\Repository\RecipeIngredientsRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\RecipeRepository;
+use Doctrine\Common\Util\Debug;
 
 /**
  * @Route("/recipe_ingredients")
@@ -43,6 +44,7 @@ class RecipeIngredientsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             dump($recipeIngredient);
+            exit(\Doctrine\Common\Util\Debug::dump($recipeIngredient));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($recipeIngredient);

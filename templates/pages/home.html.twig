@@ -201,16 +201,19 @@
             // -----------------------------------------------------------------
 
             var calendar = new Calendar(calendarEl, {
-                plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+                plugins: [ 'interaction', 'dayGrid' ],
+                //plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth'
+                    //right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 validRange: {
                     start: today
                 },
-                timeZone: 'UTC',
+                timeZone: 'local',
+                //timeZone: 'UTC',
                 editable: true,
                 defaultView: 'dayGridMonth',
                 selectable: true,
@@ -318,6 +321,7 @@
                     var eventDateStart = new Date(eventDate);
                     var eventSources = calendar.getEventSources();
 
+                    console.log(eventDateStart);
                     console.log(eventSources);
 
                     $.ajax({
@@ -337,7 +341,7 @@
                     //eventSources[0].refetch();
                 },
                 eventClick: function(info) {
-                    //info.jsEvent.preventDefault();
+                    info.jsEvent.preventDefault();
                     //alert('Event: ' + info.event.title);
                     //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                     //alert('View: ' + info.view.type);

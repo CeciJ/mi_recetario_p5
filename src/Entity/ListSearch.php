@@ -17,7 +17,7 @@ class ListSearch
     public function __construct()
     {
         $fecha = new DateTime();
-        $dateStart = $fecha->format('d-m-Y H:i:s');
+        $dateStart = $fecha->format('d-m-Y');
         $this->startPeriod = new \DateTime($dateStart);
         $this->endPeriod = new \DateTime();
     }

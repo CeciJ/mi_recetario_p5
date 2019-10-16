@@ -3,18 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Ingredient;
-use App\Entity\MeasureUnit;
 use App\Form\IngredientType;
-use App\Form\MeasureUnitType;
 use App\Entity\RecipeIngredients;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use App\Entity\Recipe;
 
 class RecipeIngredientsType extends AbstractType
 {
@@ -23,7 +19,24 @@ class RecipeIngredientsType extends AbstractType
         $builder
             ->add('quantity')
             ->add('unit')
-            ->add('nameIngredient')
+            /* ->add('nameIngredient', TextType::class, [
+                'attr' => [
+                    'autocomplete' => 'on',
+                    'class' => 'js-user-autocomplete'
+                ]
+            ]) */
+            ->add('nameIngredient', EntityType::class, [
+                'class' => Ingredient::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+            ])
+            /* ->add('nameIngredient', CollectionType::class, [
+                'entry_type' => IngredientType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+            ]) */
+            //->add('nameIngredient')
         ;
     }
 
@@ -31,7 +44,8 @@ class RecipeIngredientsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RecipeIngredients::class,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'translation_domain' => 'forms',
         ]);
     }
 }

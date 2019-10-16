@@ -6,7 +6,6 @@ use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twig\Environment;
-use App\Entity\Ingredient;
 use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
 use App\Form\ListSearchType;
@@ -40,27 +39,9 @@ class MealPlanningController extends AbstractController
         $endDatePeriod = $search->setEndPeriod($endDay);
         //$endDate = $endDatePeriod->format('Y-m-d');
 
-        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
-        
-        $allIngredients = [];
-
-        foreach($mealPlannings as $meal){
-            $recipe = $meal->getRecipe();
-            $ingredients = $recipe->getRecipeIngredients();
-            $allIngredients[] = $ingredients;
-        }
-        
-        $tabNames = [];
-        foreach($allIngredients as $ingredients){
-            foreach($ingredients as $ingredient){
-                $name = $ingredient->getNameIngredient();
-                if(!in_array($name, $tabNames)){
-                    $tabNames[] = $name;
-                } 
-            }
-        }
-        
-        $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
+        $finalList = $this->generateList($mealPlanningRepository, $search);
+        $finalIngredients = $finalList['finalIngredients'];
+        $mealPlannings = $finalList['mealPlannings'];
 
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
@@ -76,9 +57,7 @@ class MealPlanningController extends AbstractController
         $html = $this->renderView("print/mypdf.html.twig", [
             'title' => "Welcome to our PDF Test",   
             'meal_plannings' => $mealPlannings,
-            //'allIngredients' => $allIngredients,
-            //'tabNames' => $tabNames,
-            'listIngredients' => $listIngredients
+            'finalIngredients' => $finalIngredients
         ]);
 
         // Load HTML to Dompdf
@@ -107,7 +86,6 @@ class MealPlanningController extends AbstractController
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
 
-
         $search = new ListSearch();
         $startDay = new DateTime($startDate);
         $startDatePeriod = $search->setStartPeriod($startDay);
@@ -115,36 +93,18 @@ class MealPlanningController extends AbstractController
         $endDay = new DateTime($endDate);
         $endDatePeriod = $search->setEndPeriod($endDay);
         //$endDate = $endDatePeriod->format('Y-m-d');
-
-        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
         
-        $allIngredients = [];
-        //$allRecipes = [];
-
-        foreach($mealPlannings as $meal){
-            $recipe = $meal->getRecipe();
-            $ingredients = $recipe->getRecipeIngredients();
-            $allIngredients[] = $ingredients;
-        }
-        
-        $tabNames = [];
-        foreach($allIngredients as $ingredients){
-            foreach($ingredients as $ingredient){
-                $name = $ingredient->getNameIngredient();
-                if(!in_array($name, $tabNames)){
-                    $tabNames[] = $name;
-                } 
-            }
-        }
-
-        $listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
+        //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
+        $finalList = $this->generateList($mealPlanningRepository, $search);
+        $finalIngredients = $finalList['finalIngredients'];
+        $mealPlannings = $finalList['mealPlannings'];
 
         $message = (new \Swift_Message('Liste d\'ingrédients'))
             ->setFrom('cec.jourdan@gmail.com')
             ->setTo('cec.jourdan@gmail.com')
             //->setReplyTo($contactMail->getEmail())
             ->setBody($renderer->render('emails/list.html.twig', [
-                'listIngredients' => $listIngredients,
+                'finalIngredients' => $finalIngredients,
                 'startDate' => $startDate,
                 'endDate' => $endDate 
 
@@ -157,8 +117,7 @@ class MealPlanningController extends AbstractController
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
-            'allIngredients'=> $allIngredients,   
-            'listIngredients' => $listIngredients, 
+            'finalIngredients' => $finalIngredients, 
         ]);
     }
 
@@ -181,83 +140,28 @@ class MealPlanningController extends AbstractController
             $endDate = $search->getEndPeriod();
             $endDate = $endDate->format('Y-m-d H:i:s');
 
-            $mealPlannings = $mealPlanningRepository->findAllQuery($search);
-            $allIngredients = [];
-            foreach($mealPlannings as $meal){
-                $recipe = $meal->getRecipe();
-                $ingredients = $recipe->getRecipeIngredients();
-                $allIngredients[] = $ingredients;
-            }
-            
-            $tabNames = [];
-            $tabUnique = [];
-            $finalIngredients = [];
-            foreach($allIngredients as $ingredients){
-
-                foreach($ingredients as $ingredient){
-                    $name = $ingredient->getNameIngredient();
-                    $quantity = $ingredient->getQuantity();
-                    $unit = $ingredient->getUnit();
-
-                    // Si l'ingrédient n'existe pas encore, on le stocke dans le tableau
-                    if(!in_array($name, $tabNames)){
-                        $tabNames[] = $name;
-                        $tabUnique['name'] = $name;
-                        $tabUnique['quantity'] = $quantity;
-                        $tabUnique['unit'] = $unit;
-                        $finalIngredients[] = $tabUnique;
-                    } 
-                    else {
-                        // Sinon on regarde l'unité, si c'est la même on ajoute la quantité
-                        foreach($finalIngredients as $key => $finalIngredient){
-                            if($name == $finalIngredient['name']){
-                                if($unit == $finalIngredient['unit']){
-                                    $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
-                                    $finalIngredients[] = $finalIngredient;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach ($finalIngredients as $key => $value) {
-                $name2[$key] = $value['name'];
-                $quantity2[$key] = $value['quantity'];
-            }
-            array_multisort($name2, SORT_ASC, SORT_STRING, $finalIngredients);
-
-            $length = count($finalIngredients);
-
-            $tabNames2 = [];
-            for($i = 0; $i < $length; $i++){
-                if(!in_array($finalIngredients[$i]['name'], $tabNames2)){
-                    $tabNames2[] = $finalIngredients[$i]['name'];
-                } else {
-                    unset($finalIngredients[$i - 1]);
-                }
-            }
-        } else {
+            //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
+            $finalList = $this->generateList($mealPlanningRepository, $search);
+            $finalIngredients = $finalList['finalIngredients'];
+            $mealPlannings = $finalList['mealPlannings'];
+        } 
+        else {
             $startDate = null;
             $endDate = null;
         }
 
         //$listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
-        //dump($listIngredients);
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
-            //'allIngredients'=> $allIngredients,   
-            //'listIngredients' => $listIngredients,
             'finalIngredients' => $finalIngredients,
             'startDate' => $startDate,
             'endDate' => $endDate  
         ]);
        
     }
-
 
     /**
      * @Route("/new", name="meal_planning.new", methods={"GET","POST"})
@@ -432,6 +336,75 @@ class MealPlanningController extends AbstractController
             JsonResponse::HTTP_CREATED
         );
         //return $this->redirectToRoute('home');
+    }
+
+    private function generateList(MealPlanningRepository $mealPlanningRepository, ListSearch $search)
+    {
+        dump($search);
+        
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+
+        $allIngredients = [];
+        foreach($mealPlannings as $meal){
+            $recipe = $meal->getRecipe();
+            $ingredients = $recipe->getRecipeIngredients();
+            $allIngredients[] = $ingredients;
+        }
+        
+        $tabNames = [];
+        $tabUnique = [];
+        $finalIngredients = [];
+        foreach($allIngredients as $ingredients){
+
+            foreach($ingredients as $ingredient){
+                $name = $ingredient->getNameIngredient();
+                $quantity = $ingredient->getQuantity();
+                $unit = $ingredient->getUnit();
+
+                // Si l'ingrédient n'existe pas encore, on le stocke dans le tableau
+                if(!in_array($name, $tabNames)){
+                    $tabNames[] = $name;
+                    $tabUnique['name'] = $name;
+                    $tabUnique['quantity'] = $quantity;
+                    $tabUnique['unit'] = $unit;
+                    $finalIngredients[] = $tabUnique;
+                } 
+                else {
+                    // Sinon on regarde l'unité, si c'est la même on ajoute la quantité
+                    foreach($finalIngredients as $key => $finalIngredient){
+                        if($name == $finalIngredient['name']){
+                            if($unit == $finalIngredient['unit']){
+                                $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
+                                $finalIngredients[] = $finalIngredient;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($finalIngredients as $key => $value) {
+            $name2[$key] = $value['name'];
+            $quantity2[$key] = $value['quantity'];
+        }
+        array_multisort($name2, SORT_ASC, SORT_STRING, $finalIngredients);
+
+        $length = count($finalIngredients);
+
+        $tabNames2 = [];
+        for($i = 0; $i < $length; $i++){
+            if(!in_array($finalIngredients[$i]['name'], $tabNames2)){
+                $tabNames2[] = $finalIngredients[$i]['name'];
+            } else {
+                unset($finalIngredients[$i - 1]);
+            }
+        }
+
+        $finalList = [];
+        $finalList['mealPlannings'] = $mealPlannings;
+        $finalList['finalIngredients'] = $finalIngredients;
+
+        return $finalList;
     }
 
 }

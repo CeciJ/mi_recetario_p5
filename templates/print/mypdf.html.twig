@@ -7,7 +7,7 @@
 
 <h2>Ma liste de courses</h2>
 <ul>
-    {% for ingredient in listIngredients %}
+    {% for ingredient in finalIngredients %}
         <div>
             <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"> 
             <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</label>
