@@ -47,3 +47,15 @@ h2.home{
         font-size: 0.9rem;
     }
   }
+  .fc-event{
+      background-color: red;
+      border: red;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      padding: 2px;
+  }
+  .btn.btn-primary{
+      background-color: #5ee5a1 !important;
+      border: #5ee5a1 !important;
+      color: black;
+  }

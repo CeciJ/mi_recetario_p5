@@ -27,9 +27,9 @@ class MealPlanningController extends AbstractController
 {
 
     /**
-     * @Route("/savetopdf/{startDate}/{endDate}", name="meal_planning.saveToPdf", methods={"GET","POST"})
+     * @Route("/savetopdf/{startDate}/{endDate}/{listText}", name="meal_planning.saveToPdf", methods={"GET","POST"})
      */
-    public function saveToPdf($startDate, $endDate, MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request)
+    public function saveToPdf($startDate, $endDate, $listText, MealPlanningRepository $mealPlanningRepository)
     {
         $search = new ListSearch();
         $startDay = new DateTime($startDate);
@@ -39,9 +39,8 @@ class MealPlanningController extends AbstractController
         $endDatePeriod = $search->setEndPeriod($endDay);
         //$endDate = $endDatePeriod->format('Y-m-d');
 
-        $finalList = $this->generateList($mealPlanningRepository, $search);
-        $finalIngredients = $finalList['finalIngredients'];
-        $mealPlannings = $finalList['mealPlannings'];
+        $finalIngredients = explode(',', $listText);
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
 
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
@@ -73,7 +72,6 @@ class MealPlanningController extends AbstractController
         $dompdf->stream("mypdf.pdf", [
             "Attachment" => false
         ]);
-        
     }
 
     /**

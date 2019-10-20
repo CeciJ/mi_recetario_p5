@@ -1,16 +1,17 @@
 <h2>Mes repas</h2>
 <ul>
     {% for meal_planning in meal_plannings %}
-        <li>{{meal_planning.title}}</li>
+        <li>{{meal_planning.beginAt|date('l d-m-Y')}} - {{meal_planning.title}}</li>
     {% endfor %}
 </ul>
 
 <h2>Ma liste de courses</h2>
 <ul>
     {% for ingredient in finalIngredients %}
-        <div>
+        {# <div>
             <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"> 
             <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</label>
-        </div>
+        </div> #}
+        <div class="form-group"><label><input type="checkbox">{{ingredient}}</label><br></div>
     {% endfor %}
 </ul>

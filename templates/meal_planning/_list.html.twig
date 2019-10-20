@@ -6,15 +6,16 @@
     </div>
 {% endfor %} #}
 
-<h2>Ma liste de courses</h2>
+<h2 class="shopListH2">Ma liste de courses</h2>
+<div id="shopListDiv">
 {% for ingredient in finalIngredients %}
-    <div>
+    {# <div> #}
         {# {{ dump(ingredient) }} #}
-        <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}">
-        <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</label><br>
+        {# <label for="{{ingredient.name}}"> #}<input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span>{# </label> #}<br>
         {# {% for ingred in ingredient %}
             <input type="checkbox" id="{{ingred.name}}" name="{{ingred.name}}">
             <label for="{{ingred.name}}">{{ ingred.name}} : {{ ingred.quantity }} {{ ingred.unit }}</label><br>
         {% endfor %} #}
-    </div>
+    {# </div> #}
 {% endfor %}
+</div>
