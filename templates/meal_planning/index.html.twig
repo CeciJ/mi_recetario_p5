@@ -17,6 +17,12 @@
             {{ form_end(form) }}
         </div>
 
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
     {# {% if listIngredients %} #}
     {% if finalIngredients %}
         <div class="row">
@@ -24,7 +30,7 @@
                 {{ include('meal_planning/_list.html.twig') }}
                 <div>
                     <a class="btn btn-primary" {# href="{{ path('meal_planning.saveToPdf', {startDate: startDate, endDate: endDate}) }}" #} id="saveToPdfButton">Imprimer</a> 
-                    <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate, endDate: endDate}) }}" id="sendMailButton">Envoyer par mail</a>
+                    <a class="btn btn-primary" {# href="{{ path('meal_planning.sendByMail', {startDate: startDate, endDate: endDate}) }}" #} id="sendMailButton">Envoyer par mail</a>
                 </div>
             </div>
 

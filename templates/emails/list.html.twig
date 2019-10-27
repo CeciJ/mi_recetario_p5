@@ -136,8 +136,8 @@
                     {% for ingredient in finalIngredients %}
                         <tr>
                             <td>
-                                <input type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"> 
-                                <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</label>
+                                <input type="checkbox" {# id="{{ingredient.name}}" name="{{ingredient.name}}" #}> {{ingredient}}
+                                {# <label for="{{ingredient.name}}">{{ ingredient.name}} : {{ ingredient.quantity }} {{ ingredient.unit }}</label> #}
                             </td>
                         </tr>
                     {% endfor %}

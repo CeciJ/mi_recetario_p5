@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\Ingredient;
+use Doctrine\Common\Util\Debug;
 use App\Entity\RecipeIngredients;
 use App\Form\RecipeIngredientsType;
+use App\Repository\RecipeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\RecipeIngredientsRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\RecipeRepository;
-use Doctrine\Common\Util\Debug;
 
 /**
  * @Route("/recipe_ingredients")
@@ -37,6 +38,7 @@ class RecipeIngredientsController extends AbstractController
         $recipeId = $request->attributes->get('id');
         $recipe = $repo->find($recipeId);
         $recipeIngredient->setRecipe($recipe);
+
         $form = $this->createForm(RecipeIngredientsType::class, $recipeIngredient);
 
         $form->handleRequest($request);
@@ -44,7 +46,7 @@ class RecipeIngredientsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             dump($recipeIngredient);
-            exit(\Doctrine\Common\Util\Debug::dump($recipeIngredient));
+            //exit(\Doctrine\Common\Util\Debug::dump($recipeIngredient));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($recipeIngredient);

@@ -37,7 +37,7 @@
 
 <a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Gérer les ingrédients</a>
 
-<div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
+{# <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
   {% for ingredient in form.recipeIngredients %}
     <div class="row rowIngredient">
       <div class="col-md-2 ingQuantity">{{ form_row(ingredient.quantity) }}</div>
@@ -45,12 +45,13 @@
       <div class="col-md-4 ingNameIngredient">{{ form_row(ingredient.nameIngredient) }}</div>
     </div>
   {% endfor %}
-</div>
+</div> #}
 {{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
-    <script></script>
+    <script>
+    </script>
 {% endblock %}

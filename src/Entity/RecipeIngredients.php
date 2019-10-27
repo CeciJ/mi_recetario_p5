@@ -30,16 +30,16 @@ class RecipeIngredients
     private $unit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $recipe;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $nameIngredient;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $recipe;
 
 
     public function __construct()

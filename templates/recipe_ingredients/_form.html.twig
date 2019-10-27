@@ -1,8 +1,25 @@
-{{ form_start(form) }}
+{# {{ form_start(form) }}
 <div class="row">
     <div class="col-md-2">{{ form_row(form.quantity) }}</div>
     <div class="col-md-2">{{ form_row(form.unit) }}</div>
     <div class="col-md-4">{{ form_row(form.nameIngredient) }}</div>
 </div>
-<button class="btn">{{ button_label|default('Save') }}</button>
+<button class="btn">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(form) }}
+    <h3>Ingrédients</h3>
+    {{ form_row(form.quantity) }}
+    <ul class="units">
+        {# iterate over each existing tag and render its only field: name #}
+        {% for unit in form.unit %}
+            <li>{{ form_row(unit.unit) }}</li>
+        {% endfor %}
+    </ul>
+    <ul class="names">
+        {# iterate over each existing tag and render its only field: name #}
+        {% for name in form.nameIngredient %}
+            <li>{{ form_row(name.name) }}</li>
+        {% endfor %}
+    </ul>
 {{ form_end(form) }}

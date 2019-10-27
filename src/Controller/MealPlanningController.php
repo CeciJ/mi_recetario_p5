@@ -75,15 +75,10 @@ class MealPlanningController extends AbstractController
     }
 
     /**
-     * @Route("/sendbymail/{startDate}/{endDate}", name="meal_planning.sendByMail", methods={"GET","POST"})
+     * @Route("/sendbymail/{startDate}/{endDate}/{listText}", name="meal_planning.sendByMail", methods={"GET","POST"})
      */
-    public function sendByMail($startDate, $endDate, MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request, \Swift_Mailer $mailer, Environment $renderer)
+    public function sendByMail($startDate, $endDate, $listText, MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request, \Swift_Mailer $mailer, Environment $renderer)
     {
-        $search = new ListSearch();
-
-        $form = $this->createForm(ListSearchType::class, $search);
-        $form->handleRequest($request);
-
         $search = new ListSearch();
         $startDay = new DateTime($startDate);
         $startDatePeriod = $search->setStartPeriod($startDay);
@@ -91,11 +86,16 @@ class MealPlanningController extends AbstractController
         $endDay = new DateTime($endDate);
         $endDatePeriod = $search->setEndPeriod($endDay);
         //$endDate = $endDatePeriod->format('Y-m-d');
-        
-        //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
+
+        $finalIngredients = explode(',', $listText);
+
+        $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+
+        $form = $this->createForm(ListSearchType::class, $search);
+        $form->handleRequest($request);
+
         $finalList = $this->generateList($mealPlanningRepository, $search);
-        $finalIngredients = $finalList['finalIngredients'];
-        $mealPlannings = $finalList['mealPlannings'];
+        $allIngredients = $finalList['finalIngredients'];
 
         $message = (new \Swift_Message('Liste d\'ingrédients'))
             ->setFrom('cec.jourdan@gmail.com')
@@ -109,13 +109,21 @@ class MealPlanningController extends AbstractController
             ]), 'text/html');
         $mailer->send($message);
 
+        $this->addFlash(
+            'success',
+            'La liste a bien été envoyée par mail!'
+        );
+
+        //return json
+
         return $this->render("meal_planning/index.html.twig", [
             'startDate' => $startDate,
             'endDate' => $endDate,
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
-            'finalIngredients' => $finalIngredients, 
+            'finalIngredients' => $allIngredients,
+            //'display' => 'list', 
         ]);
     }
 
