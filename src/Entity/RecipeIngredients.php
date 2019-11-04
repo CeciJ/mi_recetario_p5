@@ -24,13 +24,13 @@ class RecipeIngredients
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnit", inversedBy="recipeIngredients", fetch="EAGER", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $unit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $nameIngredient;

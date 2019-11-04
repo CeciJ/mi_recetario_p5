@@ -1,57 +1,59 @@
 {% block body %}
 {{ form_start(form) }}
-<div class="row">
-  <div class="col-md-8">
-    <div class="row">
-      <div class="col-md-6">{{ form_row(form.name) }}</div>
-      <div class="col-md-6 ">{{ form_row(form.pictureFiles) }}</div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">{{ form_row(form.name) }}</div>
+        <div class="col-md-6 ">{{ form_row(form.pictureFiles) }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="row flex justify-content-start flex-wrap">
+        {% for picture in recipe.pictures %}
+          <div class="col" style="width: 100px; flex: none; margin: 5px;">
+              <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="">
+              <a href="{{ path('admin.picture.delete', {id: picture.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}">Supprimer</a> 
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="row flex justify-content-start flex-wrap">
-      {% for picture in recipe.pictures %}
-        <div class="col" style="width: 100px; flex: none; margin: 5px;">
-            <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="">
-            <a href="{{ path('admin.picture.delete', {id: picture.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}">Supprimer</a> 
+  <div class="row">
+      <div class="col-md-4">{{ form_row(form.totalTime) }}</div>
+      <div class="col-md-4">{{ form_row(form.preparationTime) }}</div>
+      <div class="col-md-4">{{ form_row(form.cookingTime) }}</div>
+  </div>
+  <div class="row">
+      <div class="col-md-4">{{ form_row(form.cost) }}</div>
+      <div class="col-md-4">{{ form_row(form.difficulty) }}</div>
+      <div class="col-md-4">{{ form_row(form.numberPersons) }}</div>
+  </div>
+  <div class="row">
+      <div class="col-md-4">{{ form_row(form.DishTypes) }}</div>
+      <div class="col-md-4">{{ form_row(form.foodTypes) }}</div>
+      <div class="col-md-4">{{ form_row(form.options) }}</div>
+  </div>
+  <div>{{ form_row(form.steps) }}</div>
+
+{#   <a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Gérer les ingrédients</a>
+ #}
+  <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
+    {% for ingredient in form.recipeIngredients %}
+      <div class="row rowIngredient form-row" style="display:flex; justify-content: space-between; align-items: center;">
+        <div >{{ form_row(ingredient.quantity) }}</div>
+        <div >{{ form_row(ingredient.unit) }}</div>
+        <div >{{ form_row(ingredient.nameIngredient) }}</div>
+        <div>
+          {# <form style="height:25px;" method="post" action="{{ path('recipe_ingredients.delete', {id: form.recipeIngredients.vars.name}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ form.recipeIngredients.vars.name) }}">
+            <button class="btn btn-danger">Supprimer</button>    
+          </form> #}
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
   </div>
-</div>
-<div class="row">
-    <div class="col-md-4">{{ form_row(form.totalTime) }}</div>
-    <div class="col-md-4">{{ form_row(form.preparationTime) }}</div>
-    <div class="col-md-4">{{ form_row(form.cookingTime) }}</div>
-</div>
-<div class="row">
-    <div class="col-md-4">{{ form_row(form.cost) }}</div>
-    <div class="col-md-4">{{ form_row(form.difficulty) }}</div>
-    <div class="col-md-4">{{ form_row(form.numberPersons) }}</div>
-</div>
-<div class="row">
-    <div class="col-md-4">{{ form_row(form.DishTypes) }}</div>
-    <div class="col-md-4">{{ form_row(form.foodTypes) }}</div>
-    <div class="col-md-4">{{ form_row(form.options) }}</div>
-</div>
-<div>{{ form_row(form.steps) }}</div>
-
-<a class="btn btn-primary" href="{{ path('recipe_ingredients.new', {id: recipe.id}) }}">Gérer les ingrédients</a>
-
-{# <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
-  {% for ingredient in form.recipeIngredients %}
-    <div class="row rowIngredient">
-      <div class="col-md-2 ingQuantity">{{ form_row(ingredient.quantity) }}</div>
-      <div class="col-md-2 ingUnit">{{ form_row(ingredient.unit) }}</div>
-      <div class="col-md-4 ingNameIngredient">{{ form_row(ingredient.nameIngredient) }}</div>
-    </div>
-  {% endfor %}
-</div> #}
-{{ form_rest(form) }}
-<button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+  {{ form_rest(form) }}
+  <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-    </script>
 {% endblock %}

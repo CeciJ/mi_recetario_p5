@@ -39,6 +39,9 @@ class RecipeIngredientsController extends AbstractController
         $recipe = $repo->find($recipeId);
         $recipeIngredient->setRecipe($recipe);
 
+        $ingredients = $recipe->getRecipeIngredients();
+        dump($ingredients);
+
         $form = $this->createForm(RecipeIngredientsType::class, $recipeIngredient);
 
         $form->handleRequest($request);
@@ -52,7 +55,7 @@ class RecipeIngredientsController extends AbstractController
             $entityManager->persist($recipeIngredient);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin.recipe.edit', [
+            return $this->redirectToRoute('recipe_ingredients.new', [
                 'id' => $recipeId,
             ]);
         }
@@ -60,6 +63,7 @@ class RecipeIngredientsController extends AbstractController
         return $this->render('recipe_ingredients/new.html.twig', [
             'recipe_ingredient' => $recipeIngredient,
             'form' => $form->createView(),
+            'ingredients' => $ingredients
         ]);
     }
 

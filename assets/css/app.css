@@ -46,16 +46,45 @@ h2.home{
     .fc-button .fc-icon{
         font-size: 0.9rem;
     }
-  }
-  .fc-event{
-      background-color: red;
-      border: red;
-      margin-top: 3px;
-      margin-bottom: 3px;
-      padding: 2px;
-  }
-  .btn.btn-primary{
-      background-color: #5ee5a1 !important;
-      border: #5ee5a1 !important;
-      color: black;
-  }
+}
+
+.fc-event{
+    background-color: red;
+    border: red;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 2px;
+}
+.btn.btn-primary{
+    background-color: #5ee5a1 !important;
+    border: #5ee5a1 !important;
+    color: black;
+}
+
+/* Autocomplete CSS */
+.algolia-autocomplete {
+    width: 100%;
+}
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+    width: 100%;
+}
+.algolia-autocomplete .aa-hint {
+    color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-top: none;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+    cursor: pointer;
+    padding: 5px 4px;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+    background-color: #B2D7FF;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+    font-weight: bold;
+    font-style: normal;
+}

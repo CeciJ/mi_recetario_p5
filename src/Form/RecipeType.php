@@ -54,13 +54,13 @@ class RecipeType extends AbstractType
                 'required' => false
             ])
             ->add('steps')
-            /* ->add('recipeIngredients', CollectionType::class, [
+            ->add('recipeIngredients', CollectionType::class, [
                 'entry_type' => RecipeIngredientsType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ]); */
+            ]);
         ;
     }
 

@@ -18,19 +18,20 @@ class RecipeIngredientsType extends AbstractType
     {
         $builder
             ->add('quantity')
-            //->add('unit')
-            ->add('unit', CollectionType::class, [
+            ->add('unit', MeasureUnitType::class)
+            /* ->add('unit', CollectionType::class, [
                 'entry_type' => MeasureUnitType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'by_reference' => false,
-            ])
-            ->add('nameIngredient', CollectionType::class, [
+            ]) */
+            ->add('nameIngredient', IngredientType::class)
+            /* ->add('nameIngredient', CollectionType::class, [
                 'entry_type' => IngredientType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'by_reference' => false,
-            ]) 
+            ])  */
             /* ->add('nameIngredient', TextType::class, [
                 'attr' => [
                     'autocomplete' => 'on',

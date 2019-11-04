@@ -1,4 +1,19 @@
 {
+    "algolia/algoliasearch-client-php": {
+        "version": "1.28.0"
+    },
+    "algolia/search-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "e4763dc0b1cb323ae78d414ded0cd1ae914fe205"
+        },
+        "files": [
+            "config/packages/algolia_search.yaml"
+        ]
+    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.2"
     },
@@ -150,6 +165,26 @@
     "jms/metadata": {
         "version": "1.7.0"
     },
+    "jms/parser-lib": {
+        "version": "1.0.0"
+    },
+    "jms/serializer": {
+        "version": "1.14.0"
+    },
+    "jms/serializer-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
+        },
+        "files": [
+            "config/packages/dev/jms_serializer.yaml",
+            "config/packages/jms_serializer.yaml",
+            "config/packages/prod/jms_serializer.yaml"
+        ]
+    },
     "knplabs/knp-components": {
         "version": "v1.3.10"
     },
@@ -184,6 +219,9 @@
     "phenx/php-svg-lib": {
         "version": "v0.3.2"
     },
+    "phpcollection/phpcollection": {
+        "version": "0.5.0"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -192,6 +230,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "phpoption/phpoption": {
+        "version": "1.5.0"
     },
     "psr/cache": {
         "version": "1.0.1"

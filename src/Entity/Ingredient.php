@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  */
-class Ingredient
+class Ingredient implements NormalizableInterface
 {
     /**
      * @ORM\Id()
@@ -85,6 +85,13 @@ class Ingredient
         }
 
         return $this;
+    }
+
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
+    {
+        return [
+            'name' => $this->getName(),
+        ];
     }
 
 }

@@ -12,7 +12,9 @@ class MeasureUnitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('unit')
+            ->add('unit', null, [
+                'label' => false
+            ])
         ;
     }
 

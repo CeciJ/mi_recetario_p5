@@ -6,20 +6,21 @@
 </div>
 <button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }} #}
+<ul>
+{% for ingredient in ingredients %}
+    <li>{{ingredient.nameIngredient}} : {{ ingredient.quantity}} {{ingredient.unit}}</li>
+{% endfor %}
+</ul>
+
 
 {{ form_start(form) }}
-    <h3>Ingrédients</h3>
-    {{ form_row(form.quantity) }}
-    <ul class="units">
-        {# iterate over each existing tag and render its only field: name #}
-        {% for unit in form.unit %}
-            <li>{{ form_row(unit.unit) }}</li>
-        {% endfor %}
-    </ul>
-    <ul class="names">
-        {# iterate over each existing tag and render its only field: name #}
-        {% for name in form.nameIngredient %}
-            <li>{{ form_row(name.name) }}</li>
-        {% endfor %}
-    </ul>
+    <h3>Nouvel ingrédient</h3>
+    <div style="display:flex;">
+        <div class="col-md-3">{{ form_row(form.quantity) }}</div>
+        <div class="col-md-3">{{ form_row(form.unit) }}</div>
+        <div class="col-md-3">
+            {{ form_row(form.nameIngredient) }}
+        </div>
+    </div>
+    <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}

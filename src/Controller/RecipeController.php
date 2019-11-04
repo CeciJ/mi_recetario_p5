@@ -8,6 +8,7 @@ use App\Entity\DishType;
 use App\Entity\FoodType;
 use App\Form\OptionType;
 use App\Form\RecipeType;
+use App\Entity\Ingredient;
 use App\Form\DishTypeType;
 use App\Form\FoodTypeType;
 use App\Entity\ContactMail;
@@ -230,6 +231,7 @@ class RecipeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             dump('form valid and submitted');
+
             $this->em->flush();
             $this->addFlash('success', 'Recette modifiée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));

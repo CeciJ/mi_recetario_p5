@@ -4,17 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Form\IngredientType;
+use Algolia\AlgoliaSearch\SearchClient;
 use App\Repository\IngredientRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Algolia\SearchBundle\IndexManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/ingredient")
  */
 class IngredientController extends AbstractController
 {
+    protected $indexManager;
+
+    public function __construct(IndexManagerInterface $indexingManager)
+    {
+        $this->indexManager = $indexingManager;
+    }
+    
     /**
      * @Route("/", name="admin.ingredient.index", methods={"GET", "POST"})
      */
@@ -49,9 +58,20 @@ class IngredientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $name = $ingredient->getName();
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ingredient);
             $entityManager->flush();
+
+            $client = \Algolia\AlgoliaSearch\SearchClient::create('D4T2HAD5AA', '72fce73f2ab1a76a00144fe0952c0923');
+            $index = $client->initIndex('ingredients');
+            $index->saveObject(
+                [
+                  'name' => $name
+                ], 
+                ['autoGenerateObjectIDIfNotExist' => true]
+            );
 
             return $this->redirectToRoute('admin.ingredient.index');
         }
@@ -106,5 +126,14 @@ class IngredientController extends AbstractController
         }
 
         return $this->redirectToRoute('admin.ingredient.index');
+    }
+
+    /**
+     * @Route("/allIngredients", name="list_of_ingredients", methods="GET")
+     */
+    public function getIngredientsApi(IngredientRepository $ingredientRepository)
+    {
+        $ingredients = $ingredientRepository->findAll();
+        return $this->json($ingredients);
     }
 }
