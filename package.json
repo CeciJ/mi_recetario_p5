@@ -17,6 +17,7 @@
         "@fullcalendar/core": "^4.3.1",
         "@fullcalendar/daygrid": "^4.3.0",
         "@fullcalendar/interaction": "^4.3.0",
+        "autocomplete.js": "^0.37.0",
         "bootstrap": "^4.3.1",
         "jquery": "^3.4.1",
         "jquery-ui": "^1.12.1",

@@ -40,8 +40,24 @@ console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
             var list = [];
             var ingredients = document.querySelectorAll('.inputList');
 
+            // List with all ingredients 
+            
+            console.log(ingredients);
+            ingredients.forEach(myFunction);
+
+            function myFunction(item) {
+                //alert(item.id);
+                list.push(item.id);
+            }
+
+            console.log(list);
+
+            // List if click to discard some ingredients
+
             $('.inputList').click(function(e){
             
+                list.length = 0;
+                console.log(list);
                 $(this).addClass("checked");
                 var span = this.nextSibling;
                 var content = span.innerText;
@@ -131,6 +147,16 @@ console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
                 console.log(this);
                 this.setAttribute('href', url);
             });
+
+            // HIDE SUCCESS MSG
+
+            var message = document.getElementById('msgSuccessListSentByMail');
+            if (message) {
+                setTimeout(function(){ 
+                    message.remove(); }, 
+                    5000
+                );
+            }
 
         });
 

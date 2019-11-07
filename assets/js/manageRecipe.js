@@ -1,5 +1,8 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
 
+var $ = require('jquery');
+var autocomplete = require('autocomplete.js');
+
 (function($) {
   'use strict';
 
@@ -57,24 +60,8 @@ console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
             compteur = compteur + 1;
 
             // Autocomplete
-            console.log($('.js-user-autocomplete').length);
-            var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
-            console.log(client);
-            var index = client.initIndex('ingredients');
-            console.log(index);
-            $('.js-user-autocomplete').autocomplete({ hint: false }, [
-              {
-                source: $.fn.autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-                displayKey: 'name',
-                templates: {
-                  suggestion: function(suggestion) {
-                    return suggestion._highlightResult.name.value;
-                  }
-                }
-              }
-            ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
-              console.log(event, suggestion, dataset, context);
-            }); 
+            
+
         });
     });
 
@@ -104,6 +91,26 @@ console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
       $newLinkDiv.before($newFormDiv);
 
     }
+
+    $(document).ready(function() {
+        var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
+        //var index = client.initIndex('ingredients');
+        var index = client.initIndex('dev_ingredients');
+        autocomplete('#search-input', { hint: false }, [
+        //autocomplete('.js-user-autocomplete', { hint: false }, [
+            {
+            source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+            displayKey: 'name',
+            templates: {
+                suggestion: function(suggestion) {
+                return suggestion._highlightResult.name.value;
+                }
+            }
+            }
+        ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
+            console.log(event, suggestion, dataset, context);
+        });
+    });
       
   });
 

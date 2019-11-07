@@ -17,12 +17,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class IngredientController extends AbstractController
 {
-    protected $indexManager;
+    /* protected $indexManager;
 
     public function __construct(IndexManagerInterface $indexingManager)
     {
         $this->indexManager = $indexingManager;
-    }
+    } */
     
     /**
      * @Route("/", name="admin.ingredient.index", methods={"GET", "POST"})
@@ -54,6 +54,7 @@ class IngredientController extends AbstractController
     public function new(Request $request): Response
     {
         $ingredient = new Ingredient();
+
         $form = $this->createForm(IngredientType::class, $ingredient);
         $form->handleRequest($request);
 
@@ -64,14 +65,14 @@ class IngredientController extends AbstractController
             $entityManager->persist($ingredient);
             $entityManager->flush();
 
-            $client = \Algolia\AlgoliaSearch\SearchClient::create('D4T2HAD5AA', '72fce73f2ab1a76a00144fe0952c0923');
+            /* $client = \Algolia\AlgoliaSearch\SearchClient::create('D4T2HAD5AA', '72fce73f2ab1a76a00144fe0952c0923');
             $index = $client->initIndex('ingredients');
             $index->saveObject(
                 [
                   'name' => $name
                 ], 
                 ['autoGenerateObjectIDIfNotExist' => true]
-            );
+            ); */
 
             return $this->redirectToRoute('admin.ingredient.index');
         }
@@ -134,6 +135,13 @@ class IngredientController extends AbstractController
     public function getIngredientsApi(IngredientRepository $ingredientRepository)
     {
         $ingredients = $ingredientRepository->findAll();
-        return $this->json($ingredients);
+        /* $em = $this->getDoctrine()->getManagerForClass(Ingredient::class);
+        $ingredients = $this->indexManager->search('query', Ingredient::class, $em); */
+        return new JsonResponse(
+            [
+                'ingredients' => $ingredients,
+            ],
+            JsonResponse::HTTP_CREATED
+        );
     }
 }

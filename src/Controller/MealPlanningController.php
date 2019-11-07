@@ -115,6 +115,8 @@ class MealPlanningController extends AbstractController
         );
 
         //return json
+        $this->addFlash('success', 'Recette ajoutée avec succès');
+        //return($this->redirectToRoute('meal_planning.index'));
 
         return $this->render("meal_planning/index.html.twig", [
             'startDate' => $startDate,
@@ -123,6 +125,7 @@ class MealPlanningController extends AbstractController
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
             'finalIngredients' => $allIngredients,
+            'listText' => 'list'
             //'display' => 'list', 
         ]);
     }
@@ -164,7 +167,8 @@ class MealPlanningController extends AbstractController
             'form' => $form->createView(),
             'finalIngredients' => $finalIngredients,
             'startDate' => $startDate,
-            'endDate' => $endDate  
+            'endDate' => $endDate,
+            'listText' => 'list'
         ]);
        
     }

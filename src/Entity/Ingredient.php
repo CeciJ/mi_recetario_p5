@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  */
-class Ingredient implements NormalizableInterface
+//class Ingredient implements NormalizableInterface
+class Ingredient 
 {
     /**
      * @ORM\Id()
@@ -39,6 +43,9 @@ class Ingredient implements NormalizableInterface
         return $this->id;
     }
 
+    /**
+     * @Groups({"searchable"})
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -87,11 +94,11 @@ class Ingredient implements NormalizableInterface
         return $this;
     }
 
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
+    /* public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
     {
         return [
             'name' => $this->getName(),
         ];
-    }
+    } */
 
 }

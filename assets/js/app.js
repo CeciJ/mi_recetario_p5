@@ -11,6 +11,7 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 // IMPORT CSS FROM CSS FILE;
 var $ = require('jquery');
+var jQuery = require('jquery');
 
 require('../css/app.css');
 require('select2');
