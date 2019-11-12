@@ -8,6 +8,7 @@ var autocomplete = require('autocomplete.js');
 
   $(function() {
     // DELETE IMAGES IN RECIPE FORM
+
     document.querySelectorAll('[data-delete]').forEach(a => {
         a.addEventListener('click', e => {
           e.preventDefault()
@@ -31,6 +32,7 @@ var autocomplete = require('autocomplete.js');
     });
 
     // ADD RECIPE INGREDIENTS IN RECIPE FORM
+
     var $collectionHolder;
     // setup an "add a tag" link
     var $addIngredientButton = $('<button type="button" class="add_ingredient_link btn btn-primary">Ajouter un ingrédient</button>');
@@ -59,8 +61,25 @@ var autocomplete = require('autocomplete.js');
             $(divToAddClass).css('display', 'flex');
             compteur = compteur + 1;
 
-            // Autocomplete
-            
+            // AUTOCOMPLETE
+
+            var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
+            //var index = client.initIndex('ingredients');
+            var index = client.initIndex('dev_ingredients');
+            autocomplete('input.form-control', { hint: false }, [
+            //autocomplete('.js-user-autocomplete', { hint: false }, [
+                {
+                source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+                displayKey: 'name',
+                templates: {
+                    suggestion: function(suggestion) {
+                    return suggestion._highlightResult.name.value;
+                    }
+                }
+                }
+            ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
+                console.log(event, suggestion, dataset, context);
+            });
 
         });
     });
@@ -92,11 +111,11 @@ var autocomplete = require('autocomplete.js');
 
     }
 
-    $(document).ready(function() {
+    /* $(document).ready(function() {
         var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
         //var index = client.initIndex('ingredients');
         var index = client.initIndex('dev_ingredients');
-        autocomplete('#search-input', { hint: false }, [
+        autocomplete('.js-user-autocomplete', { hint: false }, [
         //autocomplete('.js-user-autocomplete', { hint: false }, [
             {
             source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
@@ -110,7 +129,7 @@ var autocomplete = require('autocomplete.js');
         ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
             console.log(event, suggestion, dataset, context);
         });
-    });
+    }); */
       
   });
 

@@ -23,12 +23,15 @@ use App\Repository\OptionRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\DishTypeRepository;
 use App\Repository\FoodTypeRepository;
+use App\Controller\IngredientController;
+use App\Repository\IngredientRepository;
 use App\Repository\MeasureUnitRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Notification\ContactMailNotification;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
+use Algolia\SearchBundle\IndexManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -40,10 +43,13 @@ class RecipeController extends AbstractController
 
     private $em;
 
-    public function __construct(RecipeRepository $repository, ObjectManager $em)
+    protected $indexManager;
+
+    public function __construct(RecipeRepository $repository, ObjectManager $em, IndexManagerInterface $indexingManager)
     {
         $this->repository = $repository;
         $this->em = $em;
+        $this->indexManager = $indexingManager;
     }
 
     /**
@@ -200,7 +206,7 @@ class RecipeController extends AbstractController
      * @Route("/admin/recipe/create", name="admin.recipe.new") 
      * @return Response
      */
-    public function newAdmin(Request $request)
+    public function newAdmin(Request $request, IngredientRepository $repo, IngredientController $ingController)
     {
         $recipe = new Recipe();
 
@@ -208,9 +214,26 @@ class RecipeController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $allIngredients = $repo->findAll();
+            dump($allIngredients);
+            $recipeIngredients = $recipe->getRecipeIngredients();
+            $ingredientsRecipe = [];
+
             $this->em->persist($recipe);
             $this->em->flush();
-            $this->addFlash('success', 'Recette ajoutée avec succès');
+
+            foreach($recipeIngredients as $ingredient){
+                $ingredientsRecipe[] = $ingredient->getNameIngredient();
+            }
+
+            foreach($ingredientsRecipe as $ingredient){
+                if(!in_array($ingredient, $allIngredients)){
+                    $entityManager = $ingController->getDoctrine()->getManager();
+                    $this->indexManager->index($ingredient, $entityManager);
+                }
+            }
+
+            //$this->addFlash('success', 'Recette ajoutée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));
         }
 
@@ -224,15 +247,31 @@ class RecipeController extends AbstractController
      * @Route("/admin/recipe/{id}", name="admin.recipe.edit", methods="GET|POST") 
      * @return Response
      */
-    public function editAdmin(Recipe $recipe, Request $request)
+    public function editAdmin(Recipe $recipe, Request $request, IngredientRepository $repo, IngredientController $ingController)
     {   
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            dump('form valid and submitted');
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $allIngredients = $repo->findAll();
+            dump($allIngredients);
+            $recipeIngredients = $recipe->getRecipeIngredients();
+            $ingredientsRecipe = [];
 
             $this->em->flush();
+
+            foreach($recipeIngredients as $ingredient){
+                $ingredientsRecipe[] = $ingredient->getNameIngredient();
+            }
+
+            foreach($ingredientsRecipe as $ingredient){
+                if(!in_array($ingredient, $allIngredients)){
+                    $entityManager = $ingController->getDoctrine()->getManager();
+                    $this->indexManager->index($ingredient, $entityManager);
+                }
+            }
+
             $this->addFlash('success', 'Recette modifiée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));
         }

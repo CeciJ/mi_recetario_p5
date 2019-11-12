@@ -17,12 +17,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class IngredientController extends AbstractController
 {
-    /* protected $indexManager;
+    protected $indexManager;
 
     public function __construct(IndexManagerInterface $indexingManager)
     {
         $this->indexManager = $indexingManager;
-    } */
+    }
     
     /**
      * @Route("/", name="admin.ingredient.index", methods={"GET", "POST"})
@@ -64,6 +64,10 @@ class IngredientController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ingredient);
             $entityManager->flush();
+
+            var_dump($this->indexManager); die();
+
+            $this->indexManager->index($ingredient, $entityManager);
 
             /* $client = \Algolia\AlgoliaSearch\SearchClient::create('D4T2HAD5AA', '72fce73f2ab1a76a00144fe0952c0923');
             $index = $client->initIndex('ingredients');

@@ -115,7 +115,7 @@ class MealPlanningController extends AbstractController
         );
 
         //return json
-        $this->addFlash('success', 'Recette ajoutée avec succès');
+        //$this->addFlash('success', 'Recette ajoutée avec succès');
         //return($this->redirectToRoute('meal_planning.index'));
 
         return $this->render("meal_planning/index.html.twig", [

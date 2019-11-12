@@ -1,4 +1,5 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
+var $ = require('jquery');
 
 (function($) {
     'use strict';
@@ -84,78 +85,79 @@ console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
             });
         
             // SAVE TO PDF
+            var buttonExists = document.getElementById("saveToPdfButton");
+            if(buttonExists){
+                buttonExists.addEventListener('click', function(e){
+                    var start = document.getElementById("startPeriod").value;
+                    var end = document.getElementById("endPeriod").value;
+                    console.log(start); 
+                    console.log(end);
+    
+                    /* var arrayStart = start.split('-');
+                    var startDate = new Date(arrayStart[2]+'-'+arrayStart[1]+'-'+arrayStart[0]+'T00:00:00Z');
+                    var arrayEnd = end.split('-');
+                    var endDate = new Date(arrayEnd[2]+'-'+arrayEnd[1]+'-'+arrayEnd[0]+'T00:00:00Z'); */
+    
+                    var startDate = start+'T00:00:00Z';
+                    var endDate = end+'T00:00:00Z';
+    
+                    console.log(list); 
+                    console.log(startDate); 
+                    console.log(endDate); 
+    
+                    var listText = list.toString();
+                    console.log(listText);
+    
+                    var url = encodeURI("/meal_planning/savetopdf/"+startDate+"/"+endDate+"/"+listText);
+                    //var url = encodeURI("/meal_planning/savetopdf/2019-10-20 00:00:00/2019-10-27 00:00:00/"+listText);
+                    //var url = "/meal_planning/savetopdf/"+startDate+"/"+endDate;
+    
+                    console.log(this);
+                    console.log(url);
+                    this.setAttribute('href', url);
+    
+                });
 
-            var button = document.getElementById('saveToPdfButton');
-            button.addEventListener('click', function(e){
-                var start = document.getElementById("startPeriod").value;
-                var end = document.getElementById("endPeriod").value;
-                console.log(start); 
-                console.log(end);
+                // SEND BY MAIL
 
-                /* var arrayStart = start.split('-');
-                var startDate = new Date(arrayStart[2]+'-'+arrayStart[1]+'-'+arrayStart[0]+'T00:00:00Z');
-                var arrayEnd = end.split('-');
-                var endDate = new Date(arrayEnd[2]+'-'+arrayEnd[1]+'-'+arrayEnd[0]+'T00:00:00Z'); */
+                var buttonMail = document.getElementById('sendMailButton');
+                buttonMail.addEventListener('click', function(e){
+                    console.log(list);
+                    var start = document.getElementById("startPeriod").value;
+                    var end = document.getElementById("endPeriod").value;
+                    console.log(start); 
+                    console.log(end);
 
-                var startDate = start+'T00:00:00Z';
-                var endDate = end+'T00:00:00Z';
+                    /* var arrayStart = start.split('-');
+                    var startDate = new Date(arrayStart[2]+'-'+arrayStart[1]+'-'+arrayStart[0]);
+                    var arrayEnd = end.split('-');
+                    var endDate = new Date(arrayEnd[2]+'-'+arrayEnd[1]+'-'+arrayEnd[0]+'T00:00:00Z'); */
+                    
+                    var startDate = start+'T00:00:00Z';
+                    var endDate = end+'T00:00:00Z';
 
-                console.log(list); 
-                console.log(startDate); 
-                console.log(endDate); 
+                    console.log(list); 
+                    console.log(startDate); 
+                    console.log(endDate); 
 
-                var listText = list.toString();
-                console.log(listText);
+                    var listText = list.toString();
+                    console.log(listText);
 
-                var url = encodeURI("/meal_planning/savetopdf/"+startDate+"/"+endDate+"/"+listText);
-                //var url = encodeURI("/meal_planning/savetopdf/2019-10-20 00:00:00/2019-10-27 00:00:00/"+listText);
-                //var url = "/meal_planning/savetopdf/"+startDate+"/"+endDate;
+                    var url = encodeURI("/meal_planning/sendbymail/"+startDate+"/"+endDate+"/"+listText);
+                    console.log(url);
+                    console.log(this);
+                    this.setAttribute('href', url);
+                });
 
-                console.log(this);
-                console.log(url);
-                this.setAttribute('href', url);
+                // HIDE SUCCESS MSG
 
-            });
-
-            // SEND BY MAIL
-
-            var buttonMail = document.getElementById('sendMailButton');
-            buttonMail.addEventListener('click', function(e){
-                console.log(list);
-                var start = document.getElementById("startPeriod").value;
-                var end = document.getElementById("endPeriod").value;
-                console.log(start); 
-                console.log(end);
-
-                /* var arrayStart = start.split('-');
-                var startDate = new Date(arrayStart[2]+'-'+arrayStart[1]+'-'+arrayStart[0]);
-                var arrayEnd = end.split('-');
-                var endDate = new Date(arrayEnd[2]+'-'+arrayEnd[1]+'-'+arrayEnd[0]+'T00:00:00Z'); */
-                
-                var startDate = start+'T00:00:00Z';
-                var endDate = end+'T00:00:00Z';
-
-                console.log(list); 
-                console.log(startDate); 
-                console.log(endDate); 
-
-                var listText = list.toString();
-                console.log(listText);
-
-                var url = encodeURI("/meal_planning/sendbymail/"+startDate+"/"+endDate+"/"+listText);
-                console.log(url);
-                console.log(this);
-                this.setAttribute('href', url);
-            });
-
-            // HIDE SUCCESS MSG
-
-            var message = document.getElementById('msgSuccessListSentByMail');
-            if (message) {
-                setTimeout(function(){ 
-                    message.remove(); }, 
-                    5000
-                );
+                var message = document.getElementById('msgSuccessListSentByMail');
+                if (message) {
+                    setTimeout(function(){ 
+                        message.remove(); }, 
+                        5000
+                    );
+                }
             }
 
         });

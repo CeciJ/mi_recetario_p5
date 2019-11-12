@@ -4,7 +4,7 @@ algolia_search:
     #serializer: jms_serializer
     prefix: '%env(APP_ENV)%_'
     batchSize: 25
-    # doctrineSubscribedEvents: ['postPersist']
+    #doctrineSubscribedEvents: ['postPersist']
     doctrineSubscribedEvents: []
     indices:
     - name: ingredients
