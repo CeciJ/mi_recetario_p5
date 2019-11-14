@@ -20,15 +20,16 @@ class MeasureUnitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('unit', null, [
+            /* ->add('unit', null, [
                 'label' => false
-            ])
+            ]) */
             ->add('unit', ChoiceType::class, [
                 'label' => false,
                 'multiple' => false,
                 'choices'  => $this->units,
                 'choice_label' => function(MeasureUnit $unit, $key, $value) {
-                    return strtolower(utf8_decode($unit->getUnit()));
+                    $name = $unit->getUnit();
+                    return $name;
             }])
         ;
     }

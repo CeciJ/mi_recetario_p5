@@ -215,7 +215,6 @@ class RecipeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $allIngredients = $repo->findAll();
-            dump($allIngredients);
             $recipeIngredients = $recipe->getRecipeIngredients();
             $ingredientsRecipe = [];
 
