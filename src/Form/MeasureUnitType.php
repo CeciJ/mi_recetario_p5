@@ -14,7 +14,7 @@ class MeasureUnitType extends AbstractType
 
     public function __construct(MeasureUnitRepository $unitRepository)
     {
-        $this->units = $unitRepository->findAll();
+        $this->units = $unitRepository->findAllDistinct();
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

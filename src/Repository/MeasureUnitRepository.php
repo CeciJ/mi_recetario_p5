@@ -19,6 +19,15 @@ class MeasureUnitRepository extends ServiceEntityRepository
         parent::__construct($registry, MeasureUnit::class);
     }
 
+    public function findAllDistinct()
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m')
+            ->distinct(true)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return MeasureUnit[] Returns an array of MeasureUnit objects
     //  */

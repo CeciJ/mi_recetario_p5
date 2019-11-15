@@ -140,8 +140,8 @@ class MealPlanningController extends AbstractController
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
 
-        $mealPlannings = null;
-        $finalIngredients = null;
+        //$mealPlannings = null;
+        //$finalIngredients = null;
 
         if($form->isSubmitted()){
             $startDate = $search->getStartPeriod();
@@ -153,15 +153,8 @@ class MealPlanningController extends AbstractController
             $finalList = $this->generateList($mealPlanningRepository, $search);
             $finalIngredients = $finalList['finalIngredients'];
             $mealPlannings = $finalList['mealPlannings'];
-        } 
-        else {
-            $startDate = null;
-            $endDate = null;
-        }
 
-        //$listIngredients = $recipeIngRepository->compileIngredients($search, $tabNames, $allIngredients);
-
-        return $this->render("meal_planning/index.html.twig", [
+            return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
@@ -169,6 +162,21 @@ class MealPlanningController extends AbstractController
             'startDate' => $startDate,
             'endDate' => $endDate,
             'listText' => 'list'
+        ]);
+        } 
+        else {
+            $startDate = null;
+            $endDate = null;
+        }
+
+        return $this->render("meal_planning/index.html.twig", [
+            'current_menu' => 'recipes',
+            //'meal_plannings' => $mealPlannings,
+            'form' => $form->createView(),
+            'finalIngredients' => null,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            //'listText' => 'list'
         ]);
        
     }
