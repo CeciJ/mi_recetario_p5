@@ -108,6 +108,7 @@
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Recette:</label>
                             <select class="form-control" id="recipient-name">
+                                <option value="defaultValue">Choisir ma recette...</option>
                                 {% for recipe in allRecipes %}
                                     <option value={{ recipe.id }}>{{ recipe.name }}</option>
                                 {% endfor %}
@@ -345,9 +346,41 @@
             },
             eventClick: function(info) {
                 info.jsEvent.preventDefault();
-                //alert('Event: ' + info.event.title);
-                //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-                //alert('View: ' + info.view.type);
+                var mealPlanningName = info.event.title;
+
+                alert('Event: ' + info.event.title);
+                alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                alert('View: ' + info.view.type);
+            },
+            eventDrop: function(eventDropInfo){
+                console.log(eventDropInfo);
+                
+                var eventTitle = eventDropInfo.event.title;
+                var eventUrl = eventDropInfo.event.url;
+                var splitUrl = eventUrl.split('/');
+                var idMealPlanning = splitUrl[2];
+                var eventDiff = eventDropInfo.delta.days;
+
+                var newDate = eventDropInfo.event._instance.range.start;
+                console.log(idMealPlanning);
+                console.log(eventTitle);
+                console.log(eventDiff);
+
+                $.ajax({
+                    url: "/meal_planning/edit/"+idMealPlanning,
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        date: newDate, 
+                        title: eventTitle,
+                        id: idMealPlanning 
+                    },
+                    success: function (event) {   
+                        //eventSources[0].refetch();
+                        alert('Menu décalé avec succès !');
+                    }
+                });
+
             },
             eventDragStop: function(event) {
                 console.log(event.event.url);

@@ -24,7 +24,7 @@
         {% endfor %}
 
     {# {% if listIngredients %} #}
-    {% if finalIngredients %}
+    {% if finalIngredients is defined %}
         <div class="row">
             <div class="col-md-6">
                 {{ include('meal_planning/_list.html.twig') }}
@@ -44,16 +44,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for meal_planning in meal_plannings %}
-                        <tr>
-                            <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
-                            <td>{{ meal_planning.title }}</td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="5">no records found</td>
-                        </tr>
-                    {% endfor %}
+                    {% if meal_plannings is defined %}
+                        {% for meal_planning in meal_plannings %}
+                            <tr>
+                                <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
+                                <td>{{ meal_planning.title }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5">no records found</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

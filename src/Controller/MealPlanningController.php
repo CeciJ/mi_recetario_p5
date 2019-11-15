@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twig\Environment;
@@ -139,6 +140,8 @@ class MealPlanningController extends AbstractController
 
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
+        $startDate = null;
+        $endDate = null;
 
         //$mealPlannings = null;
         //$finalIngredients = null;
@@ -149,12 +152,15 @@ class MealPlanningController extends AbstractController
             $endDate = $search->getEndPeriod();
             $endDate = $endDate->format('Y-m-d H:i:s');
 
-            //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
+            /* $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+            dump($mealPlannings); */
+            
             $finalList = $this->generateList($mealPlanningRepository, $search);
             $finalIngredients = $finalList['finalIngredients'];
             $mealPlannings = $finalList['mealPlannings'];
+        } 
 
-            return $this->render("meal_planning/index.html.twig", [
+        return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
             'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
@@ -162,21 +168,6 @@ class MealPlanningController extends AbstractController
             'startDate' => $startDate,
             'endDate' => $endDate,
             'listText' => 'list'
-        ]);
-        } 
-        else {
-            $startDate = null;
-            $endDate = null;
-        }
-
-        return $this->render("meal_planning/index.html.twig", [
-            'current_menu' => 'recipes',
-            //'meal_plannings' => $mealPlannings,
-            'form' => $form->createView(),
-            'finalIngredients' => null,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            //'listText' => 'list'
         ]);
        
     }
@@ -202,38 +193,12 @@ class MealPlanningController extends AbstractController
             $datatitle = explode('=', $dataTitle);
             $dataTitle = $datatitle[1];
 
-            //exit(\Doctrine\Common\Util\Debug::dump($dataTitle));
+            $recipe = $recipeRepo->findOneByName($dataTitle);
 
-            /*
-            if($detailOrigin == 'dateClick') {
-
-            } else {
-
-            }
-            exit(\Doctrine\Common\Util\Debug::dump($detailOrigin));
-            */
-            /*
-            if(strlen($dataTitle) < 5)
-            {
-                $dataTitle = (int) $dataTitle;
-                $recipe = $recipeRepo->find($dataTitle);
-                $recipeNameOk = $recipe->getname();
-
-                $mealPlanning = new MealPlanning();
-                $mealPlanning->setTitle($recipeNameOk);
-                $mealPlanning->setBeginAt($start);
-                //$mealPlanning->addRecipesData($recipe);
-            }
-            else
-            {
-            */
-                $recipe = $recipeRepo->findOneByName($dataTitle);
-
-                $mealPlanning = new MealPlanning();
-                $mealPlanning->setTitle($dataTitle);
-                $mealPlanning->setBeginAt($start);
-                $mealPlanning->setRecipe($recipe);
-            //}
+            $mealPlanning = new MealPlanning();
+            $mealPlanning->setTitle($dataTitle);
+            $mealPlanning->setBeginAt($start);
+            $mealPlanning->setRecipe($recipe);
 
             //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
             $entityManager = $this->getDoctrine()->getManager();
@@ -247,41 +212,6 @@ class MealPlanningController extends AbstractController
                 JsonResponse::HTTP_CREATED
             );
         }
-        /*
-        else {
-            $mealPlanning = new MealPlanning();
-
-            $form = $this->createForm(MealPlanningType::class, $mealPlanning);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($mealPlanning);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('meal_planning.index');
-            }
-        }
-        */
-        /*
-        $mealPlanning = new MealPlanning();
-
-            $form = $this->createForm(MealPlanningType::class, $mealPlanning);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($mealPlanning);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('meal_planning.index');
-            }
-        
-        return $this->render('pages/home.html.twig', [
-            'meal_planning' => $mealPlanning,
-            'form' => $form->createView(),
-        ]);
-        */
     }
 
     /**
@@ -300,23 +230,36 @@ class MealPlanningController extends AbstractController
     /**
      * @Route("/edit/{id}", name="meal_planning.edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, MealPlanning $mealPlanning): Response
+    public function edit(Request $request, MealPlanningRepository $mealPlanningRepo): Response
     {
-        $form = $this->createForm(MealPlanningType::class, $mealPlanning);
-        $form->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+            $data = urldecode($data);
+            $datas = explode('&', $data);
+            $dataForId = explode('=', $datas[2]);
+            $mealPlanningId = $dataForId[1];
+            $dataForNewDate = explode('=', $datas[0]);
+            $newDate = $dataForNewDate[1];
+            $date = explode('(', $newDate);
+            $date = new DateTime($date[0]);
+            //$finalNewDate = $date::createFromFormat($newDate, )
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $mealPlanningToEdit = $mealPlanningRepo->find($mealPlanningId);
+            $mealPlanningToEdit->setBeginAt($date);
+            
+            //dump($mealPlanningToEdit); die();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($mealPlanningToEdit);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('meal_planning.index', [
-                'id' => $mealPlanning->getId(),
-            ]);
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                ],
+                JsonResponse::HTTP_CREATED
+            );
+            //exit(\Doctrine\Common\Util\Debug::dump($mealPlanningToEdit));
         }
-
-        return $this->render('meal_planning/edit.html.twig', [
-            'meal_planning' => $mealPlanning,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
