@@ -140,34 +140,50 @@ class MealPlanningController extends AbstractController
 
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
-        $startDate = null;
-        $endDate = null;
-
-        //$mealPlannings = null;
-        //$finalIngredients = null;
+        //$startDate = new DateTime('now');
+        //$endDate = new DateTime('now');
+        //$endDate = $endDate->add(new DateInterval('PD7'));
 
         if($form->isSubmitted()){
-            $startDate = $search->getStartPeriod();
-            $startDate = $startDate->format('Y-m-d H:i:s');
-            $endDate = $search->getEndPeriod();
-            $endDate = $endDate->format('Y-m-d H:i:s');
-
-            /* $mealPlannings = $mealPlanningRepository->findAllQuery($search);
-            dump($mealPlannings); */
-            
             $finalList = $this->generateList($mealPlanningRepository, $search);
             $finalIngredients = $finalList['finalIngredients'];
             $mealPlannings = $finalList['mealPlannings'];
-        } 
+            //dump($finalIngredients);
+
+            return $this->render("meal_planning/index.html.twig", [
+                'current_menu' => 'recipes',
+                'form' => $form->createView(),
+                //'messageOK' => 'pour l instant c est bon',
+                'finalIngredients' => $finalIngredients,
+                'meal_plannings' => $mealPlannings
+            ]);
+
+        }
+
+        dump('sans form');
+
+        /* if($form->isSubmitted()){
+            $startDate = $search->getStartPeriod();
+            //$startDate = $startDate->format('Y-m-d H:i:s');
+            $endDate = $search->getEndPeriod()->add(new DateInterval('PT23H59M59S'));
+            //$endDate = $endDate->format('Y-m-d H:i:s');
+            dump($search); 
+            //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
+            //dump($mealPlannings);
+            $finalList = $this->generateList($mealPlanningRepository, $search);
+            dump($finalList); 
+            $finalIngredients = $finalList['finalIngredients'];
+            $mealPlannings = $finalList['mealPlannings'];
+        }  */
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
-            'meal_plannings' => $mealPlannings,
             'form' => $form->createView(),
+            /* 'meal_plannings' => $mealPlannings,
             'finalIngredients' => $finalIngredients,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'listText' => 'list'
+            'listText' => 'list' */
         ]);
        
     }
@@ -301,7 +317,7 @@ class MealPlanningController extends AbstractController
 
     private function generateList(MealPlanningRepository $mealPlanningRepository, ListSearch $search)
     {
-        dump($search);
+        //dump($search);
         
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
 

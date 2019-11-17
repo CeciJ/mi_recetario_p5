@@ -23,44 +23,96 @@
             </div>
         {% endfor %}
 
-    {# {% if listIngredients %} #}
-    {% if finalIngredients is defined %}
-        <div class="row">
-            <div class="col-md-6">
-                {{ include('meal_planning/_list.html.twig') }}
-                <div>
-                    <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate, endDate: endDate, listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
-                    <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate, endDate: endDate, listText: listText}) }}"id="sendMailButton">Envoyer par mail</a>
-                </div>
-            </div>
+{#         {% if messageOK is defined %}
+            <div>{{ messageOK }}</div>
+        {% endif %} #}
 
-            <div class="col-md-6">
-                <h2>Mes repas</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Recette</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% if meal_plannings is defined %}
-                        {% for meal_planning in meal_plannings %}
-                            <tr>
-                                <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
-                                <td>{{ meal_planning.title }}</td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="5">no records found</td>
-                            </tr>
+        {% if finalIngredients is defined %}
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="shopListH2">Ma liste de courses</h2>
+                    <div id="shopListDiv">
+                        {% for ingredient in finalIngredients %}
+                            <input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
                         {% endfor %}
-                    {% endif %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    {% endif %}
+                    </div>
+                    <div>
+                        {# <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
+                        <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a> #}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                        <h2>Mes repas</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Recette</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if meal_plannings is defined %}
+                                {% for meal_planning in meal_plannings %}
+                                    <tr>
+                                        <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
+                                        <td>{{ meal_planning.title }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        {% endif %}
+        
+                {# <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="shopListH2">Ma liste de courses</h2>
+                        <div id="shopListDiv">
+                            {% if finalIngredients is defined %}
+                                {% for ingredient in finalIngredients %}
+                                    <input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
+                            <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h2>Mes repas</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Recette</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if meal_plannings is defined %}
+                                {% for meal_planning in meal_plannings %}
+                                    <tr>
+                                        <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
+                                        <td>{{ meal_planning.title }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div> #}
+
     </div>
 {% endblock %}
 

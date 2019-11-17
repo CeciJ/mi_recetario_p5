@@ -15,6 +15,7 @@ class MeasureUnitType extends AbstractType
     public function __construct(MeasureUnitRepository $unitRepository)
     {
         $this->units = $unitRepository->findAllDistinct();
+        //dump($this->units);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -26,12 +27,22 @@ class MeasureUnitType extends AbstractType
             ->add('unit', ChoiceType::class, [
                 'label' => false,
                 'multiple' => false,
-                'choices'  => $this->units,
-                'choice_label' => function(MeasureUnit $unit, $key, $value) {
-                    $name = $unit->getUnit();
-                    return $name;
+                'choices'  => $this->fillLabels(),
+                'choice_label' => function($choice, $key, $value) {
+                    return $value;
             }])
         ;
+    }
+
+    public function fillLabels()
+    {
+        $allLabels = [];
+        foreach($this->units as $key => $unit){
+            $allLabels[] = $unit['unit'];
+        }
+        sort($allLabels);
+        //dump($allLabels);
+        return $allLabels;
     }
 
     public function configureOptions(OptionsResolver $resolver)

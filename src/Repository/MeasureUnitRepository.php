@@ -22,8 +22,8 @@ class MeasureUnitRepository extends ServiceEntityRepository
     public function findAllDistinct()
     {
         return $this->createQueryBuilder('m')
-            ->select('m')
-            ->distinct(true)
+            ->select('DISTINCT m.unit')
+            //->distinct('name')
             ->getQuery()
             ->getResult();
     }

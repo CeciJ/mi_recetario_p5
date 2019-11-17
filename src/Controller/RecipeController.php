@@ -213,7 +213,19 @@ class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // On récupère la recette
+            dump($form->getData());
+            // On regarde si les ingrédients existent déjà en BDD
+                // S'ils existent on les mets à jour pour éviter de multiplier le même ingrédient en BDD
+                // Sinon on crée le nouvel ingrédient
+            // On regarde si les unités existent déjà en BDD
+                // S'ils existent on les mets à jour pour éviter de multiplier la même unité en BDD
+                // Sinon on crée la nouvelle unité
+            // On persiste la recette
+            // On retourne à l'index des recettes
+
             $allIngredients = $repo->findAll();
             $recipeIngredients = $recipe->getRecipeIngredients();
             $ingredientsRecipe = [];
@@ -253,6 +265,37 @@ class RecipeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            // On récupère la recette
+            dump($form->getData()); 
+
+            // On récupère les ingrédients de la recette
+            $recipeIngredients = $recipe->getRecipeIngredients();
+            dump($recipeIngredients); 
+
+            // On regarde si les ingrédients existent déjà en BDD
+                // S'ils existent on les mets à jour pour éviter de multiplier le même ingrédient en BDD
+                // Sinon on crée le nouvel ingrédient
+            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+            dump($repository);
+            
+            foreach($recipeIngredients as $recipeIngredient){
+                $ingredient = $recipeIngredient->getNameIngredient();
+                dump($ingredient);
+                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
+                dump($ingredientToCheck);
+                if($ingredientToCheck){
+                    dump('ingrédient en base de données');
+                } else {
+                    dump('ingrédient PAS en base de données');
+                }
+            }
+            die();
+            // On regarde si les unités existent déjà en BDD
+                // S'ils existent on les mets à jour pour éviter de multiplier la même unité en BDD
+                // Sinon on crée la nouvelle unité
+            // On persiste la recette
+            // On retourne à l'index des recettes
+
             $allIngredients = $repo->findAll();
             dump($allIngredients);
             $recipeIngredients = $recipe->getRecipeIngredients();

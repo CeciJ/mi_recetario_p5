@@ -45,6 +45,7 @@ class RecipeIngredients
     public function __construct()
     {
         $this->ingredient = new ArrayCollection();
+        //$this->nameIngredient = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,5 +108,26 @@ class RecipeIngredients
 
         return $this;
     }
+
+    /* public function addNameIngredient(Ingredient $nameIngredient): self
+    {
+        dump($this->nameIngredient); die();
+        if (!$this->nameIngredient->contains($nameIngredient)) {
+            $this->nameIngredient[] = $nameIngredient;
+            $nameIngredient->addRecipeIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNameIngredient(Ingredient $nameIngredient): self
+    {
+        if ($this->nameIngredient->contains($nameIngredient)) {
+            $this->nameIngredient->removeElement($nameIngredient);
+            $nameIngredient->removeRecipeIngredient($this);
+        }
+
+        return $this;
+    } */
 
 }
