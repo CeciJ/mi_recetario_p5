@@ -285,6 +285,7 @@ class RecipeController extends AbstractController
                 dump($ingredientToCheck);
                 if($ingredientToCheck){
                     dump('ingrédient en base de données');
+                    
                 } else {
                     dump('ingrédient PAS en base de données');
                 }
