@@ -3,61 +3,51 @@
 {% block title "Ma recette de " ~ recipe.name %}
 
 {% block body %}
-    <div class="container mt-4">
-        {% for message in app.flashes('success') %}
+    <div class="container mt-5" id="allBlockRecipe">
+
+        {# {% for message in app.flashes('success') %}
             <div class="alert alert-success">{{ message }}</div>
         {% endfor %}
 
         {% if not form.vars.valid %}
             <div class="alert alert-danger">Erreur dans les données envoyées</div>
-        {% endif %}
+        {% endif %} #}
 
-        <div class="row">
-            <div class="col-md-5">
+        <div class="row" id="blocRecipe">
+            <div id="divImg" class="col-md-5 col-sm-5 col-12">
                 <div data-slider>
                     {% if recipe.pictures is empty %}
-                        <img src="{{ 'empty.jpg' | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                        <img src="{{ 'empty.jpg' | imagine_filter('medium') }}" alt="card-img-top">
                     {% else %}
                         {% for picture in recipe.pictures %}
-                            <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('medium') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+                            <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('medium') }}" alt="card-img-top">
                         {% endfor %}
                     {% endif %}
                 </div> 
             </div>
-            <div id="contentRecipe" class="col-md-7">
+            <div id="contentRecipe" class="col-md-6 col-sm-6 col-12">
                 <h1>{{ recipe.name }}</h1>
                 <div id="detailsRecipe">
                     <p>Type : 
                         {% for dishType in recipe.DishTypes %}
-                                <span>{{ dishType.name }}</span>
+                                <span><b>{{ dishType.name }}</b></span>
                         {% endfor %}
                     </p>
                     <p>Cuisine : 
                         {% for foodType in recipe.foodTypes %}
-                            <span >{{ foodType.name }}</span>
+                            <span ><b>{{ foodType.name }}</b></span>
                         {% endfor %}
                     </p>
-                    <p>Niveau de difficulté : {{recipe.difficultyType}} </p>
-                    <p>Coût : {{recipe.costType}} </p>
+                    <p>Niveau de difficulté : <b>{{recipe.difficultyType}}</b></p>
+                    <p>Coût : <b>{{recipe.costType}}</b></p>
                     <div class="row">
-                        <p class="col-4">Total :</br>{{recipe.totalTime}} min</p>
-                        <p class="col-4">Préparation :</br>{{recipe.preparationTime}} min</p>
-                        <p class="col-4">Cuisson :</br>{{recipe.cookingTime}} min</p>
+                        <p class="col-4">Total :</br><b>{{recipe.totalTime}}</b> min</p>
+                        <p class="col-4">Préparation :</br><b>{{recipe.preparationTime}}</b> min</p>
+                        <p class="col-4">Cuisson :</br><b>{{recipe.cookingTime}}</b> min</p>
                     </div>
                     {% for option in recipe.options %}
-                        <p>{{ option.name }}</p>
+                        <p><b>{{ option.name }}</b></p>
                     {% endfor %}
-                    <div class="row">
-                        <p class="col-12">Ingrédients : </p>
-                    </div>
-                    <div class="row">
-                        <ul>
-                            {% for ingredient in recipe.recipeIngredients %}
-                                <li>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <p>Description de la recette :<br>{{recipe.steps|nl2br}} </p>
                 </div>
                 {# <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
                 <a href="#" class="btn btn-primary" id="contactButton" {% if form.vars.submitted %}style="display: none;"{% endif %}>Envoyer par mail</a>
@@ -77,6 +67,19 @@
                         </div>
                     {{ form_end(form) }}
                 </div> #}
+            </div>
+        </div>
+        <div class="row" id="ingredientsAndDescription">
+            <div id="ingredients" class="col-md-4 col-sm-4 col-12">
+                <h2>Ingrédients</h2>
+                <ul>
+                    {% for ingredient in recipe.recipeIngredients %}
+                        <li>{{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.nameIngredient }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="recipeDescription" class="col-md-7 col-sm-7 col-12">
+                <h2>Description de la recette</h2><br>{{recipe.steps|nl2br}}</p>
             </div>
         </div>
     </div>

@@ -54,8 +54,8 @@ class CalendarListener
              */
 
             $mealPlanningEvent->setOptions([
-                'backgroundColor' => 'red',
-                'borderColor' => 'red',
+                'backgroundColor' => '#fbac03',
+                'borderColor' => '#fbac03',
             ]);
             $mealPlanningEvent->addOption(
                 'url',

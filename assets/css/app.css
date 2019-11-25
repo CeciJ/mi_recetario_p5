@@ -101,9 +101,52 @@ tr th.fc-day-header{
     border: 2px #fbac03 !important;
 }
 
+/*--SHOW RECIPE--*/
+#blocRecipe{
+    display: flex;
+    margin-top: 15px;
+}
+#blocRecipe img{
+    width: 100%; 
+    height: auto;
+    border-radius: 5px;
+}
+/* #allBlockRecipe{
+    border: 3px solid #fbac03 !important;
+    border-radius: 5px;
+} */
+#contentRecipe{
+    background: #fbac03 !important;
+    border-radius: 5px;
+    opacity: 0.8;
+    margin-right: 15px;
+}
+#contentRecipe h1{
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+#ingredientsAndDescription{
+    display: flex;
+    margin-top: 20px;
+}
+#ingredients{
+    background: #fbac03 !important;
+    border-radius: 5px;
+    opacity: 0.8;
+    margin-right: 15px;
+    padding: 20px;
+    height: max-content !important;
+}
+#recipeDescription{
+    border: 3px solid #fbac03 !important;
+    border-radius: 5px;
+    opacity: 0.8;
+    margin-right: 15px;
+    padding: 20px;
+}
 
 /*Recipe details*/
-#contentRecipe{
+/* #contentRecipe{
     background-color: rgb(4, 202, 202);
     border-radius: 3px;
     margin-top: 15px;
@@ -116,7 +159,7 @@ tr th.fc-day-header{
     margin-right: 5px;
     padding: 10px;
     border-radius: 3px; 
-}
+} */
 
 /*--RESPONSIVE--*/
 
@@ -141,9 +184,34 @@ tr th.fc-day-header{
     .fc-button .fc-icon{
         font-size: 0.9rem;
     }
+
+    /*--Show recipe--*/
+    #divImg{
+        margin: auto;
+        margin-bottom: 40px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    #contentRecipe{
+        margin:auto;
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+        margin-bottom: 0px !important;
+        width: 100%;
+        border: 3px solid #fbac03 !important;
+        background-color: white !important;
+        border-radius: 5px;
+        opacity: 0.8;
+        margin-right: 15px;
+        padding: 20px;
+    }
+    #ingredientsAndDescription{
+        margin-top: 0px !important;
+    }
+    #allBlockRecipe{
+        margin-top: 25px !important;
+    }
 }
-
-
 
 
 /* Autocomplete CSS */
