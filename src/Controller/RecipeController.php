@@ -290,7 +290,7 @@ class RecipeController extends AbstractController
                     dump('ingrédient PAS en base de données');
                 }
             }
-            die();
+            //die();
             // On regarde si les unités existent déjà en BDD
                 // S'ils existent on les mets à jour pour éviter de multiplier la même unité en BDD
                 // Sinon on crée la nouvelle unité

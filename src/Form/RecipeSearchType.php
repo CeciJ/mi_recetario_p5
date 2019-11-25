@@ -22,14 +22,14 @@ class RecipeSearchType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Temps de préparation maximum'
+                    'placeholder' => 'Temps préparation'
                 ]
             ])
             ->add('numberPersons', IntegerType::class, [
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Nombre de personnes'
+                    'placeholder' => 'Nombre personnes'
                 ]
             ])
             ->add('DishTypes', EntityType::class, [

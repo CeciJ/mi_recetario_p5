@@ -1,15 +1,107 @@
-/*Homepage*/
-#bandeauTitre{
-    background-color: #5ee5a1 !important;
+/*--HOMEPAGE--*/
+
+#blocPage{
+    width: 100%;
+    margin: auto;
 }
-h1{
+#navBar{
+    background-color: white;
+}
+#bandeauTitre{
+    /*background-color: #5ee5a1 !important;*/
+    background-color: #fbac03;
+}
+h1, #bandeauTitre p{
+    color: #393836;
+}
+h2.home{
+    margin-top: 20px;
+    margin-bottom: 20px !important;
+}
+footer{
+    margin-top: 30px; 
+    margin-bottom: 0px !important;
+    background-color: #fbac03 !important;
+    opacity: 0.8;
+    height: 50px;
+    padding: 10px;
+}
+.recipeCard{
+    box-shadow: inset 0px 0px 15px #888;
+}
+.recipeCard a{
+    color: #fbac03;
+}
+.recipeCard a:hover{
+    text-decoration: none;
+}
+.btn.btn-primary{
+    background-color: #fbac03 !important;
+    border: #fbac03 !important;
     color: black;
 }
-/*Liste de courses*/
-h2{
-    margin-top: 20px;
-    margin-bottom: 10px !important;
+#external-events h5 button{
+    color: #212529;
 }
+#external-events p{
+    color: #fbac03;
+}
+.fc-event{
+    background-color: #fbac03;
+    border: #fbac03;
+    color: #212529;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 2px;
+}
+tr th.fc-day-header{
+    background-color: #fbac03;
+}
+#goDirectlyToCalendar{
+    text-decoration: none;
+    color: #212529;
+    margin-left: 10px;
+}
+.removebtn {
+    color:black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width:13px;
+    height: 13px;
+    text-align:center;
+    border-radius:50%;
+    font-size: 10px;
+    cursor: pointer;
+    background-color: #FFF
+}
+#drop-remove label{
+    font-size:11px;
+}
+#linksCalendar{
+    display:flex;
+}
+#throwPhoto{
+    margin-top:15px; 
+    margin-bottom: 15px;
+}
+
+/*--LIST OF RECIPES--*/
+
+.h1.allRecipes{
+    margin-top: 20px;
+    margin-bottom: 20px !important;
+}
+.page-link{
+    color: #fbac03 !important;
+}
+.page-item.active .page-link{
+    color: white !important;
+    background: #fbac03 !important;
+    border: 2px #fbac03 !important;
+}
+
+
 /*Recipe details*/
 #contentRecipe{
     background-color: rgb(4, 202, 202);
@@ -25,12 +117,15 @@ h2{
     padding: 10px;
     border-radius: 3px; 
 }
-/*Liste de courses*/
-h2.home{
-    margin-top: 20px;
-    margin-bottom: 10px !important;
-}
+
+/*--RESPONSIVE--*/
+
 @media screen and (max-width: 600px) {
+    
+    /*--Homepage--*/
+    #external-events > p{
+        display: none;
+    }
     #accordion {
       display: none;
     }
@@ -48,18 +143,8 @@ h2.home{
     }
 }
 
-.fc-event{
-    background-color: red;
-    border: red;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 2px;
-}
-.btn.btn-primary{
-    background-color: #5ee5a1 !important;
-    border: #5ee5a1 !important;
-    color: black;
-}
+
+
 
 /* Autocomplete CSS */
 .algolia-autocomplete {
@@ -86,5 +171,4 @@ h2.home{
 }
 .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
     font-weight: bold;
-    font-style: normal;
 }
