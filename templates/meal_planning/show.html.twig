@@ -30,9 +30,9 @@
 
     <div class="card mb-4">
     {% if recipe.picture %}
-        <img src="{{ vich_uploader_asset(recipe.picture, "imageFile") | imagine_filter('thumb') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+        <img src="{{ vich_uploader_asset(recipe.picture, "imageFile") | imagine_filter('thumb') }}" style="width: 100%; height: auto;" alt="card-img-top">
     {% else %}
-        <img src="{{ "empty.jpg" | imagine_filter('thumb') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+        <img src="{{ "empty.jpg" | imagine_filter('thumb') }}" style="width: 100%; height: auto;" alt="card-img-top">
     {% endif %}
     <div class="card-body">
         <h5 class="card-title">

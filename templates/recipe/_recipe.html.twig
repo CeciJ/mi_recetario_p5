@@ -1,8 +1,8 @@
 <div class="card mb-4 recipeCard">
     {% if recipe.picture %}
-        <img src="{{ vich_uploader_asset(recipe.picture, "imageFile") | imagine_filter('thumb') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+        <img src="{{ vich_uploader_asset(recipe.picture, "imageFile") | imagine_filter('thumb') }}" style="width: 100%; height: auto;" alt="card-img-top">
     {% else %}
-        <img src="{{ "empty.jpg" | imagine_filter('thumb') }}" style="width: 100%; heigth: auto;" alt="card-img-top">
+        <img src="{{ "empty.jpg" | imagine_filter('thumb') }}" style="width: 100%; height: auto;" alt="card-img-top">
     {% endif %}
     <div class="card-body">
         <h5 class="card-title">
@@ -12,8 +12,8 @@
             {% for dishType in recipe.DishTypes %}
                 {{ dishType.name }}
             {% endfor %}
-        </br>
-        {{ recipe.totalTime }} minutes</br>
+        <br>
+        {{ recipe.totalTime }} minutes<br>
         {{ recipe.numberPersons }} {% if recipe.numberPersons > 1 %} personnes {% else %} personne {% endif %}</p>
     </div>
 </div>

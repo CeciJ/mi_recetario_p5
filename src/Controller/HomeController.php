@@ -22,7 +22,7 @@ class HomeController extends AbstractController
      */
     public function index(RecipeRepository $repository, DishTypeRepository $dishTypeRepository, Request $request): Response
     {
-
+        $count = 0;
         $recipes = $repository->findLatest();
         $allRecipes = $repository->findAll();
         $foodCategories = $dishTypeRepository->findAll();
@@ -41,7 +41,8 @@ class HomeController extends AbstractController
             'recipes' => $recipes,
             'foodCategories' => $foodCategories,
             'allRecipes' => $allRecipes,
-            'recipeCategories' => $recipesByAllCategories
+            'recipeCategories' => $recipesByAllCategories,
+            'count' => $count
         ]);
     }
 

@@ -4,22 +4,22 @@
 
 {% block body %}
 <div class="container mt-4">
-    <a href="{{ path('admin.recipe.index') }}" class="btn btn-info" style="margin-bottom:15px;">Revenir à la liste de recettes</a>
+    <a href="{{ path('admin.recipe.index') }}" class="btn btn-primary backRecipeList">Revenir à la liste de recettes</a>
     
-    <div id="dishTypes" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
-        <h3 style="margin-bottom: 20px;">Types de plats</h3>
+    <div id="dishTypes" class="optionPart">
+        <h3>Types de plats</h3>
         <div class="row">
             {% for dishType in dish_types %}
-                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                <div class="col-md-2 optionType">
                     <div>
                         <div>{{ dishType.name }}</div>
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size: 11px;">
                             <div class="col-md-12">
                                 <a data-toggle="modal" data-target="#modalEditDishType-{{dishType.id}}" href="{{ path('admin.dish_type.edit', {id: dishType.id}) }}" data-id="{{dishType.id}}" data-name="{{dishType.name}}"  class="modal-trigger edit" id="buttonEditDishType-{{dishType.id}}" style="cursor:pointer;" onclick="openModalEditDishType({{dishType.id}})">Modifier</a>
                                 <form method="post" action="{{ path('admin.dish_type.delete', {id: dishType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dishType.id) }}">
-                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                    <button>Supprimer</button>
                                 </form>
                             </div>
                         </div>
@@ -34,11 +34,11 @@
         <button id="buttonSubmitDishType" data-toggle="modal" data-target="{{ path('admin.dish_type.new') }}" class="modal-trigger add dishType btn btn-primary" style="margin-top: 25px;">Ajouter un type de plat</button>            
     </div>
 
-    <div id="foodTypes" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
-        <h3 style="margin-bottom: 20px;">Types de cuisine</h3>
+    <div id="foodTypes" class="optionPart">
+        <h3>Types de cuisine</h3>
         <div class="row">
             {% for foodType in food_types %}
-                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                <div class="col-md-2 optionType">
                     <div>
                         <div>{{ foodType.name }}</div>
                         <div class="row" style="font-size: 10px;">
@@ -47,7 +47,7 @@
                                 <form method="post" action="{{ path('admin.food_type.delete', {id: foodType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ foodType.id) }}">
-                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                    <button>Supprimer</button>
                                 </form>
                             </div>
                         </div>
@@ -62,11 +62,11 @@
         <button id="buttonSubmitFoodType" data-toggle="modal" data-target="{{ path('admin.food_type.new') }}" class="modal-trigger add foodType btn btn-primary" style="margin-top: 25px;">Ajouter un type de cuisine</button>            
     </div>
 
-    <div id="options" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
-        <h3 style="margin-bottom: 20px;">Options supplémentaires</h3>
+    <div id="options" class="optionPart">
+        <h3>Options supplémentaires</h3>
         <div class="row">
             {% for option in options %}
-                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
+                <div class="col-md-2 optionType">
                     <div>
                         <div>{{ option.name }}</div>
                         <div class="row" style="font-size: 10px;">
@@ -75,7 +75,7 @@
                                 <form method="post" action="{{ path('admin.option.delete', {id: option.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
-                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
+                                    <button>Supprimer</button>
                                 </form>
                             </div>
                         </div>

@@ -41,9 +41,9 @@
                     <p>Niveau de difficulté : <b>{{recipe.difficultyType}}</b></p>
                     <p>Coût : <b>{{recipe.costType}}</b></p>
                     <div class="row">
-                        <p class="col-4">Total :</br><b>{{recipe.totalTime}}</b> min</p>
-                        <p class="col-4">Préparation :</br><b>{{recipe.preparationTime}}</b> min</p>
-                        <p class="col-4">Cuisson :</br><b>{{recipe.cookingTime}}</b> min</p>
+                        <p class="col-4">Total :<br><b>{{recipe.totalTime}}</b> min</p>
+                        <p class="col-4">Préparation :<br><b>{{recipe.preparationTime}}</b> min</p>
+                        <p class="col-4">Cuisson :<br><b>{{recipe.cookingTime}}</b> min</p>
                     </div>
                     {% for option in recipe.options %}
                         <p><b>{{ option.name }}</b></p>
@@ -79,7 +79,7 @@
                 </ul>
             </div>
             <div id="recipeDescription" class="col-md-7 col-sm-7 col-12">
-                <h2>Description de la recette</h2><br>{{recipe.steps|nl2br}}</p>
+                <h2>Description de la recette</h2><br><p>{{recipe.steps|nl2br}}</p>
             </div>
         </div>
     </div>

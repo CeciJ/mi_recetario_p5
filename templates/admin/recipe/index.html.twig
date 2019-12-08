@@ -2,6 +2,10 @@
 
 {% block title 'Gérer les recettes' %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
 {% block body %}
     <div class="container mt-4">
 
@@ -10,12 +14,12 @@
             <a href="{{ path('admin.food_type.index') }}" class="btn btn-secondary">Gérer les types de cuisine</a>
             <a href="{{ path('admin.option.index') }}" class="btn btn-secondary">Gérer les options</a>
             <a href="{{ path('admin.measure_unit.index') }}" class="btn btn-secondary">Gérer les unités</a>-->
-            <a href="{{ path('admin.all_options') }}" class="btn btn-secondary">Gérer les options</a>
-            <a href="{{ path('admin.ingredient.index') }}" class="btn btn-secondary">Gérer les ingrédients</a>
+            <a href="{{ path('admin.all_options') }}" class="col-5 btn btn-perso">Gérer les options</a>
+{#          <a href="{{ path('admin.ingredient.index') }}" class="col-5 btn btn-perso">Gérer les ingrédients</a>#}            
             <a href="{{ path('admin.recipe.new') }}" class="btn btn-primary">Créer une nouvelle recette</a>
         </div>
 
-        <h1>Gérer les recettes</h1>
+        <h1 class="adminRecipe">Gérer les recettes</h1>
 
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">{{ message }}</div>
@@ -24,7 +28,7 @@
         <table class="table table-stripped">
             <thead>
                 <tr>
-                    <th>Titre</th>
+                    <th>Nom de la recette</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -33,11 +37,11 @@
                 <tr>
                     <td>{{ recipe.name }}</td>
                     <td>
-                        <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}" class="btn btn-secondary">Éditer</a>    
+                        <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}" class="btn btn-perso">Éditer</a>    
                         <form method="post" action="{{ path('admin.recipe.delete', {id: recipe.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recipe.id) }}">
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-primary">Supprimer</button>
                         </form>
                     </td>
                 </tr>
