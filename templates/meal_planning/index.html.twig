@@ -44,8 +44,8 @@
                         {% endfor %}
                     </div>
                     <div>
-                        {# <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
-                        <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a> #}
+                        <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
+                        <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a>
                     </div>
                 </div>
 

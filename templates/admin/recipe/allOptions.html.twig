@@ -10,7 +10,7 @@
         <h3>Types de plats</h3>
         <div class="row">
             {% for dishType in dish_types %}
-                <div class="col-md-2 optionType">
+                <div class="col-md-2 col-5 optionType">
                     <div>
                         <div>{{ dishType.name }}</div>
                         <div class="row" style="font-size: 11px;">
@@ -38,7 +38,7 @@
         <h3>Types de cuisine</h3>
         <div class="row">
             {% for foodType in food_types %}
-                <div class="col-md-2 optionType">
+                <div class="col-md-2 col-5 optionType">
                     <div>
                         <div>{{ foodType.name }}</div>
                         <div class="row" style="font-size: 10px;">
@@ -66,7 +66,7 @@
         <h3>Options supplémentaires</h3>
         <div class="row">
             {% for option in options %}
-                <div class="col-md-2 optionType">
+                <div class="col-md-2 col-5 optionType">
                     <div>
                         <div>{{ option.name }}</div>
                         <div class="row" style="font-size: 10px;">

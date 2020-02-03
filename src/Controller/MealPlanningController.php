@@ -140,9 +140,9 @@ class MealPlanningController extends AbstractController
 
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
-        //$startDate = new DateTime('now');
-        //$endDate = new DateTime('now');
-        //$endDate = $endDate->add(new DateInterval('PD7'));
+        $startDate = new DateTime('now');
+        $endDate = new DateTime('now');
+        $endDate = $endDate->add(new DateInterval('P7D'));
 
         if($form->isSubmitted()){
             $finalList = $this->generateList($mealPlanningRepository, $search);
@@ -155,7 +155,10 @@ class MealPlanningController extends AbstractController
                 'form' => $form->createView(),
                 //'messageOK' => 'pour l instant c est bon',
                 'finalIngredients' => $finalIngredients,
-                'meal_plannings' => $mealPlannings
+                'meal_plannings' => $mealPlannings,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'listText' => 'list'
             ]);
 
         }

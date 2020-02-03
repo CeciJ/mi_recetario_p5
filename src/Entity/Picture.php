@@ -30,6 +30,7 @@ class Picture
     private $imageFile;
 
     /**
+     * @var String|null
      * @ORM\Column(type="string", length=255)
      */
     private $filename;

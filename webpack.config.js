@@ -24,6 +24,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('home', './assets/js/home.js')
     .addEntry('allRecipes', './assets/js/allRecipes.js')
     .addEntry('recipe', './assets/js/recipe.js')
     .addEntry('manageRecipe', './assets/js/manageRecipe.js')
@@ -66,7 +67,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()

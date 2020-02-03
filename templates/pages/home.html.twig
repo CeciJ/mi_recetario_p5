@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container homepage">
         <img src="{{ "calendar.png" }}" alt="calendar-icon" width="30" height="30"/><a href="#calendar-container" id="goDirectlyToCalendar">Aller directement à mon calendrier</a>
         <h2 class="home">Mes dernières recettes publiées</h2>
         <div class="row flex">
@@ -24,12 +24,10 @@
         <h2 class="home">Mon calendrier de recettes</h2>
         <div class="row">
             <div class="col-md-3 col-12" id='external-events'>
-                <p>
-                    <strong>Mes recettes par catégories</strong>
-                </p>
                 <div id="accordion">
                     {% for categorie in foodCategories %}
-                        {% set count = count + 1 %}
+                        {% if categorie.recipes|length > 0 %}
+                            {% set count = count + 1 %}
                         <div class="card">
                             <div class="card-header" id="heading{{ categorie.id }}">
                                 <h5 class="mb-0">
@@ -44,7 +42,7 @@
                                     {% for key, recipeCategory in recipeCategories %}
                                         {% if key == categorie.id %}
                                             {% for recipe in recipeCategory %}
-                                                <div class='fc-event'>{{ recipe.name }}</div>
+                                                <div class='fc-event' data-remove={{count}}>{{ recipe.name }}</div>
                                             {% endfor %}
                                         {% endif %}
                                     {% endfor %}
@@ -55,6 +53,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 
@@ -148,4 +147,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
    {{ encore_entry_script_tags('app') }}
+   {{ encore_entry_script_tags('home') }}
 {% endblock %}

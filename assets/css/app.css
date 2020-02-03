@@ -153,8 +153,6 @@ h1.adminRecipe{
 .btn-perso{
     background-color: white;
     border: 1px solid #fbac03 !important;
-    color: #fbac03 !important;
-    font-weight: bold;
 }
 
 /*---MANAGE OPTIONS---*/
@@ -203,12 +201,18 @@ h1.mealPlanningList{
     background: #fbac03 !important;
     padding: 15px !important;
     border-radius: 5px !important;
+    height: max-content;
 }
 .allMealPlanning{
     padding: 15px !important;
 }
 #shopListDiv span{
     margin-left: 10px;    
+}
+#saveToPdfButton, #sendMailButton{
+    background-color:white !important;
+    margin-top: 15px;
+    margin-right: 10px;
 }
 
 /*Recipe details*/
@@ -232,11 +236,17 @@ h1.mealPlanningList{
 @media screen and (max-width: 600px) {
     
     /*--Homepage--*/
+    #bandeauTitre{
+        border-radius: 0rem !important;
+    }
     #external-events > p{
         display: none;
     }
     #accordion {
-      display: none;
+        display: none;
+    }
+    .homepage h2{
+        font-size: 1.5rem;
     }
     body .fc{
         font-size: 0.9rem;
@@ -249,6 +259,9 @@ h1.mealPlanningList{
     }
     .fc-button .fc-icon{
         font-size: 0.9rem;
+    }
+    .fc-toolbar h2 {
+        font-size: 1rem;
     }
 
     /*--Show recipe--*/
@@ -277,6 +290,10 @@ h1.mealPlanningList{
     #allBlockRecipe{
         margin-top: 25px !important;
     }
+    #blocRecipe img{
+        border-radius: 0px;
+    }
+
     /*--Admin recipe--*/
     .btn-perso{
         font-size: 13px !important;
@@ -284,6 +301,12 @@ h1.mealPlanningList{
     .btn-primary{
         margin-top: 10px !important;
     }
+
+    /*--Admin options--*/
+    .optionType{
+        margin-right: 15px;
+    }
+
     /*--ShopList--*/
     .allShopList{
         margin: auto !important;

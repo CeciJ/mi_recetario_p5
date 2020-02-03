@@ -2,6 +2,9 @@ console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
 
 var $ = require('jquery');
 var autocomplete = require('autocomplete.js');
+// IMPORT PLUGIN JS SELECT
+require('select2');
+$('select').select2();
 
 (function($) {
   'use strict';
