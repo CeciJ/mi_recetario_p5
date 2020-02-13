@@ -13,15 +13,13 @@
     <div class="container homepage">
         <img src="{{ "calendar.png" }}" alt="calendar-icon" width="30" height="30"/><a href="#calendar-container" id="goDirectlyToCalendar">Aller directement à mon calendrier</a>
         <h2 class="home">Mes dernières recettes publiées</h2>
-        <div class="row flex">
+        <div class="homeLastRecipes row flex">
             {% for recipe in recipes %}
-                <div class="col-md-3 col-sm-5 col-12">
-                    {% include 'recipe/_recipe.html.twig' %}
-                </div>
+                {% include 'recipe/_recipe.html.twig' %}
             {% endfor %}
         </div>
 
-        <h2 class="home">Mon calendrier de recettes</h2>
+        <h2 class="home calendar">Mon calendrier de recettes</h2>
         <div class="row">
             <div class="col-md-3 col-12" id='external-events'>
                 <div id="accordion">
@@ -46,7 +44,7 @@
                                             {% endfor %}
                                         {% endif %}
                                     {% endfor %}
-                                    <p>
+                                    <p class="dropRemoveCalendar">
                                         <input type='checkbox' id='drop-remove{{count}}' class='drop-remove'/>
                                         <label for='drop-remove{{count}}'>Enlever de la liste après sélection</label>
                                     </p>
@@ -60,7 +58,6 @@
             </div>
             <div class="col-md-9 col-12" id='calendar-container'>
                 <div id="linksCalendar">
-                    {# <a href="{{ path('meal_planning.new') }}" class="btn btn-primary" style="margin-bottom:15px; margin-top:15px;">Ajouter une recette</a> #}
                     <div id="calendarTrash" class="calendar-trash">
                         <img src="{{ "throw.png" }}" id="throwPhoto" alt="poubelle-icon" title="Fais glisser la recette vers la poubelle pour la supprimer du calendrier" width="36" height="36"/>
                     </div>

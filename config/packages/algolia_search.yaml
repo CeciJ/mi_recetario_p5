@@ -4,9 +4,11 @@ algolia_search:
     #serializer: jms_serializer
     prefix: '%env(APP_ENV)%_'
     batchSize: 25
-    #doctrineSubscribedEvents: ['postPersist']
-    doctrineSubscribedEvents: []
+    doctrineSubscribedEvents: ['postPersist']
     indices:
     - name: ingredients
       class: App\Entity\Ingredient
+      enable_serializer_groups: true
+    - name: units
+      class: App\Entity\MeasureUnit
       enable_serializer_groups: true

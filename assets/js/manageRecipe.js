@@ -2,7 +2,6 @@ console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
 
 var $ = require('jquery');
 var autocomplete = require('autocomplete.js');
-// IMPORT PLUGIN JS SELECT
 require('select2');
 $('select').select2();
 
@@ -11,7 +10,6 @@ $('select').select2();
 
   $(function() {
     // DELETE IMAGES IN RECIPE FORM
-
     document.querySelectorAll('[data-delete]').forEach(a => {
         a.addEventListener('click', e => {
           e.preventDefault()
@@ -35,7 +33,6 @@ $('select').select2();
     });
 
     // ADD RECIPE INGREDIENTS IN RECIPE FORM
-
     var $collectionHolder;
     // setup an "add a tag" link
     var $addIngredientButton = $('<button type="button" class="add_ingredient_link btn btn-primary">Ajouter un ingrédient</button>');
@@ -47,6 +44,11 @@ $('select').select2();
 
         // add the "add a tag" anchor and li to the tags ul
         $collectionHolder.append($newLinkDiv);
+
+        // add a delete link to all of the existing tag form elements
+        $collectionHolder.find('.rowIngredient').each(function() {
+          addTagFormDeleteLink($(this));
+        });
 
         // count the current form inputs we have (e.g. 2), use that as the new
         // index when inserting a new item (e.g. 2)
@@ -112,7 +114,20 @@ $('select').select2();
 
       $newLinkDiv.before($newFormDiv);
 
+      // add a delete link to the new form
+      addTagFormDeleteLink($newFormDiv);
+
     }
+
+    function addTagFormDeleteLink($newFormDiv) {
+      var $removeFormButton = $('<button type="button">Effacer cet ingrédient</button>');
+      $newFormDiv.append($removeFormButton);
+  
+      $removeFormButton.on('click', function(e) {
+          // remove the li for the tag form
+          $newFormDiv.remove();
+      });
+  }
 
     /* $(document).ready(function() {
         var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');

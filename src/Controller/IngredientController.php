@@ -4,12 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Form\IngredientType;
-use Algolia\AlgoliaSearch\SearchClient;
 use App\Repository\IngredientRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
-use Algolia\SearchBundle\IndexManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -17,11 +17,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class IngredientController extends AbstractController
 {
-    protected $indexManager;
+    private $repository;
 
-    public function __construct(IndexManagerInterface $indexingManager)
+    private $em;
+
+
+    public function __construct(IngredientRepository $repository, ObjectManager $em)
     {
-        $this->indexManager = $indexingManager;
+        $this->repository = $repository;
+        $this->em = $em;
     }
     
     /**
@@ -64,19 +68,6 @@ class IngredientController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ingredient);
             $entityManager->flush();
-
-            var_dump($this->indexManager); die();
-
-            $this->indexManager->index($ingredient, $entityManager);
-
-            /* $client = \Algolia\AlgoliaSearch\SearchClient::create('D4T2HAD5AA', '72fce73f2ab1a76a00144fe0952c0923');
-            $index = $client->initIndex('ingredients');
-            $index->saveObject(
-                [
-                  'name' => $name
-                ], 
-                ['autoGenerateObjectIDIfNotExist' => true]
-            ); */
 
             return $this->redirectToRoute('admin.ingredient.index');
         }

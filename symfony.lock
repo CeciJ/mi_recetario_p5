@@ -219,6 +219,9 @@
     "phenx/php-svg-lib": {
         "version": "v0.3.2"
     },
+    "php": {
+        "version": "7.1"
+    },
     "phpcollection/phpcollection": {
         "version": "0.5.0"
     },
@@ -240,11 +243,17 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
     },
     "sabberworm/php-css-parser": {
         "version": "8.1.0"

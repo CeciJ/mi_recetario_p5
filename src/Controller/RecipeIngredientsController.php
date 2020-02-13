@@ -9,6 +9,7 @@ use App\Entity\RecipeIngredients;
 use App\Form\RecipeIngredientsType;
 use App\Repository\RecipeRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\RecipeIngredientsRepository;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class RecipeIngredientsController extends AbstractController
 {
+    private $repository;
+
+    private $em;
+
+    public function __construct(RecipeIngredientsRepository $repository, ObjectManager $em)
+    {
+        $this->repository = $repository;
+        $this->em = $em;
+    }
+
     /**
      * @Route("/", name="recipe_ingredients.index", methods={"GET"})
      */

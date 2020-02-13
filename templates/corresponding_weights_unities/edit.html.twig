@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CorrespondingWeightsUnities{% endblock %}
+
+{% block body %}
+    <h1>Edit CorrespondingWeightsUnities</h1>
+
+    {{ include('corresponding_weights_unities/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('corresponding_weights_unities_index') }}">back to list</a>
+
+    {{ include('corresponding_weights_unities/_delete_form.html.twig') }}
+{% endblock %}

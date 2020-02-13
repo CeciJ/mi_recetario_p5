@@ -19,7 +19,7 @@ class RecipeIngredients
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $quantity;
 
@@ -30,13 +30,13 @@ class RecipeIngredients
     private $unit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ingredient", inversedBy="recipeIngredients", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $nameIngredient;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $recipe;
@@ -45,7 +45,6 @@ class RecipeIngredients
     public function __construct()
     {
         $this->ingredient = new ArrayCollection();
-        //$this->nameIngredient = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,14 +108,9 @@ class RecipeIngredients
         return $this;
     }
 
-    /* public function addNameIngredient(Ingredient $nameIngredient): self
+    public function addNameIngredient(Ingredient $nameIngredientRecipe): self
     {
-        dump($this->nameIngredient); die();
-        if (!$this->nameIngredient->contains($nameIngredient)) {
-            $this->nameIngredient[] = $nameIngredient;
-            $nameIngredient->addRecipeIngredient($this);
-        }
-
+        $nameIngredientRecipe->setRecipeIngredient($this);
         return $this;
     }
 
@@ -128,6 +122,6 @@ class RecipeIngredients
         }
 
         return $this;
-    } */
+    } 
 
 }

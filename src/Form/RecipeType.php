@@ -45,7 +45,8 @@ class RecipeType extends AbstractType
             ->add('foodTypes', EntityType::class, [
                 'class' => FoodType::class,
                 'choice_label' => 'name',
-                'multiple' => true
+                'multiple' => true,
+                'required' => false
             ])
             ->add('options', EntityType::class, [
                 'class' => Option::class,

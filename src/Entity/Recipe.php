@@ -111,7 +111,7 @@ class Recipe
     private $pictures;
 
     /**
-     * @Assert\All({ 
+     * @Assert\All({
      *   @Assert\Image(mimeTypes="image/jpeg")
      * })
      */
@@ -512,7 +512,14 @@ class Recipe
 
     public function addRecipeIngredients(RecipeIngredients $recipeIngredients)
     {
-        $this->recipeIngredients->add($recipeIngredients);
+        if (!$this->recipeIngredients->contains($recipeIngredients)) {
+            $this->recipeIngredients->add($recipeIngredients);
+        }
+    }
+
+    public function removeRecipeIngredients(RecipeIngredients $recipeIngredients)
+    {
+        $this->recipeIngredients->removeElement($recipeIngredients);
     }
 
 }

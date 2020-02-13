@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une équivalence{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une équivalence</h1>
+
+    {{ include('corresponding_weights_unities/_form.html.twig') }}
+
+    <a href="{{ path('admin.corresponding.index') }}">Revenir à l'index</a>
+{% endblock %}

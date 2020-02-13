@@ -38,6 +38,9 @@ class MeasureUnit
         return $this->id;
     }
 
+    /**
+     * @Groups({"searchable"})
+     */
     public function getUnit(): ?string
     {
         return $this->unit;

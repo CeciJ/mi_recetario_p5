@@ -25,15 +25,17 @@ use App\Repository\DishTypeRepository;
 use App\Repository\FoodTypeRepository;
 use App\Controller\IngredientController;
 use App\Repository\IngredientRepository;
+use App\Controller\MeasureUnitController;
 use App\Repository\MeasureUnitRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Notification\ContactMailNotification;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
-use Algolia\SearchBundle\IndexManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Algolia\SearchBundle\SearchService;
+use Algolia\SearchBundle\SearchServiceInterface;
 
 
 class RecipeController extends AbstractController 
@@ -43,13 +45,13 @@ class RecipeController extends AbstractController
 
     private $em;
 
-    protected $indexManager;
+    protected $searchService;
 
-    public function __construct(RecipeRepository $repository, ObjectManager $em, IndexManagerInterface $indexingManager)
+    public function __construct(RecipeRepository $repository, ObjectManager $em, SearchService $searchService)
     {
         $this->repository = $repository;
         $this->em = $em;
-        $this->indexManager = $indexingManager;
+        $this->searchService = $searchService;
     }
 
     /**
@@ -206,7 +208,7 @@ class RecipeController extends AbstractController
      * @Route("/admin/recipe/create", name="admin.recipe.new") 
      * @return Response
      */
-    public function newAdmin(Request $request, IngredientRepository $repo, IngredientController $ingController)
+    public function newAdmin(Request $request, IngredientController $ingController, MeasureUnitController $unitController, RecipeIngredientsController $recipeIngController)
     {
         $recipe = new Recipe();
 
@@ -216,35 +218,58 @@ class RecipeController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             // On récupère la recette
-            dump($form->getData());
-            // On regarde si les ingrédients existent déjà en BDD
-                // S'ils existent on les mets à jour pour éviter de multiplier le même ingrédient en BDD
-                // Sinon on crée le nouvel ingrédient
-            // On regarde si les unités existent déjà en BDD
-                // S'ils existent on les mets à jour pour éviter de multiplier la même unité en BDD
-                // Sinon on crée la nouvelle unité
-            // On persiste la recette
-            // On retourne à l'index des recettes
+            $recipe = $form->getData();
 
-            $allIngredients = $repo->findAll();
+            // On récupère les ingrédients de la recette
             $recipeIngredients = $recipe->getRecipeIngredients();
-            $ingredientsRecipe = [];
 
-            $this->em->persist($recipe);
-            $this->em->flush();
+            // On regarde s'il y a des ingrédients et des unités qui ne sont pas en bdd
+            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+            $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
 
-            foreach($recipeIngredients as $ingredient){
-                $ingredientsRecipe[] = $ingredient->getNameIngredient();
-            }
-
-            foreach($ingredientsRecipe as $ingredient){
-                if(!in_array($ingredient, $allIngredients)){
+            foreach($recipeIngredients as $recipeIngredient){
+                $ingredient = $recipeIngredient->getNameIngredient();
+                $measureUnit = $recipeIngredient->getUnit();
+                dump($ingredient);
+                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
+                $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
+                dump($ingredientToCheck);
+                dump($unitToCheck);
+                if($ingredientToCheck){
+                    dump('ingrédient en base de données');
+                    $ingredientToCheck->addRecipeIngredient($recipeIngredient);
+                    
+                } else {
+                    dump('ingrédient PAS en base de données');
                     $entityManager = $ingController->getDoctrine()->getManager();
-                    $this->indexManager->index($ingredient, $entityManager);
+                    $entityManager->persist($ingredient);  
+                    $this->searchService->index($entityManager, $ingredient, 
+                        ['autoGenerateObjectIDIfNotExist' => true]
+                    );
+                    //$entityManager->flush();
+                }
+                if($unitToCheck){
+                    dump('unité en base de données');
+                    $unitToCheck->addRecipeIngredient($recipeIngredient);
+                } else {
+                    dump('unité PAS en base de données');
+                    $entityManager = $unitController->getDoctrine()->getManager();
+                    $entityManager->persist($measureUnit);
+/*                     $this->searchService->index($entityManager, $measureUnit);
+ */                    //$entityManager->flush();
                 }
             }
 
-            //$this->addFlash('success', 'Recette ajoutée avec succès');
+            // On enregistre les ingrédients complets de la recette
+            $entityManagerRI = $recipeIngController->getDoctrine()->getManager();
+            foreach($recipeIngredients as $ingredient){
+                $entityManagerRI->persist($ingredient);
+                $entityManagerRI->flush();
+            }
+
+            $this->em->persist($recipe);
+            $this->em->flush();
+            $this->addFlash('success', 'Recette ajoutée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));
         }
 
@@ -258,14 +283,60 @@ class RecipeController extends AbstractController
      * @Route("/admin/recipe/{id}", name="admin.recipe.edit", methods="GET|POST") 
      * @return Response
      */
-    public function editAdmin(Recipe $recipe, Request $request, IngredientRepository $repo, IngredientController $ingController)
+    public function editAdmin(Recipe $recipe, Request $request, IngredientController $ingController, MeasureUnitController $unitController, RecipeIngredientsController $recipeIngController)
     {   
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            // On récupère la recette
+            // On récupère la recette et les ingrédients
+            $recipe = $form->getData();
+            $recipeIngredients = $recipe->getRecipeIngredients();
+
+            // On regarde s'il y a des noms d'ingrédients et des unités qui ne sont pas en bdd pour chaque ingrédients
+            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+            $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
+            foreach($recipeIngredients as $recipeIngredient){
+                $ingredient = $recipeIngredient->getNameIngredient();
+                $measureUnit = $recipeIngredient->getUnit();
+                dump($ingredient);
+                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
+                $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
+                dump($ingredientToCheck);
+                dump($unitToCheck);
+                if($ingredientToCheck){
+                    dump('ingrédient en base de données');
+                    $ingredientToCheck->addRecipeIngredient($recipeIngredient);
+                    
+                } else {
+                    dump('ingrédient PAS en base de données');
+                    $entityManager = $ingController->getDoctrine()->getManager();
+                    $entityManager->persist($ingredient);
+                    //$entityManager->flush();
+                }
+                if($unitToCheck){
+                    dump('unité en base de données');
+                    $unitToCheck->addRecipeIngredient($recipeIngredient);
+                    
+                } else {
+                    dump('unité PAS en base de données');
+                    $entityManager = $unitController->getDoctrine()->getManager();
+                    $entityManager->persist($measureUnit);
+                    //$entityManager->flush();
+                }
+            }
+
+            // On enregistre les ingrédients complets de la recette
+            $entityManagerRI = $recipeIngController->getDoctrine()->getManager();
+            foreach($recipeIngredients as $ingredient){
+                $entityManagerRI->persist($ingredient);
+                $entityManagerRI->flush();
+            }
+
+            $this->em->flush();
+
+            /* // On récupère la recette
             dump($form->getData()); 
 
             // On récupère les ingrédients de la recette
@@ -314,7 +385,7 @@ class RecipeController extends AbstractController
                     $this->indexManager->index($ingredient, $entityManager);
                 }
             }
-
+            */
             $this->addFlash('success', 'Recette modifiée avec succès');
             return($this->redirectToRoute('admin.recipe.index'));
         }
