@@ -20,6 +20,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('unit', [$this, 'formatUnit']),
+            new TwigFunction('formatName', [$this, 'formatName']),
         ];
     }
 
@@ -49,5 +50,15 @@ class AppExtension extends AbstractExtension
         } else {
             return $unit;
         }
+    }
+
+    public function formatName($name)
+    {
+        return $this->enleverCaracteresSpeciaux($name);
+    }
+
+    private function enleverCaracteresSpeciaux($text) {
+        $string = str_replace(' ', '_', $text);
+        return $string;
     }
 }

@@ -6,7 +6,7 @@
     <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(formFoodType) }} #}
 
-<div class="modal fade modalEditFoodType" id="modalEditFoodType-{{foodType.id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditFoodTypeLabel" aria-hidden="true">
+<div class="modal fade modalEditFoodType" id="modalEditFoodType-{{foodType.id}}" tabindex="-1" role="dialog" aria-label="modalEditFoodTypeLabel" aria-hidden="true">
     {{ form_start(formEditFoodType) }}
     <div class="modal-dialog" role="document">
         <input id="editFoodTypeID-{{foodType.id}}" type="hidden" value="{{foodType.id}}">
@@ -21,7 +21,7 @@
         <div class="modal-body edit">
             <p>Modifier : {{foodType.name}}</p>
             <div class="row">
-                <div id="rowModal" class="col-md-6">{{ form_row(formEditFoodType.name, {'id':'formFoodType-' ~ foodType.name|replace({' ': '_'})}) }}</div>
+                <div id="rowModalEditFoodType-{{foodType.id}}" class="col-md-6">{{ form_row(formEditFoodType.name, {'id':'formFoodType-' ~ foodType.name|replace({' ': '_'})}) }}</div>
             </div>
         </div>
         <div class="modal-footer">
@@ -34,29 +34,8 @@
     {{ form_end(formEditFoodType) }}
 </div>
 
-<script>
 
-function submitEditFoodType(id){
-    var oldName2 = $('#editFoodTypeName-'+id).val();
-    var path = "/foodtype/" + id + "/edit";
-
-    var inputName = $('#formFoodType-'+oldName2);
-
-    var newName = inputName.val();
-
-    $.ajax({
-        url: path,
-        method: "POST",
-        data: {
-            id: id,
-            newName: newName
-        },
-        success: function(data){
-            alert('Modification effectuée avec succès');
-            $('#modalEditFoodType-'+id).modal('hide');
-            window.location.reload();
-        }
-    });
-}
-
-</script>
+{% block javascripts %}
+   {{ encore_entry_script_tags('app') }}
+   {{ encore_entry_script_tags('manageRecipe') }}
+{% endblock %}

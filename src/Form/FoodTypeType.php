@@ -20,7 +20,8 @@ class FoodTypeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => FoodType::class,
-            'translation_domain' => 'forms'
+            'translation_domain' => 'forms',
+            'csrf_protection' => false
         ]);
     }
 }

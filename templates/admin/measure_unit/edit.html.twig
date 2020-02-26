@@ -20,7 +20,7 @@
     <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(formMeasureUnit) }} #}
 
-<div class="modal fade modalEditMeasureUnit" id="modalEditMeasureUnit-{{measure_unit.id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditMeasureUnitLabel" aria-hidden="true">
+<div class="modal fade modalEditMeasureUnit" id="modalEditMeasureUnit-{{measure_unit.id}}" tabindex="-1" role="dialog" aria-label="modalEditMeasureUnitLabel" aria-hidden="true">
     {{ form_start(formEditMeasureUnit) }}
     <div class="modal-dialog" role="document">
         <input id="editMeasureUnitID-{{measure_unit.id}}" type="hidden" value="{{measure_unit.id}}">
@@ -35,7 +35,7 @@
         <div class="modal-body edit">
             <p>Modifier : {{measure_unit.unit}}</p>
             <div class="row">
-                <div id="rowModal" class="col-md-6">{{ form_row(formEditMeasureUnit.unit, {'id':'formMeasureUnit-' ~ measure_unit.unit|replace({' ': '_'})}) }}</div>
+                <div id="rowModalEditMeasureUnit" class="col-md-6">{{ form_row(formEditMeasureUnit.unit, {'id':'formMeasureUnit-' ~ measure_unit.unit|replace({' ': '_'})}) }}</div>
             </div>
         </div>
         <div class="modal-footer">

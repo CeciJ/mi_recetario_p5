@@ -42,9 +42,9 @@
   <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
     {% for ingredient in form.recipeIngredients %}
       <div class="row rowIngredient form-row" style="display:flex; justify-content: space-between; align-items: center;">
-        <div >{{ form_row(ingredient.quantity) }}</div>
-        <div >{{ form_row(ingredient.unit) }}</div>
-        <div >{{ form_row(ingredient.nameIngredient) }}</div>
+        <div class="formQuantity">{{ form_row(ingredient.quantity) }}</div>
+        <div class="formUnit">{{ form_row(ingredient.unit) }}</div>
+        <div class="formIngredient">{{ form_row(ingredient.nameIngredient) }}</div>
         <div>
           {# <form style="height:25px;" method="post" action="{{ path('recipe_ingredients.delete', {id: form.recipeIngredients.vars.name}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
             <input type="hidden" name="_method" value="DELETE">

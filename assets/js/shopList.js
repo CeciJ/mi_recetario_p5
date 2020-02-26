@@ -1,5 +1,9 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
-var $ = require('jquery');
+import $ from 'jquery';
+
+require('jquery-ui');
+require('jquery-ui/ui/widgets/datepicker.js');
+require('bootstrap');
 
 (function($) {
     'use strict';

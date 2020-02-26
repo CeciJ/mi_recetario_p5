@@ -32,6 +32,11 @@ class Ingredient
      */
     private $recipeIngredients;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CorrespondingWeightsUnities", inversedBy="ingredients")
+     */
+    private $weight;
+
     
     public function __construct()
     {
@@ -90,6 +95,18 @@ class Ingredient
                 $recipeIngredient->setNameIngredient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWeight(): ?CorrespondingWeightsUnities
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?CorrespondingWeightsUnities $weight): self
+    {
+        $this->weight = $weight;
 
         return $this;
     }

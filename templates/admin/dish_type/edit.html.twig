@@ -7,7 +7,8 @@
     <button id="submitEditDishType" class="btn btn-primary" data-target-id="" data-target-name="">{{ button|default('Modifier') }}</button>
 {{ form_end(formEditDishType) }} #}
 
-<div class="modal fade modalEditDishType" id="modalEditDishType-{{dishType.id}}" tabindex="-1" role="dialog" aria-labelledby="modalEditDishTypeLabel" aria-hidden="true">
+{% block body %}
+<div class="modal fade modalEditDishType" id="modalEditDishType-{{dishType.id}}" tabindex="-1" role="dialog" aria-label="modalEditDishTypeLabel" aria-hidden="true">
     {{ form_start(formEditDishType) }}
     <div class="modal-dialog" role="document">
         <input id="editDishTypeID-{{dishType.id}}" type="hidden" value="{{dishType.id}}">
@@ -22,7 +23,7 @@
         <div class="modal-body edit">
             <p>Modifier : {{dishType.name}}</p>
             <div class="row">
-                <div id="rowModal" class="col-md-6">{{ form_row(formEditDishType.name, {'id':'formDishType-' ~ dishType.name|replace({' ': '_'})}) }}</div>
+                <div id="rowModalEditDishType-{{dishType.id}}" class="col-md-6">{{ form_row(formEditDishType.name, {'id':'formDishType-' ~ dishType.name|replace({' ': '_'})}) }}</div>
             </div>
         </div>
         <div class="modal-footer">
@@ -34,30 +35,30 @@
     </div>
     {{ form_end(formEditDishType) }}
 </div>
+{% endblock %}
 
-<script>
-
-function submitEditDishType(id){
-    var oldName = $('#editDishTypeName-'+id).val();
-    var path = "/dishtype/" + id + "/edit";
-
-    var inputName = $('#formDishType-'+oldName);
-
-    var newName = inputName.val();
-
-    $.ajax({
-        url: path,
-        method: "POST",
-        data: {
-            id: id,
-            newName: newName
-        },
-        success: function(data){
-            alert('Modification effectuée avec succès');
-            $('#modalEditDishType-'+id).modal('hide');
-            window.location.reload();
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('manageRecipe') }}
+    <script>
+        function submitEditDishType(id){
+            var oldName = $('#editDishTypeName-'+id).val();
+            var path = "/dishtype/" + id + "/edit";
+            var inputName = $('#formDishType-'+oldName);
+            var newName = inputName.val();
+            $.ajax({
+                url: path,
+                method: "POST",
+                data: {
+                    id: id,
+                    newName: newName
+                },
+                success: function(data){
+                    alert('Modification effectuée avec succès');
+                    $('#modalEditDishType-'+id).modal('hide');
+                    window.location.reload();
+                }
+            });
         }
-    });
-}
-
-</script>
+    </script>
+{% endblock %}

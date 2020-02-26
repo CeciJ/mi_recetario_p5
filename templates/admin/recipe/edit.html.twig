@@ -5,12 +5,12 @@
 {% block body %} 
 
     <div style="margin-bottom:15px;">
-        <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary">Retour à la liste de recettes</a>
+        <a href="{{ path('admin.recipe.index') }}" class="btn btn-secondary editRecipe backRecipeList">Retour à la liste de recettes</a>
     </div>
 
-    <div class="container mt-4">
+    <div class="container mt-4 formEditRecipe">
         <h1>Éditer la recette</h1>
-        {{ include("admin/recipe/_form.html.twig", {form: form, button: 'Éditer'}) }}
+        {{ include("admin/recipe/_form.html.twig", {form: form, button: 'Éditer la recette'}) }}
     </div>
 
 {% endblock %}
@@ -18,4 +18,6 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('manageRecipe') }}
+    <!--<script src="https://cdn.jsdelivr.net/npm/algoliasearch@3/dist/algoliasearch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>-->
 {% endblock %}

@@ -325,6 +325,7 @@ class MealPlanningController extends AbstractController
         //dump($search);
         
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
+        //dump($mealPlannings); 
 
         $allIngredients = [];
         foreach($mealPlannings as $meal){
@@ -332,25 +333,29 @@ class MealPlanningController extends AbstractController
             $ingredients = $recipe->getRecipeIngredients();
             $allIngredients[] = $ingredients;
         }
+        //dump($allIngredients);
         
         $tabNames = [];
         $tabUnique = [];
         $finalIngredients = [];
+        $duplicatedIngredients = [];
         $repositoryWeight = $this->getDoctrine()->getRepository(CorrespondingWeightsUnities::class);
         //$allCorrespondingIngredients = $repositoryWeight->findAll();
 
         $repoTest = $this->getDoctrine()->getRepository(RecipeIngredients::class);
 
         foreach($allIngredients as $ingredients){
-
             foreach($ingredients as $ingredient){
 
                 $name = $ingredient->getNameIngredient(); // Entity Ingredient
                 $quantity = $ingredient->getQuantity();
                 $unit = $ingredient->getUnit(); // Entity Measure Unit
-
+                //dump($tabNames);
+                //dump($name);
+                
                 // Si l'ingrédient n'est pas encore dans la liste, on le stocke dans le tableau
-                if(!in_array($name, $tabNames)){
+                if(!in_array($name->getName(), $tabNames)){
+                    dump('Pas dans la liste, ingrédient ajouté');
                     $tabNames[] = $name;
                     $tabUnique['name'] = $name;
                     $tabUnique['quantity'] = $quantity;
@@ -358,27 +363,35 @@ class MealPlanningController extends AbstractController
                     $finalIngredients[] = $tabUnique;
                 } 
                 else {
+                    dump('Déjà dans la liste!');
                     // Sinon on regarde l'unité de celui qui est déjà dans la liste, si c'est la même on ajoute la quantité
                     foreach($finalIngredients as $key => $finalIngredient){
                         if($name == $finalIngredient['name']){
-                            dump($name);
-                            dump($unit);
-                            dump($finalIngredient['name']);
-                            dump($finalIngredient['unit']);
+                            dump('Ingrédient en double');
+                            //dump($name);
+                            //dump($unit);
+                            //dump($finalIngredient['name']);
+                            //dump($finalIngredient['unit']);
                             if($unit == $finalIngredient['unit']){
+                                unset($finalIngredients[$key]);
+                                //dump($unit);
+                                //dump($finalIngredient['unit']);
                                 $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
+                                $finalIngredient['name'] = $name;
+                                $finalIngredient['unit'] = $unit;
+                                //dump($finalIngredient['quantity']);
                                 $finalIngredients[] = $finalIngredient;
-                            } elseif ($finalIngredient['unit'] == 'unité(s)' || $finalIngredient['unit'] == 'g' || $unit = 'unité(s)' || $unit = 'g' ) {
+                            } elseif ((($finalIngredient['unit'] == 'unité(s)') && ($unit = 'g')) || (($finalIngredient['unit'] == 'g') && ($unit = 'unité(s)'))){
                                 dump('ici');
                                 $ingredientToCheck = $repositoryWeight->findOneBy(['Ingredient' => $finalIngredient['name']->getName()]);
                                 if($ingredientToCheck){
                                     dump('équivalence');
                                     if($finalIngredient['unit'] == 'unité(s)' && $unit = 'g'){
-                                        /* dump($ingredientToCheck);
-                                        dump($finalIngredient['quantity']);
-                                        dump($finalIngredient['unit']);
-                                        dump($quantity);
-                                        dump($unit); */
+                                        //dump($ingredientToCheck);
+                                        //dump($finalIngredient['quantity']);
+                                        //dump($finalIngredient['unit']);
+                                        //dump($quantity);
+                                        //dump($unit); 
                                         $quantity = ($quantity / $ingredientToCheck->getWeight());
                                         $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
                                     } elseif ($finalIngredient['unit'] == 'g' && $unit = 'unité(s)'){
@@ -387,7 +400,7 @@ class MealPlanningController extends AbstractController
                                         $finalIngredient['unit'] = $unit;
                                         unset($finalIngredients[$key]);
                                         $finalIngredients[] = $finalIngredient;
-                                    }
+                                    } 
                                 } else {
                                     dump('pas équivalence');
                                     $duplicatedIngredient = [
@@ -397,19 +410,20 @@ class MealPlanningController extends AbstractController
                                     ];
                                 
                                     dump($duplicatedIngredient);
-                                    dump($finalIngredient);
+                                    //dump($finalIngredient);
                                     $finalIngredients[] = $duplicatedIngredient;
                                 }
                             }
                         }
                     }
-                }
+                } 
             }
         }
 
+        dump($tabNames);
         dump($finalIngredients);
         dump(count($finalIngredients));
-
+    
         foreach ($finalIngredients as $key => $value) {
             $name2[$key] = $value['name'];
             $quantity2[$key] = $value['quantity'];

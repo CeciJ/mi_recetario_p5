@@ -2,40 +2,49 @@
 
 {% block title %}Liste des équivalences{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
 {% block body %}
-    <a href="{{ path('admin.recipe.index') }}" class="col-xs-5 btn btn-perso">Retour à la liste des recettes</a>
+    <div class="container mt-4 correspondances">
+        <div style="margin-bottom:15px;">
+            <a href="{{ path('admin.recipe.index') }}" class="col-xs-5 btn btn-perso btn btn-primary backRecipeList">Retour à la liste des recettes</a>
+        </div>
 
-    <h1>Liste des équivalences</h1>
+        <h1>Liste des équivalences</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ingrédient</th>
-                <th>Poids (gr)</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for corresponding_weights_unity in corresponding_weights_unities %}
-            <tr>
-                <td>{{ corresponding_weights_unity.Ingredient }}</td>
-                <td>{{ corresponding_weights_unity.Weight }}</td>
-                <td>
-{#                     <a href="{{ path('admin.corresponding.show', {'id': corresponding_weights_unity.id}) }}">show</a>
- #}                    <a href="{{ path('admin.corresponding.edit', {'id': corresponding_weights_unity.id}) }}">Éditer</a>
-                        <form method="post" action="{{ path('admin.corresponding.delete', {'id': corresponding_weights_unity.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir effacer cette équivalence?');">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ corresponding_weights_unity.id) }}">
-                            <button class="btn">Supprimer</button>
-                        </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Aucune équivalence enregistrée</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="th_ingredient">Ingrédient</th>
+                    <th class="th_unit">Poids (gr)</th>
+                    <th class="th_action"></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for corresponding_weights_unity in corresponding_weights_unities %}
+                <tr>
+                    <td class="td_ingredient">{{ corresponding_weights_unity.Ingredient }}</td>
+                    <td class="td_unit">{{ corresponding_weights_unity.Weight }}</td>
+                    <td class="td_actions">
+    {#                     <a href="{{ path('admin.corresponding.show', {'id': corresponding_weights_unity.id}) }}">show</a>
+    #}                    <a href="{{ path('admin.corresponding.edit', {'id': corresponding_weights_unity.id}) }}" class="btn btn-perso">Éditer</a>
+                            <form method="post" action="{{ path('admin.corresponding.delete', {'id': corresponding_weights_unity.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir effacer cette équivalence?');" style="display:inline-block;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ corresponding_weights_unity.id) }}">
+                                <button class="btn btn-primary">Supprimer</button>
+                            </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucune équivalence enregistrée</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('admin.corresponding.new') }}">Ajouter une équivalence</a>
+        <a href="{{ path('admin.corresponding.new') }}" class="col-xs-5 btn btn-primary addCorrespondance">Ajouter une équivalence</a>
+    </div>
 {% endblock %}

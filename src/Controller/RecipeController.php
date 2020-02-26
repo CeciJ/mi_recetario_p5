@@ -11,7 +11,6 @@ use App\Form\RecipeType;
 use App\Entity\Ingredient;
 use App\Form\DishTypeType;
 use App\Form\FoodTypeType;
-use App\Entity\ContactMail;
 use App\Entity\MeasureUnit;
 use App\Entity\RecipeSearch;
 use App\Form\ContactMailType;
@@ -28,7 +27,6 @@ use App\Repository\IngredientRepository;
 use App\Controller\MeasureUnitController;
 use App\Repository\MeasureUnitRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use App\Notification\ContactMailNotification;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,7 +79,7 @@ class RecipeController extends AbstractController
      * @Route("/recettes/{slug}-{id}", name="recipe.show", requirements={"slug": "[a-z0-9\-]*"}) 
      * @return Response
      */
-    public function show(Recipe $recipe, string $slug, Request $request, ContactMailNotification $notification): Response
+    public function show(Recipe $recipe, string $slug, Request $request): Response
     {
 
         $slugChecked = $recipe->getSlug();
@@ -94,29 +92,9 @@ class RecipeController extends AbstractController
             ], 301);
         }
 
-        dump($recipe->getRecipeIngredients());
-
-        $contactMail = new ContactMail();
-        $contactMail->setRecipe($recipe);
-        $form = $this->createForm(ContactMailType::class, $contactMail);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $notification->notify($contactMail);
-            $this->addFlash('success', 'Votre email a bien été envoyé');
-            /*
-            return $this->redirectToRoute("recipe.show", [
-                'id' => $recipe->getId(),
-                'slug' => $slugChecked
-            ]);
-            */
-        }
-
         return $this->render("recipe/show.html.twig", [
             'current_menu' => 'recipes',
-            'recipe' => $recipe,
-            'form' => $form->createView()
+            'recipe' => $recipe
         ]);
     }
 
@@ -243,9 +221,9 @@ class RecipeController extends AbstractController
                     dump('ingrédient PAS en base de données');
                     $entityManager = $ingController->getDoctrine()->getManager();
                     $entityManager->persist($ingredient);  
-                    $this->searchService->index($entityManager, $ingredient, 
+                    /* $this->searchService->index($entityManager, $ingredient, 
                         ['autoGenerateObjectIDIfNotExist' => true]
-                    );
+                    ); */
                     //$entityManager->flush();
                 }
                 if($unitToCheck){
@@ -290,6 +268,57 @@ class RecipeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            // On récupère la recette
+            $recipe = $form->getData();
+
+            // On récupère les ingrédients de la recette
+            $recipeIngredients = $recipe->getRecipeIngredients();
+
+            // On regarde s'il y a des ingrédients et des unités qui ne sont pas en bdd
+            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+            $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
+
+            foreach($recipeIngredients as $recipeIngredient){
+                $ingredient = $recipeIngredient->getNameIngredient();
+                $measureUnit = $recipeIngredient->getUnit();
+                dump($ingredient);
+                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
+                $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
+                dump($ingredientToCheck);
+                dump($unitToCheck);
+                if($ingredientToCheck){
+                    dump('ingrédient en base de données');
+                    $ingredientToCheck->addRecipeIngredient($recipeIngredient);
+                    
+                } else {
+                    dump('ingrédient PAS en base de données');
+                    $entityManager = $ingController->getDoctrine()->getManager();
+                    $entityManager->persist($ingredient);  
+                    /* $this->searchService->index($entityManager, $ingredient, 
+                        ['autoGenerateObjectIDIfNotExist' => true]
+                    ); */
+                    //$entityManager->flush();
+                }
+                if($unitToCheck){
+                    dump('unité en base de données');
+                    $unitToCheck->addRecipeIngredient($recipeIngredient);
+                } else {
+                    dump('unité PAS en base de données');
+                    $entityManager = $unitController->getDoctrine()->getManager();
+                    $entityManager->persist($measureUnit);
+/*                     $this->searchService->index($entityManager, $measureUnit);
+ */                    //$entityManager->flush();
+                }
+            }
+
+            // On enregistre les ingrédients complets de la recette
+            $entityManagerRI = $recipeIngController->getDoctrine()->getManager();
+            foreach($recipeIngredients as $ingredient){
+                $entityManagerRI->persist($ingredient);
+                $entityManagerRI->flush();
+            }
+
+            /* 
             // On récupère la recette et les ingrédients
             $recipe = $form->getData();
             $recipeIngredients = $recipe->getRecipeIngredients();
@@ -332,7 +361,7 @@ class RecipeController extends AbstractController
             foreach($recipeIngredients as $ingredient){
                 $entityManagerRI->persist($ingredient);
                 $entityManagerRI->flush();
-            }
+            } */
 
             $this->em->flush();
 

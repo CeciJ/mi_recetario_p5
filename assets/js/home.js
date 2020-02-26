@@ -1,11 +1,10 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/home.js');
 var $ = require('jquery');
+require('bootstrap');
 
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
-console.log('test');
 
 // FULLCALENDAR JQUERY
 //document.addEventListener('DOMContentLoaded', function() {

@@ -1,10 +1,18 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
 
+var jQuery = require('jquery');
 var $ = require('jquery');
+//var algoliasearch = require('algoliasearch');
 var autocomplete = require('autocomplete.js');
+
 require('select2');
+require('bootstrap');
+//var autocomplete = require('jquery-ui/ui/widgets/autocomplete.js');
 $('select').select2();
 
+console.log(autocomplete);
+/* console.log(algoliasearch);
+ */
 (function($) {
   'use strict';
 
@@ -42,6 +50,8 @@ $('select').select2();
         // Get the ul that holds the collection of tags
         $collectionHolder = $('div.manageIngredients');
 
+        console.log($collectionHolder);
+
         // add the "add a tag" anchor and li to the tags ul
         $collectionHolder.append($newLinkDiv);
 
@@ -71,6 +81,7 @@ $('select').select2();
             var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
             //var index = client.initIndex('ingredients');
             var index = client.initIndex('dev_ingredients');
+            console.log(index);
             autocomplete('input.form-control', { hint: false }, [
             //autocomplete('.js-user-autocomplete', { hint: false }, [
                 {
@@ -86,6 +97,23 @@ $('select').select2();
                 console.log(event, suggestion, dataset, context);
             });
 
+        });
+
+        $('.modal-trigger.add.dishType').click(function () {
+          $('.modalAddDishType').modal();
+          $('.modalAddDishType').modal('show');
+        });
+        $('.modal-trigger.add.foodType').click(function () {
+            $('.modalAddFoodType').modal();
+            $('.modalAddFoodType').modal('show');
+        });
+        $('.modal-trigger.add.option').click(function () {
+            $('.modalAddOption').modal();
+            $('.modalAddOption').modal('show');
+        });
+        $('.modal-trigger.add.measureUnit').click(function () {
+            $('.modalAddMeasureUnit').modal();
+            $('.modalAddMeasureUnit').modal('show');
         });
     });
 
@@ -120,35 +148,105 @@ $('select').select2();
     }
 
     function addTagFormDeleteLink($newFormDiv) {
-      var $removeFormButton = $('<button type="button">Effacer cet ingrédient</button>');
+      var $removeFormButton = $('<button type="button" class="btn btn-perso deleteIngredient">Effacer ingrédient</button>');
       $newFormDiv.append($removeFormButton);
   
       $removeFormButton.on('click', function(e) {
           // remove the li for the tag form
           $newFormDiv.remove();
       });
-  }
+    }
 
-    /* $(document).ready(function() {
-        var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
-        //var index = client.initIndex('ingredients');
-        var index = client.initIndex('dev_ingredients');
-        autocomplete('.js-user-autocomplete', { hint: false }, [
-        //autocomplete('.js-user-autocomplete', { hint: false }, [
-            {
-            source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-            displayKey: 'name',
-            templates: {
-                suggestion: function(suggestion) {
-                return suggestion._highlightResult.name.value;
-                }
-            }
-            }
-        ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
-            console.log(event, suggestion, dataset, context);
-        });
-    }); */
+    function submitEditOption(id){
+      var oldName = $('#editOptionName-'+id).val();
+      var path = "/option/" + id + "/edit";
+
+      var inputName = $('#formOption-'+oldName);
+
+      var newName = inputName.val();
+
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditOption-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    }
+
+    function submitEditDishType(id){
+      var oldName = $('#editDishTypeName-'+id).val();
+      var path = "/dishtype/" + id + "/edit";
+
+      var inputName = $('#formDishType-'+oldName);
+
+      var newName = inputName.val();
+
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditDishType-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    }
+
+    function submitEditFoodType(id){
+      var oldName2 = $('#editFoodTypeName-'+id).val();
+      var path = "/foodtype/" + id + "/edit";
+
+      var inputName = $('#formFoodType-'+oldName2);
+
+      var newName = inputName.val();
+
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditFoodType-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    }
       
   });
 
 })(jQuery);
+
+
+/* $(document).ready(function() {
+    var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
+    //var index = client.initIndex('ingredients');
+    var index = client.initIndex('dev_ingredients');
+    autocomplete('.js-user-autocomplete', { hint: false }, [
+    //autocomplete('.js-user-autocomplete', { hint: false }, [
+        {
+        source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+        displayKey: 'name',
+        templates: {
+            suggestion: function(suggestion) {
+            return suggestion._highlightResult.name.value;
+            }
+        }
+        }
+    ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
+        console.log(event, suggestion, dataset, context);
+    });
+}); */

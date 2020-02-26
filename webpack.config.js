@@ -74,27 +74,4 @@ Encore
     //.addEntry('admin', './assets/js/admin.js')
 ;
 
-/*
-const config = Encore.getWebpackConfig();
-
-// Set "modules" option of the css-loader
-for (const rule of config.module.rules) {
-    if (rule.use) {
-        for (const ruleUse of rule.use) {
-            if (ruleUse.loader === 'css-loader') {
-                ruleUse.options.modules = true;
-            }
-        }
-    }
-}
-*/
-// Export the config (don't call getWebpackConfig() again)
-//module.exports = config;
-
-/*
-Encore.configureLoaderRule('css', loaderRule => {
-    loaderRule.test = /\.css$/i
-});
-*/
-
 module.exports = Encore.getWebpackConfig();

@@ -10,3 +10,4 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
 // IMPORT CSS FROM CSS FILE;
 require('../css/app.css');
+require('bootstrap');

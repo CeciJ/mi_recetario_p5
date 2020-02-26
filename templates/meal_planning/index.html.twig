@@ -11,11 +11,13 @@
         <h1 class="mealPlanningList">Mes recettes sur une période</h1>
 
         <h2>Choisir la période</h2>
-        <div class="container">
+        <div class="container formPeriodMealList">
             {{ form_start(form) }}
             <div class="form-row align-items-end">
-                <div class="col-md-5">{{ form_row(form.startPeriod) }}</div>
-                <div class="col-md-5">{{ form_row(form.endPeriod) }}</div>
+                <div class="form-row-period">
+                    <div class="col-md-5">{{ form_row(form.startPeriod) }}</div>
+                    <div class="col-md-5">{{ form_row(form.endPeriod) }}</div>
+                </div>
                 <div class="col-md-2"><div class="form-group"><button class="btn btn-primary">Rechercher</button></div></div>
             </div>
             {{ form_end(form) }}
@@ -33,14 +35,14 @@
 
         {% if finalIngredients is defined %}
 
-            <hr class="breakLine" color="yellow">
+            <hr class="breakLine">
 
             <div class="row">
                 <div class="col-md-5 col-11 allShopList">
                     <h2 class="shopListH2">Ma liste de courses</h2>
                     <div id="shopListDiv">
                         {% for ingredient in finalIngredients %}
-                            <input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
+                            <label><input class="inputList" type="checkbox" id="{{formatName(ingredient.name)}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
                         {% endfor %}
                     </div>
                     <div>
@@ -63,7 +65,7 @@
                                 {% for meal_planning in meal_plannings %}
                                     <tr>
                                         <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
-                                        <td>{{ meal_planning.title }}</td>
+                                        <td><a href="{{ '/recettes/riz-noir-aux-poireaux-154' }}">{{ meal_planning.title }}</a></td>
                                     </tr>
                                 {% else %}
                                     <tr>
