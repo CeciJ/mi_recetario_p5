@@ -11,8 +11,8 @@ require('bootstrap');
 $('select').select2();
 
 console.log(autocomplete);
-/* console.log(algoliasearch);
- */
+//console.log(algoliasearch);
+
 (function($) {
   'use strict';
 
@@ -79,24 +79,44 @@ console.log(autocomplete);
             // AUTOCOMPLETE
 
             var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
-            //var index = client.initIndex('ingredients');
-            var index = client.initIndex('dev_ingredients');
-            console.log(index);
-            autocomplete('input.form-control', { hint: false }, [
-            //autocomplete('.js-user-autocomplete', { hint: false }, [
+
+            var inputsNames = document.querySelectorAll('[id^="recipe_recipeIngredients_"][id$="_nameIngredient_name"]'); 
+            jQuery.each(inputsNames, function(k, val){
+              var id = val.id;
+              var index = client.initIndex('dev_ingredients');
+              autocomplete('input#'+id, { hint: false }, [
                 {
-                source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-                displayKey: 'name',
-                templates: {
-                    suggestion: function(suggestion) {
-                    return suggestion._highlightResult.name.value;
-                    }
+                  source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+                  displayKey: 'name',
+                  templates: {
+                      suggestion: function(suggestion) {
+                      return suggestion._highlightResult.name.value;
+                      }
+                  }
                 }
-                }
-            ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
-                console.log(event, suggestion, dataset, context);
+              ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
+                  //console.log(event, suggestion, dataset, context);
+              });
             });
 
+            var inputsUnits = document.querySelectorAll('[id^="recipe_recipeIngredients_"][id$="_unit_unit"]'); 
+            jQuery.each(inputsUnits, function(k, val){
+              var id = val.id;
+              var index = client.initIndex('dev_units');
+              autocomplete('input#'+id, { hint: false }, [
+                {
+                  source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+                  displayKey: 'unit',
+                  templates: {
+                      suggestion: function(suggestion) {
+                      return suggestion._highlightResult.unit.value;
+                      }
+                  }
+                }
+              ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
+                  //console.log(event, suggestion, dataset, context);
+              });
+            });          
         });
 
         $('.modal-trigger.add.dishType').click(function () {
