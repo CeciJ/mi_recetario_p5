@@ -26,7 +26,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('home', './assets/js/home.js')
     .addEntry('allRecipes', './assets/js/allRecipes.js')
-    .addEntry('recipe', './assets/js/recipe.js')
+    .addEntry('manageCorrespondances', './assets/js/manageCorrespondances.js')
     .addEntry('manageRecipe', './assets/js/manageRecipe.js')
     .addEntry('shopList', './assets/js/shopList.js')
 
@@ -67,7 +67,12 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    .autoProvidejQuery()
+    //.autoProvidejQuery()
+    /* .autoProvideVariables({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+    }) */
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()

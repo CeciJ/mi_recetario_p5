@@ -3,11 +3,14 @@
 {% block title %}Edit CorrespondingWeightsUnities{% endblock %}
 
 {% block body %}
-    <h1>Edit CorrespondingWeightsUnities</h1>
 
-    {{ include('corresponding_weights_unities/_form.html.twig', {'button_label': 'Update'}) }}
+    <div style="margin-bottom:15px;">
+        <a class="btn btn-secondary editRecipe backRecipeList" href="{{ path('admin.corresponding.index') }}">Retour à la liste</a>
+    </div>  
 
-    <a href="{{ path('corresponding_weights_unities_index') }}">back to list</a>
+    <div class="container mt-4 formEditRecipe">
+        <h1>Éditer la correspondance ingrédient / poids</h1>
+        {{ include('corresponding_weights_unities/_form.html.twig', {'button_label': 'Éditer'}) }}
+    </div>
 
-    {{ include('corresponding_weights_unities/_delete_form.html.twig') }}
 {% endblock %}

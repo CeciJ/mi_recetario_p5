@@ -10,13 +10,8 @@
     <div class="container mt-4 recipeManagement">
 
         <div style="margin-bottom:15px;">
-            <!--<a href="{{ path('admin.dish_type.index') }}" class="btn btn-secondary">Gérer les types de plats</a>
-            <a href="{{ path('admin.food_type.index') }}" class="btn btn-secondary">Gérer les types de cuisine</a>
-            <a href="{{ path('admin.option.index') }}" class="btn btn-secondary">Gérer les options</a>
-            <a href="{{ path('admin.measure_unit.index') }}" class="btn btn-secondary">Gérer les unités</a>-->
             <a href="{{ path('admin.all_options') }}" class="col-xs-5 btn btn-perso">Gérer les options</a>
             <a href="{{ path('admin.corresponding.index') }}" class="col-xs-5 btn btn-perso">Gérer les équivalences unités/poids</a>
-{#          <a href="{{ path('admin.ingredient.index') }}" class="col-5 btn btn-perso">Gérer les ingrédients</a>#}            
             <a href="{{ path('admin.recipe.new') }}" class="col-xs-5 btn btn-primary addNewRecipe">Créer une nouvelle recette</a>
         </div>
 
@@ -27,11 +22,6 @@
         {% endfor %}
         
         <table class="table table-stripped">
-            {# <thead>
-                <tr>
-                    <th>Recettes</th>
-                </tr>
-            </thead> #}
             <tbody>
                 {% for recipe in recipes %}
                 <tr>

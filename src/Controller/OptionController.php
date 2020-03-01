@@ -19,12 +19,12 @@ class OptionController extends AbstractController
     /**
      * @Route("/", name="admin.option.index", methods={"GET"})
      */
-    public function index(OptionRepository $optionRepository): Response
+    /* public function index(OptionRepository $optionRepository): Response
     {
         return $this->render('admin/option/index.html.twig', [
             'options' => $optionRepository->findAll(),
         ]);
-    }
+    } */
 
     /**
      * @Route("/new", name="admin.option.new", methods={"GET","POST"})
@@ -51,12 +51,12 @@ class OptionController extends AbstractController
     /**
      * @Route("/{id}", name="admin.option.show", methods={"GET"})
      */
-    public function show(Option $option): Response
+    /* public function show(Option $option): Response
     {
         return $this->render('admin/option/show.html.twig', [
             'option' => $option,
         ]);
-    }
+    } */
 
     /**
      * @Route("/{id}/edit", name="admin.option.edit", methods={"GET","POST"})

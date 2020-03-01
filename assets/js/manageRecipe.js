@@ -10,9 +10,6 @@ require('bootstrap');
 //var autocomplete = require('jquery-ui/ui/widgets/autocomplete.js');
 $('select').select2();
 
-console.log(autocomplete);
-//console.log(algoliasearch);
-
 (function($) {
   'use strict';
 
@@ -66,13 +63,10 @@ console.log(autocomplete);
 
         var compteur = 0;
         $addIngredientButton.on('click', function(e) {
-          //console.log(compteur);
-            // add a new tag form (see next code block)
             addTagForm($collectionHolder, $newLinkDiv);
             console.log($collectionHolder[0].children[1]);
-            
+          
             var divToAddClass = $collectionHolder[0].children[1].childNodes[compteur];
-            //console.log(divToAddClass);
             $(divToAddClass).css('display', 'flex');
             compteur = compteur + 1;
 
@@ -116,7 +110,12 @@ console.log(autocomplete);
               ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
                   //console.log(event, suggestion, dataset, context);
               });
-            });          
+            });  
+            
+            $('#submitDishTypeEdit-1').click(function(){
+              console.log('click');
+              submitEditDishType(1);
+            });
         });
 
         $('.modal-trigger.add.dishType').click(function () {
@@ -138,33 +137,14 @@ console.log(autocomplete);
     });
 
     function addTagForm($collectionHolder, $newLinkDiv) {
-      // Get the data-prototype explained earlier
       var prototype = $collectionHolder.data('prototype');
-
-      // get the new index
       var index = $collectionHolder.data('index');
-
       var newForm = prototype;
-      // You need this only if you didn't set 'label' => false in your tags field in TaskType
-      // Replace '__name__label__' in the prototype's HTML to
-      // instead be a number based on how many items we have
-      // newForm = newForm.replace(/__name__label__/g, index);
-
-      // Replace '__name__' in the prototype's HTML to
-      // instead be a number based on how many items we have
       newForm = newForm.replace(/__name__/g, index);
-
-      // increase the index with one for the next item
       $collectionHolder.data('index', index + 1);
-
-      // Display the form in the page in an li, before the "Add a tag" link li
       var $newFormDiv = $('<div></div>').append(newForm);
-
       $newLinkDiv.before($newFormDiv);
-
-      // add a delete link to the new form
       addTagFormDeleteLink($newFormDiv);
-
     }
 
     function addTagFormDeleteLink($newFormDiv) {
@@ -176,97 +156,7 @@ console.log(autocomplete);
           $newFormDiv.remove();
       });
     }
-
-    function submitEditOption(id){
-      var oldName = $('#editOptionName-'+id).val();
-      var path = "/option/" + id + "/edit";
-
-      var inputName = $('#formOption-'+oldName);
-
-      var newName = inputName.val();
-
-      $.ajax({
-          url: path,
-          method: "POST",
-          data: {
-              id: id,
-              newName: newName
-          },
-          success: function(data){
-              alert('Modification effectuée avec succès');
-              $('#modalEditOption-'+id).modal('hide');
-              window.location.reload();
-          }
-      });
-    }
-
-    function submitEditDishType(id){
-      var oldName = $('#editDishTypeName-'+id).val();
-      var path = "/dishtype/" + id + "/edit";
-
-      var inputName = $('#formDishType-'+oldName);
-
-      var newName = inputName.val();
-
-      $.ajax({
-          url: path,
-          method: "POST",
-          data: {
-              id: id,
-              newName: newName
-          },
-          success: function(data){
-              alert('Modification effectuée avec succès');
-              $('#modalEditDishType-'+id).modal('hide');
-              window.location.reload();
-          }
-      });
-    }
-
-    function submitEditFoodType(id){
-      var oldName2 = $('#editFoodTypeName-'+id).val();
-      var path = "/foodtype/" + id + "/edit";
-
-      var inputName = $('#formFoodType-'+oldName2);
-
-      var newName = inputName.val();
-
-      $.ajax({
-          url: path,
-          method: "POST",
-          data: {
-              id: id,
-              newName: newName
-          },
-          success: function(data){
-              alert('Modification effectuée avec succès');
-              $('#modalEditFoodType-'+id).modal('hide');
-              window.location.reload();
-          }
-      });
-    }
       
   });
 
 })(jQuery);
-
-
-/* $(document).ready(function() {
-    var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
-    //var index = client.initIndex('ingredients');
-    var index = client.initIndex('dev_ingredients');
-    autocomplete('.js-user-autocomplete', { hint: false }, [
-    //autocomplete('.js-user-autocomplete', { hint: false }, [
-        {
-        source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-        displayKey: 'name',
-        templates: {
-            suggestion: function(suggestion) {
-            return suggestion._highlightResult.name.value;
-            }
-        }
-        }
-    ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
-        console.log(event, suggestion, dataset, context);
-    });
-}); */

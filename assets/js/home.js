@@ -43,18 +43,15 @@ $(document).ready(function() {
   
     var calendar = new Calendar(calendarEl, {
         plugins: [ 'interaction', 'dayGrid' ],
-        //plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
         header: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth, dayGridWeek'
-            //right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         validRange: {
             start: today
         },
         timeZone: 'local',
-        //timeZone: 'UTC',
         editable: true,
         defaultView: 'dayGridMonth',
         selectable: true,
@@ -69,14 +66,13 @@ $(document).ready(function() {
         droppable: true, // this allows things to be dropped onto the calendar
         eventSources: [
             {
-                /* url: "{{ path('fc_load_events') }}", */
                 url: "/fc-load-events",
                 method: "POST",
                 extraParams: {
                     filters: JSON.stringify({})
                 },
                 failure: () => {
-                    // alert("There was an error while fetching FullCalendar!");
+                    alert("There was an error while fetching FullCalendar!");
                 },
             }
         ],
@@ -157,9 +153,7 @@ $(document).ready(function() {
         drop: function(event) {
             var idCategorie = event.draggedEl.attributes[1].nodeValue;
             var checkbox = document.getElementById('drop-remove'+idCategorie);
-            // is the "remove after drop" checkbox checked?
             if (checkbox.checked) {
-                // if so, remove the element from the "Draggable Events" list
                 event.draggedEl.parentNode.removeChild(event.draggedEl);
             }
               
@@ -173,6 +167,9 @@ $(document).ready(function() {
   
             console.log(eventDateStart);
             console.log(eventSources);
+
+            var element = event.draggedEl;
+            console.log(element);
   
             $.ajax({
                 url: "/meal_planning/new",
@@ -182,8 +179,16 @@ $(document).ready(function() {
                     beginAt: eventDateStart, 
                     title: eventTitle 
                     },
-                success: function (event) {   
-                    //eventSources[0].refetch();
+                success: function (event) {
+                    var eventId = event.id;
+                    var events = calendar.getEvents(eventId);
+                    jQuery.each(events, function(k, event) {
+                        var url = event._def.url;
+                        if(url.length == 0){
+                            event.remove();
+                            eventSources[0].refetch();
+                        }
+                    }); 
                     alert('Recette ajoutée avec succès !');
                     //window.location.reload(true);
                 }
@@ -193,10 +198,6 @@ $(document).ready(function() {
         eventClick: function(info) {
             info.jsEvent.preventDefault();
             var mealPlanningName = info.event.title;
-  
-            alert('Event: ' + info.event.title);
-            alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-            alert('View: ' + info.view.type);
         },
         eventDrop: function(eventDropInfo){
             console.log(eventDropInfo);
@@ -295,6 +296,9 @@ $(document).ready(function() {
             $("#exampleModal").modal('hide');
         }
         )(jQuery);
+
+        var eventSources = calendar.getEventSources();
+        console.log(eventSources);
         
         $.ajax({
             url: "/meal_planning/new",
@@ -305,34 +309,17 @@ $(document).ready(function() {
                 title: titleName,
             },
             success: function (data, response, event, date) {
+                console.log(data);
+                console.log(response);
+                console.log(event);
+                console.log(date);
                 alert('Recette ajoutée avec succès !');
-                calendar.refetchEvents();
+                eventSources[0].refetch();
             },
             error: function (data) {
                 alert('Erreur dans l\'ajout de la recette');
             }
         });
-        /*.done(function(event) {
-            //eventSources[0].refetch();
-            alert('Recette ajoutée avec succès !');
-            $('#exampleModal').modal('hide');
-            //eventSources[0].refetch();
-            titleName = '';
-            dateEvent = '';
-            console.log(event);
-            //event.jsEvent.stopPropagation();
-            //window.location.reload(true)
-            
-        });
-        */
     }
 
 });
-  
-  /* // FORMULAIRE DE CONTACT
-  var $contactButton = $('#contactButton')
-  $contactButton.click(e => {
-    e.preventDefault();
-    $('#contactForm').slideDown();
-    $contactButton.slideUp();
-  }) */

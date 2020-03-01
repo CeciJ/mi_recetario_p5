@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\DishType;
 use App\Form\DishTypeType;
-use Doctrine\Common\Util\Debug;
 use App\Repository\DishTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class DishTypeController extends AbstractController
 {
-    /**
-     * @Route("/", name="admin.dish_type.index", methods={"GET"})
-     */
-    public function index(DishTypeRepository $dishTypeRepository): Response
-    {
-        return $this->render('admin/dish_type/index.html.twig', [
-            'dish_types' => $dishTypeRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="admin.dish_type.new", methods={"GET","POST"})
@@ -51,16 +41,6 @@ class DishTypeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin.dish_type.show", methods={"GET"})
-     */
-    public function show(DishType $dishType): Response
-    {
-        return $this->render('admin/dish_type/show.html.twig', [
-            'dish_type' => $dishType,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="admin.dish_type.edit", methods={"GET","POST"}, options={"expose"=true})
      */
     public function edit(Request $request, DishType $dishType, DishTypeRepository $dishTypeRepo): Response
@@ -80,33 +60,23 @@ class DishTypeController extends AbstractController
             $dishType = $dishTypeRepo->find($id);
             $dishType->setName($newName);
 
-            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             return new JsonResponse(
                 [
                     'status' => 'ok',
+                    'newName' => $newName
                 ],
                 JsonResponse::HTTP_CREATED
             );
         }
-
-        /* if ($formEditDishType->isSubmitted() && $formEditDishType->isValid()) {
-            dump($request); die;
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin.allOptions');
-        } */
 
         return $this->render('admin/dish_type/edit.html.twig', [
             'formEditDishType' => $formEditDishType->createView(),
             'dishType' => $dishType
         ]);
     }
-
-    
 
     /**
      * @Route("/{id}", name="admin.dish_type.delete", methods={"DELETE"})

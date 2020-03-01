@@ -1,12 +1,3 @@
-
- {# {{ form_start(formEditDishType) }}
-    <div class="row">
-        <div class="col-md-6">{{ form_row(formEditDishType.name) }}</div>
-    </div>
-    {{ form_widget(formEditDishType) }}
-    <button id="submitEditDishType" class="btn btn-primary" data-target-id="" data-target-name="">{{ button|default('Modifier') }}</button>
-{{ form_end(formEditDishType) }} #}
-
 {% block body %}
 <div class="modal fade modalEditDishType" id="modalEditDishType-{{dishType.id}}" tabindex="-1" role="dialog" aria-label="modalEditDishTypeLabel" aria-hidden="true">
     {{ form_start(formEditDishType) }}
@@ -27,8 +18,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            {# <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button> #}
-            <button type="button" class="btn btn-primary" id="submitDishTypeEdit-{{dishType.id}}" onclick="submitEditDishType({{dishType.id}})">Ajouter</button>
+            <button type="button" class="btn btn-primary" id="submitDishTypeEdit-{{dishType.id}}" onclick="submitEditDishType({{dishType.id}})">Modifier</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -41,24 +31,25 @@
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('manageRecipe') }}
     <script>
-        function submitEditDishType(id){
-            var oldName = $('#editDishTypeName-'+id).val();
-            var path = "/dishtype/" + id + "/edit";
-            var inputName = $('#formDishType-'+oldName);
-            var newName = inputName.val();
-            $.ajax({
-                url: path,
-                method: "POST",
-                data: {
-                    id: id,
-                    newName: newName
-                },
-                success: function(data){
-                    alert('Modification effectuée avec succès');
-                    $('#modalEditDishType-'+id).modal('hide');
-                    window.location.reload();
-                }
-            });
-        }
+    function submitEditDishType(id){
+      console.log('submitEditType');
+      var oldName = $('#editDishTypeName-'+id).val();
+      var path = "/dishtype/" + id + "/edit";
+      var inputName = $('#formDishType-'+oldName);
+      var newName = inputName.val();
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditDishType-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    } 
     </script>
 {% endblock %}

@@ -17,16 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class FoodTypeController extends AbstractController
 {
     /**
-     * @Route("/", name="admin.food_type.index", methods={"GET"})
-     */
-    public function index(FoodTypeRepository $foodTypeRepository): Response
-    {
-        return $this->render('admin/food_type/index.html.twig', [
-            'food_types' => $foodTypeRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/new", name="admin.food_type.new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -49,35 +39,10 @@ class FoodTypeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin.food_type.show", methods={"GET"})
-     */
-    public function show(FoodType $foodType): Response
-    {
-        return $this->render('admin/food_type/show.html.twig', [
-            'food_type' => $foodType,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="admin.food_type.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, FoodType $foodType, FoodTypeRepository $foodTypeRepo): Response
     {
-        /* $form = $this->createForm(FoodTypeType::class, $foodType);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('admin.food_type.index', [
-                'id' => $foodType->getId(),
-            ]);
-        }
-
-        return $this->render('admin/food_type/edit.html.twig', [
-            'food_type' => $foodType,
-            'form' => $form->createView(),
-        ]); */
         $formEditFoodType = $this->createForm(FoodTypeType::class, $foodType);
         $formEditFoodType->handleRequest($request);
 
@@ -93,7 +58,6 @@ class FoodTypeController extends AbstractController
             $foodType = $foodTypeRepo->find($id);
             $foodType->setName($newName);
 
-            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
@@ -104,13 +68,6 @@ class FoodTypeController extends AbstractController
                 JsonResponse::HTTP_CREATED
             );
         }
-
-        /* if ($formEditFoodType->isSubmitted() && $formEditFoodType->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin.all_options');
-        } */
 
         return $this->render('admin/food_type/edit.html.twig', [
             'formEditFoodType' => $formEditFoodType->createView(),

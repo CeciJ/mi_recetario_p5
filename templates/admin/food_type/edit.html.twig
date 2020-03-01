@@ -1,11 +1,3 @@
-{# {{ form_start(formFoodType) }}
-    <div class="row">
-        <div class="col-md-4">{{ form_row(formFoodType.name) }}</div><span class="closeForm" style="cursor:pointer;">x</span>
-    </div>
-    {{ form_widget(formFoodType) }}
-    <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
-{{ form_end(formFoodType) }} #}
-
 <div class="modal fade modalEditFoodType" id="modalEditFoodType-{{foodType.id}}" tabindex="-1" role="dialog" aria-label="modalEditFoodTypeLabel" aria-hidden="true">
     {{ form_start(formEditFoodType) }}
     <div class="modal-dialog" role="document">
@@ -25,8 +17,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            {# <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button> #}
-            <button type="button" class="btn btn-primary" id="submitFoodTypeEdit-{{foodType.id}}" onclick="submitEditFoodType({{foodType.id}})">Ajouter</button>
+            <button type="button" class="btn btn-primary" id="submitFoodTypeEdit-{{foodType.id}}" onclick="submitEditFoodType({{foodType.id}})">Modifier</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -38,4 +29,28 @@
 {% block javascripts %}
    {{ encore_entry_script_tags('app') }}
    {{ encore_entry_script_tags('manageRecipe') }}
+   <script>
+    function submitEditFoodType(id){
+      var oldName2 = $('#editFoodTypeName-'+id).val();
+      var path = "/foodtype/" + id + "/edit";
+
+      var inputName = $('#formFoodType-'+oldName2);
+
+      var newName = inputName.val();
+
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditFoodType-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    }
+   </script>
 {% endblock %}

@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\MeasureUnit;
 use App\Form\MeasureUnitType;
 use App\Repository\MeasureUnitRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/measure_unit")
@@ -18,12 +19,12 @@ class MeasureUnitController extends AbstractController
     /**
      * @Route("/", name="admin.measure_unit.index", methods={"GET"})
      */
-    public function index(MeasureUnitRepository $measureUnitRepository): Response
+/*     public function index(MeasureUnitRepository $measureUnitRepository): Response
     {
         return $this->render('admin/measure_unit/index.html.twig', [
             'measure_units' => $measureUnitRepository->findAll(),
         ]);
-    }
+    } */
 
     /**
      * @Route("/new", name="admin.measure_unit.new", methods={"GET","POST"})
@@ -51,12 +52,12 @@ class MeasureUnitController extends AbstractController
     /**
      * @Route("/{id}", name="admin.measure_unit.show", methods={"GET"})
      */
-    public function show(MeasureUnit $measureUnit): Response
+/*     public function show(MeasureUnit $measureUnit): Response
     {
         return $this->render('admin/measure_unit/show.html.twig', [
             'measure_unit' => $measureUnit,
         ]);
-    }
+    } */
 
     /**
      * @Route("/{id}/edit", name="admin.measure_unit.edit", methods={"GET","POST"})
@@ -76,7 +77,7 @@ class MeasureUnitController extends AbstractController
             $newName = urldecode($newName);
 
             $measureUnit = $measureUnitRepo->find($id);
-            $measureUnit->setName($newName);
+            $measureUnit->setUnit($newName);
 
             //exit(\Doctrine\Common\Util\Debug::dump($dishType));
             $entityManager = $this->getDoctrine()->getManager();

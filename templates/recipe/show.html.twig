@@ -5,14 +5,6 @@
 {% block body %}
     <div class="container mt-5" id="allBlockRecipe">
 
-        {# {% for message in app.flashes('success') %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-
-        {% if not form.vars.valid %}
-            <div class="alert alert-danger">Erreur dans les données envoyées</div>
-        {% endif %} #}
-
         <div class="row" id="blocRecipe">
             <div id="divImg" class="col-md-5 col-sm-5 col-12">
                 <div data-slider>
@@ -49,24 +41,6 @@
                         <p><b>{{ option.name }}</b></p>
                     {% endfor %}
                 </div>
-                {# <a href="#" class="btn btn-primary">Ajouter à mon semainier</a>
-                <a href="#" class="btn btn-primary" id="contactButton" {% if form.vars.submitted %}style="display: none;"{% endif %}>Envoyer par mail</a>
-                <div id="contactForm" class="mt-4" {% if not form.vars.submitted %}style="display: none;"{% endif %}>
-                    {{ form_start(form) }}
-                        <div class="row">
-                            <div class="col">{{ form_row(form.firstname) }}</div>
-                            <div class="col">{{ form_row(form.lastname) }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">{{ form_row(form.phone) }}</div>
-                            <div class="col">{{ form_row(form.email) }}</div>
-                        </div>
-                        {{ form_rest(form) }}
-                        <div class="form-group">
-                            <button class="btn btn-primary">Envoyer</button>
-                        </div>
-                    {{ form_end(form) }}
-                </div> #}
             </div>
         </div>
         <div class="row" id="ingredientsAndDescription">

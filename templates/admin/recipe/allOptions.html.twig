@@ -43,7 +43,7 @@
                         <div class="optionName">{{ foodType.name }}</div>
                         <div class="row" style="font-size: 10px;">
                             <div class="actionsOptions col-md-12">
-                                <a data-toggle="modal" data-target="#modalEditFoodType-{{foodType.id}}" href="{{ path('admin.food_type.edit', {id: foodType.id}) }}" data-id="{{foodType.id}}" data-name="{{foodType.name}}"  class="modal-trigger edit foodType" id="buttonEditFoodType-{{foodType.id}}" style="cursor:pointer;" onclick="openModalEditFoodType({{foodType.id}})">Modifier</a>
+                                <a data-toggle="modal" data-target="#modalEditFoodType-{{foodType.id}}" href="{{ path('admin.food_type.edit', {id: foodType.id}) }}" data-id="{{foodType.id}}" data-name="{{foodType.name}}"  class="modal-trigger edit foodType" id="buttonEditFoodType-{{foodType.id}}" style="cursor:pointer;">Modifier</a>
                                 <form method="post" action="{{ path('admin.food_type.delete', {id: foodType.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" id="delete_token_foodtype_{{foodType.id}}" name="_token" value="{{ csrf_token('delete' ~ foodType.id) }}">
@@ -71,7 +71,7 @@
                         <div class="optionName">{{ option.name }}</div>
                         <div class="row" style="font-size: 10px;">
                             <div class="actionsOptions col-md-12">
-                                <a data-toggle="modal" data-target="#modalEditOption-{{option.id}}" href="{{ path('admin.option.edit', {id: option.id}) }}" data-id="{{option.id}}" data-name="{{option.name}}"  class="modal-trigger edit option" id="buttonEditOption-{{option.id}}" style="cursor:pointer;" onclick="openModalEditOption({{option.id}})">Modifier</a>
+                                <a data-toggle="modal" data-target="#modalEditOption-{{option.id}}" href="{{ path('admin.option.edit', {id: option.id}) }}" data-id="{{option.id}}" data-name="{{option.name}}"  class="modal-trigger edit option" id="buttonEditOption-{{option.id}}" style="cursor:pointer;">Modifier</a>
                                 <form method="post" action="{{ path('admin.option.delete', {id: option.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" id="delete_token_optiontype_{{option.id}}" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
@@ -89,48 +89,6 @@
         </div>
         <button id="buttonSubmitOption" data-toggle="modal" data-target="{{ path('admin.option.new') }}" class="modal-trigger add option btn btn-primary" style="margin-top: 25px;">Ajouter une option</button>
     </div>
-
-{#     <div id="units" style="margin-bottom: 30px; background-color:  #a4efc9; padding: 15px; border-radius: 10px;">
-        <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
-        <div class="row">
-            {% for measure_unit in measure_units %}
-                <div class="col-md-2" style="text-align: center; margin-left: 15px; margin-bottom: 15px; padding: 10px 12px; background-color: #f2f7f7; border-radius: 3px;">
-                    <div>
-                        <div>{{ measure_unit.unit }}</div>
-                        <div class="row" style="font-size: 10px;">
-                            <div class="col-md-12">
-                                <a data-toggle="modal" data-target="#modalEditMeasureUnit-{{measure_unit.id}}" href="{{ path('admin.measure_unit.edit', {id: measure_unit.id}) }}" data-id="{{measure_unit.id}}" data-name="{{measure_unit.unit}}"  class="modal-trigger edit measure_unit" id="buttonEditMeasureUnit-{{measure_unit.id}}" style="cursor:pointer;" onclick="openModalEditMeasureUnit({{measure_unit.id}})">Modifier</a>
-                                <form method="post" action="{{ path('admin.measure_unit.delete', {id: measure_unit.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous bien sûr?')">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ measure_unit.id) }}">
-                                    <button style="border: none; background-color: #f2f7f7;">Supprimer</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{ render(controller(
-                    'App\\Controller\\MeasureUnitController::edit',
-                    { 'id': measure_unit.id }
-                )) }}
-            {% endfor %}
-        </div>
-        <button id="buttonSubmitMeasureUnit" data-toggle="modal" data-target="{{ path('admin.measure_unit.new') }}" class="modal-trigger add measureUnit btn btn-primary" style="margin-top: 25px;">Ajouter une unité</button>
-    </div> #}
-    
-    {# <div id="units" style="margin-bottom: 30px; border: 1px solid black; padding: 15px; border-radius: 10px;">
-        <h3 style="margin-bottom: 20px;">Unités de mesure</h3>
-        <ul style="list-style-type: none; margin: 0; padding: 0;">
-            {% for measure_unit in measure_units %}
-                <li style="display: inline;text-align: center;padding: 14px 16px; border: 1px solid black; border-radius: 3px;">{{ measure_unit.unit }}</li>
-            {% endfor %}
-        </ul>
-        <button id="buttonSubmitMeasureUnit" type="submit" class="btn btn-primary" style="margin-top: 25px;">Ajouter une unité de mesure</button>
-        <div id="formMeasureUnit" class="formAddOption">
-            {% include "admin/measure_unit/_form.html.twig" %}
-        </div>
-    </div> #}
-
 </div>
 
 <!-- MODAL ADD DISH TYPE -->
@@ -147,7 +105,6 @@
             {{ render(path('admin.dish_type.new')) }}
         </div>
         <div class="modal-footer">
-            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -168,7 +125,6 @@
             {{ render(path('admin.food_type.new')) }}
         </div>
         <div class="modal-footer">
-            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -189,28 +145,6 @@
             {{ render(path('admin.option.new')) }}
         </div>
         <div class="modal-footer">
-            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ADD MEASURE UNIT -->
-<div class="modal fade modalAddMeasureUnit" id="modalAddMeasureUnit" tabindex="-1" role="dialog" aria-label="modalAddMeasureUnitLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Ajouter une nouvelle unité</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body add">
-            {{ render(path('admin.measure_unit.new')) }}
-        </div>
-        <div class="modal-footer">
-            <!--<button type="button" class="btn btn-primary">Ajouter</button>-->
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -226,95 +160,4 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('manageRecipe') }}
-    <script>
-        function openModalEditDishType(id){
-            var oldName = $('#editDishTypeName-'+id).val();
-            var indexOfFirst = oldName.indexOf(' ');
-            if(indexOfFirst < 0){
-                var inputName = $('#formDishType-'+oldName);
-                inputName.val('');
-            } 
-            $(inputName).on("click", function(){
-                if ($(this).is( ":focus" )) {
-                    if($(this).on( "keydown")){
-                        console.log($('#formDishType-'+oldName).val());
-                    }
-                }else{
-                    $(this).focus();
-                }
-            });
-        }
-        function openModalEditFoodType(id){
-            var oldName = $('#editFoodTypeName-'+id).val();
-            var indexOfFirst = oldName.indexOf(' ');
-            if(indexOfFirst < 0){
-                var inputName = $('#formFoodType-'+oldName);
-                inputName.val('');
-            } 
-            $(inputName).on("click", function(){
-                if ($(this).is( ":focus" )) {
-                    if($(this).on( "keydown")){
-                        console.log($('#formFoodType-'+oldName).val());
-                    }
-                }else{
-                    $(this).focus();
-                }
-            });
-        }
-        function openModalEditOption(id){
-            var oldName = $('#editOptionName-'+id).val();
-            var indexOfFirst = oldName.indexOf(' ');
-            if(indexOfFirst < 0){
-                var inputName = $('#formOption-'+oldName);
-                inputName.val('');
-            } 
-            $(inputName).on("click", function(){
-                if ($(this).is( ":focus" )) {
-                    if($(this).on( "keydown")){
-                        console.log($('#formOption-'+oldName).val());
-                    }
-                }else{
-                    $(this).focus();
-                }
-            });
-        }
-        function openModalEditMeasureUnit(id){
-            var oldName = $('#editMeasureUnitName-'+id).val();
-            console.log(oldName);
-            var indexOfFirst = oldName.indexOf(' ');
-            console.log(indexOfFirst);
-            if(indexOfFirst < 0){
-                var inputName = $('#formMeasureUnit-'+oldName);
-                console.log(inputName);
-                inputName.val('');
-            } 
-            $(inputName).on("click", function(){
-                if ($(this).is( ":focus" )) {
-                    if($(this).on( "keydown")){
-                        console.log($('#formMeasureUnit-'+oldName).val());
-                    }
-                }else{
-                    $(this).focus();
-                }
-            });
-        }
-        /* $(document).ready(function() {
-            $('.modal-trigger.add.dishType').click(function () {
-                $('.modalAddDishType').modal();
-                $('.modalAddDishType').modal('show');
-            });
-            $('.modal-trigger.add.foodType').click(function () {
-                $('.modalAddFoodType').modal();
-                $('.modalAddFoodType').modal('show');
-            });
-            $('.modal-trigger.add.option').click(function () {
-                $('.modalAddOption').modal();
-                $('.modalAddOption').modal('show');
-            });
-            $('.modal-trigger.add.measureUnit').click(function () {
-                $('.modalAddMeasureUnit').modal();
-                $('.modalAddMeasureUnit').modal('show');
-            });
-        }); */
-    </script>
 {% endblock %}

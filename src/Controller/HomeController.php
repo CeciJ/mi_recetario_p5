@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\DishType;
-use App\Entity\MealPlanning;
 use App\Repository\RecipeRepository;
 use App\Repository\DishTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +18,7 @@ class HomeController extends AbstractController
      * @param RecipeRepository $repository
      * @return Response
      */
-    public function index(RecipeRepository $repository, DishTypeRepository $dishTypeRepository, Request $request): Response
+    public function index(RecipeRepository $repository, DishTypeRepository $dishTypeRepository): Response
     {
         $count = 0;
         $recipes = $repository->findLatest();

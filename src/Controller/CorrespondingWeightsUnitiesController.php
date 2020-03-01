@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Ingredient;
 use App\Entity\CorrespondingWeightsUnities;
 use App\Form\CorrespondingWeightsUnitiesType;
-use App\Repository\CorrespondingWeightsUnitiesRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CorrespondingWeightsUnitiesRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/admin/corresponding")
@@ -16,25 +17,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class CorrespondingWeightsUnitiesController extends AbstractController
 {
     /**
-     * @Route("/", name="admin.corresponding.index", methods={"GET"})
+     * @Route("/", name="admin.corresponding.index", methods={"GET", "POST"})
      */
-    public function index(CorrespondingWeightsUnitiesRepository $correspondingWeightsUnitiesRepository): Response
-    {
-        return $this->render('corresponding_weights_unities/index.html.twig', [
-            'corresponding_weights_unities' => $correspondingWeightsUnitiesRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="admin.corresponding.new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
+    public function index(Request $request, IngredientController $ingController, CorrespondingWeightsUnitiesRepository $correspondingWeightsUnitiesRepository): Response
     {
         $correspondingWeightsUnity = new CorrespondingWeightsUnities();
         $form = $this->createForm(CorrespondingWeightsUnitiesType::class, $correspondingWeightsUnity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ingredientName = $form->getData()->getIngredient();
+            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+            $ingredientToCheck = $repository->findOneBy(['name' => $ingredientName]);
+            if(!$ingredientToCheck){
+                $ingredient = new Ingredient;
+                $ingredient->setName($ingredientName);
+                $entityManager = $ingController->getDoctrine()->getManager();
+                $entityManager->persist($ingredient); 
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($correspondingWeightsUnity);
             $entityManager->flush();
@@ -42,19 +43,9 @@ class CorrespondingWeightsUnitiesController extends AbstractController
             return $this->redirectToRoute('admin.corresponding.index');
         }
 
-        return $this->render('corresponding_weights_unities/new.html.twig', [
-            'corresponding_weights_unity' => $correspondingWeightsUnity,
+        return $this->render('corresponding_weights_unities/index.html.twig', [
+            'corresponding_weights_unities' => $correspondingWeightsUnitiesRepository->findAll(),
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="admin.corresponding.show", methods={"GET"})
-     */
-    public function show(CorrespondingWeightsUnities $correspondingWeightsUnity): Response
-    {
-        return $this->render('corresponding_weights_unities/show.html.twig', [
-            'corresponding_weights_unity' => $correspondingWeightsUnity,
         ]);
     }
 

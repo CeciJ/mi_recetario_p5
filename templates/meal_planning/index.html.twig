@@ -29,10 +29,6 @@
             </div>
         {% endfor %}
 
-{#         {% if messageOK is defined %}
-            <div>{{ messageOK }}</div>
-        {% endif %} #}
-
         {% if finalIngredients is defined %}
 
             <hr class="breakLine">
@@ -42,11 +38,11 @@
                     <h2 class="shopListH2">Ma liste de courses</h2>
                     <div id="shopListDiv">
                         {% for ingredient in finalIngredients %}
-                            <label><input class="inputList" type="checkbox" id="{{formatName(ingredient.name)}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
+                            <label><input class="inputList" type="checkbox" id="{{formatName(ingredient.name)}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity)|round(2, 'floor') }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
                         {% endfor %}
                     </div>
                     <div>
-                        <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
+                        <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton" target="_blank">Imprimer</a> 
                         <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a>
                     </div>
                 </div>
@@ -65,11 +61,11 @@
                                 {% for meal_planning in meal_plannings %}
                                     <tr>
                                         <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
-                                        <td><a href="{{ '/recettes/riz-noir-aux-poireaux-154' }}">{{ meal_planning.title }}</a></td>
+                                        <td><a href="{{ path('recipe.show', {slug: meal_planning.recipe.slug, id: meal_planning.recipe.id}) }}" target="_blank">{{ meal_planning.title }}</a></td>
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="5">no records found</td>
+                                        <td colspan="5">Aucun menu plannifié</td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
@@ -78,49 +74,6 @@
                     </div>
                 </div>
         {% endif %}
-        
-                {# <div class="row">
-                    <div class="col-md-6">
-                        <h2 class="shopListH2">Ma liste de courses</h2>
-                        <div id="shopListDiv">
-                            {% if finalIngredients is defined %}
-                                {% for ingredient in finalIngredients %}
-                                    <input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div>
-                            <a class="btn btn-primary" href="{{ path('meal_planning.saveToPdf', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}" id="saveToPdfButton">Imprimer</a> 
-                            <a class="btn btn-primary" href="{{ path('meal_planning.sendByMail', {startDate: startDate|date("Y-m-d H:i:s"), endDate: endDate|date("Y-m-d H:i:s"), listText: listText}) }}"  id="sendMailButton">Envoyer par mail</a>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <h2>Mes repas</h2>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Recette</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% if meal_plannings is defined %}
-                                {% for meal_planning in meal_plannings %}
-                                    <tr>
-                                        <td>{{ meal_planning.beginAt ? meal_planning.beginAt|date('d-m-Y') : '' }}</td>
-                                        <td>{{ meal_planning.title }}</td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="5">no records found</td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div> #}
 
     </div>
 {% endblock %}

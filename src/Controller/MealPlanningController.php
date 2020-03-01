@@ -225,10 +225,14 @@ class MealPlanningController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($mealPlanning);
             $entityManager->flush();
+            $id = $mealPlanning->getId();
 
             return new JsonResponse(
                 [
                     'status' => 'ok',
+                    'meal_planning' => $mealPlanning,
+                    'id' => $id,
+                    'begin_at' => $start
                 ],
                 JsonResponse::HTTP_CREATED
             );

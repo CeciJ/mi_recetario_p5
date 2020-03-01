@@ -138,15 +138,17 @@ footer{
 .recipesIndex h5.card-title a{
     color: #fbac03 !important;
 }
-.recipesIndex .allRecipes{
+.recipesIndex div.allRecipes{
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     padding-left: 15px;
     padding-right: 15px;
 }
 .recipesIndex .recipeCard{
     box-shadow: inset 0px 0px 15px #888;
     width: 22%;
+    margin-left: auto;
+    margin-right: auto;
 }
 .recipesIndex .recipeCard a:hover{
     text-decoration: none;
@@ -226,6 +228,9 @@ h1.adminRecipe{
     margin-bottom: 15px; 
     padding: 10px 12px; 
     border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .optionType button{
     /*background-color: #fbac03;*/
@@ -236,6 +241,14 @@ h1.adminRecipe{
     margin-bottom: 20px;
 }
 
+/*---CORRESPONDANCES---*/
+.addCorrespondance{
+    display: flex;
+}
+.addCorrespondance .form-group{
+    width: 40%;
+    margin-right: 5%;
+}
 
 /*---MEAL PLANNING LIST---*/
 h1.mealPlanningList{

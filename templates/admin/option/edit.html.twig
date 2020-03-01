@@ -1,15 +1,3 @@
-{# {% extends "base.html.twig" %}
-
-{% block title 'Éditer cette option' %}
-
-{% block body %}   
-    <div class="container mt-4">
-        <h1>Éditer l'option</h1>
-        {{ include("admin/option/_form.html.twig", {form: form, button: 'Éditer'}) }}
-    </div>
-
-{% endblock %} #}
-
 <div class="modal fade modalEditOption" id="modalEditOption-{{option.id}}" tabindex="-1" role="dialog" aria-label="modalEditOptionLabel" aria-hidden="true">
     {{ form_start(formEditOption) }}
     <div class="modal-dialog" role="document">
@@ -29,8 +17,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            {# <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button> #}
-            <button type="button" class="btn btn-primary" id="submitOptionEdit-{{option.id}}" onclick="submitEditOption({{option.id}})">Ajouter</button>
+            <button type="button" class="btn btn-primary" id="submitOptionEdit-{{option.id}}" onclick="submitEditOption({{option.id}})">Modifier</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>
         </div>
@@ -42,4 +29,28 @@
 {% block javascripts %}
    {{ encore_entry_script_tags('app') }}
    {{ encore_entry_script_tags('manageRecipe') }}
+   <script>
+    function submitEditOption(id){
+      var oldName = $('#editOptionName-'+id).val();
+      var path = "/option/" + id + "/edit";
+
+      var inputName = $('#formOption-'+oldName);
+
+      var newName = inputName.val();
+
+      $.ajax({
+          url: path,
+          method: "POST",
+          data: {
+              id: id,
+              newName: newName
+          },
+          success: function(data){
+              alert('Modification effectuée avec succès');
+              $('#modalEditOption-'+id).modal('hide');
+              window.location.reload();
+          }
+      });
+    }
+   </script>
 {% endblock %}

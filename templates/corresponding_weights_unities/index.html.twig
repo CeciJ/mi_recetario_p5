@@ -12,6 +12,12 @@
             <a href="{{ path('admin.recipe.index') }}" class="col-xs-5 btn btn-perso btn btn-primary backRecipeList">Retour à la liste des recettes</a>
         </div>
 
+        <h1>Ajouter une équivalence</h1>
+
+        {{ include('corresponding_weights_unities/_form.html.twig') }}
+
+        <br>
+
         <h1>Liste des équivalences</h1>
 
         <table class="table">
@@ -28,8 +34,7 @@
                     <td class="td_ingredient">{{ corresponding_weights_unity.Ingredient }}</td>
                     <td class="td_unit">{{ corresponding_weights_unity.Weight }}</td>
                     <td class="td_actions">
-    {#                     <a href="{{ path('admin.corresponding.show', {'id': corresponding_weights_unity.id}) }}">show</a>
-    #}                    <a href="{{ path('admin.corresponding.edit', {'id': corresponding_weights_unity.id}) }}" class="btn btn-perso">Éditer</a>
+                        <a href="{{ path('admin.corresponding.edit', {'id': corresponding_weights_unity.id}) }}" class="btn btn-perso">Éditer</a>
                             <form method="post" action="{{ path('admin.corresponding.delete', {'id': corresponding_weights_unity.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir effacer cette équivalence?');" style="display:inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ corresponding_weights_unity.id) }}">
@@ -44,7 +49,11 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <a href="{{ path('admin.corresponding.new') }}" class="col-xs-5 btn btn-primary addCorrespondance">Ajouter une équivalence</a>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('manageCorrespondances') }}
+    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3/dist/algoliasearch.min.js"></script>
 {% endblock %}

@@ -21,7 +21,6 @@ class IngredientController extends AbstractController
 
     private $em;
 
-
     public function __construct(IngredientRepository $repository, ObjectManager $em)
     {
         $this->repository = $repository;
@@ -31,7 +30,7 @@ class IngredientController extends AbstractController
     /**
      * @Route("/", name="admin.ingredient.index", methods={"GET", "POST"})
      */
-    public function index(IngredientRepository $ingredientRepository, Request $request): Response
+/*     public function index(IngredientRepository $ingredientRepository, Request $request): Response
     {
         $ingredient = new Ingredient();
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -50,7 +49,7 @@ class IngredientController extends AbstractController
             'ingredient' => $ingredient,
             'form' => $form->createView(),
         ]);
-    }
+    } */
 
     /**
      * @Route("/new", name="admin.ingredient.new", methods={"GET","POST"})
@@ -81,12 +80,12 @@ class IngredientController extends AbstractController
     /**
      * @Route("/{id}", name="admin.ingredient.show", methods={"GET"})
      */
-    public function show(Ingredient $ingredient): Response
+/*     public function show(Ingredient $ingredient): Response
     {
         return $this->render('ingredient/show.html.twig', [
             'ingredient' => $ingredient,
         ]);
-    }
+    } */
 
     /**
      * @Route("/{id}/edit", name="admin.ingredient.edit", methods={"GET","POST"})
@@ -127,16 +126,16 @@ class IngredientController extends AbstractController
     /**
      * @Route("/allIngredients", name="list_of_ingredients", methods="GET")
      */
-    public function getIngredientsApi(IngredientRepository $ingredientRepository)
+    /* public function getIngredientsApi(IngredientRepository $ingredientRepository)
     {
         $ingredients = $ingredientRepository->findAll();
-        /* $em = $this->getDoctrine()->getManagerForClass(Ingredient::class);
-        $ingredients = $this->indexManager->search('query', Ingredient::class, $em); */
+        // $em = $this->getDoctrine()->getManagerForClass(Ingredient::class);
+        //$ingredients = $this->indexManager->search('query', Ingredient::class, $em); 
         return new JsonResponse(
             [
                 'ingredients' => $ingredients,
             ],
             JsonResponse::HTTP_CREATED
         );
-    }
+    } */
 }

@@ -33,12 +33,12 @@ class RecipeIngredientsController extends AbstractController
     /**
      * @Route("/", name="recipe_ingredients.index", methods={"GET"})
      */
-    public function index(RecipeIngredientsRepository $recipeIngredientsRepository): Response
+    /* public function index(RecipeIngredientsRepository $recipeIngredientsRepository): Response
     {
         return $this->render('recipe_ingredients/index.html.twig', [
             'recipe_ingredients' => $recipeIngredientsRepository->findAll(),
         ]);
-    }
+    } */
 
     /**
      * @Route("/new/{id}", name="recipe_ingredients.new", methods={"GET","POST"})
@@ -81,12 +81,12 @@ class RecipeIngredientsController extends AbstractController
     /**
      * @Route("/{id}", name="recipe_ingredients.show", methods={"GET"})
      */
-    public function show(RecipeIngredients $recipeIngredient): Response
+    /* public function show(RecipeIngredients $recipeIngredient): Response
     {
         return $this->render('recipe_ingredients/show.html.twig', [
             'recipe_ingredient' => $recipeIngredient,
         ]);
-    }
+    } */
 
     /**
      * @Route("/{id}/edit", name="recipe_ingredients.edit", methods={"GET","POST"})
