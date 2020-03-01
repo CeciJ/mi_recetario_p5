@@ -17,16 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MeasureUnitController extends AbstractController
 {
     /**
-     * @Route("/", name="admin.measure_unit.index", methods={"GET"})
-     */
-/*     public function index(MeasureUnitRepository $measureUnitRepository): Response
-    {
-        return $this->render('admin/measure_unit/index.html.twig', [
-            'measure_units' => $measureUnitRepository->findAll(),
-        ]);
-    } */
-
-    /**
      * @Route("/new", name="admin.measure_unit.new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -50,16 +40,6 @@ class MeasureUnitController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin.measure_unit.show", methods={"GET"})
-     */
-/*     public function show(MeasureUnit $measureUnit): Response
-    {
-        return $this->render('admin/measure_unit/show.html.twig', [
-            'measure_unit' => $measureUnit,
-        ]);
-    } */
-
-    /**
      * @Route("/{id}/edit", name="admin.measure_unit.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, MeasureUnit $measureUnit, MeasureUnitRepository $measureUnitRepo): Response
@@ -79,7 +59,6 @@ class MeasureUnitController extends AbstractController
             $measureUnit = $measureUnitRepo->find($id);
             $measureUnit->setUnit($newName);
 
-            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
@@ -95,23 +74,6 @@ class MeasureUnitController extends AbstractController
             'formEditMeasureUnit' => $formEditMeasureUnit->createView(),
             'measure_unit' => $measureUnit
         ]);
-
-
-        /* $form = $this->createForm(MeasureUnitType::class, $measureUnit);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('admin.measure_unit.index', [
-                'id' => $measureUnit->getId(),
-            ]);
-        }
-
-        return $this->render('admin/measure_unit/edit.html.twig', [
-            'measure_unit' => $measureUnit,
-            'formEditMeasureUnit' => $form->createView(),
-        ]); */
     }
 
     /**

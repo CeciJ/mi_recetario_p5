@@ -2,9 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Recipe;
-use App\Entity\Ingredient;
-use Doctrine\Common\Util\Debug;
 use App\Entity\RecipeIngredients;
 use App\Form\RecipeIngredientsType;
 use App\Repository\RecipeRepository;
@@ -31,16 +28,6 @@ class RecipeIngredientsController extends AbstractController
     }
 
     /**
-     * @Route("/", name="recipe_ingredients.index", methods={"GET"})
-     */
-    /* public function index(RecipeIngredientsRepository $recipeIngredientsRepository): Response
-    {
-        return $this->render('recipe_ingredients/index.html.twig', [
-            'recipe_ingredients' => $recipeIngredientsRepository->findAll(),
-        ]);
-    } */
-
-    /**
      * @Route("/new/{id}", name="recipe_ingredients.new", methods={"GET","POST"})
      */
     public function new(Request $request, RecipeRepository $repo): Response
@@ -49,18 +36,12 @@ class RecipeIngredientsController extends AbstractController
         $recipeId = $request->attributes->get('id');
         $recipe = $repo->find($recipeId);
         $recipeIngredient->setRecipe($recipe);
-
         $ingredients = $recipe->getRecipeIngredients();
-        dump($ingredients);
 
         $form = $this->createForm(RecipeIngredientsType::class, $recipeIngredient);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            dump($recipeIngredient);
-            //exit(\Doctrine\Common\Util\Debug::dump($recipeIngredient));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($recipeIngredient);
@@ -77,16 +58,6 @@ class RecipeIngredientsController extends AbstractController
             'ingredients' => $ingredients
         ]);
     }
-
-    /**
-     * @Route("/{id}", name="recipe_ingredients.show", methods={"GET"})
-     */
-    /* public function show(RecipeIngredients $recipeIngredient): Response
-    {
-        return $this->render('recipe_ingredients/show.html.twig', [
-            'recipe_ingredient' => $recipeIngredient,
-        ]);
-    } */
 
     /**
      * @Route("/{id}/edit", name="recipe_ingredients.edit", methods={"GET","POST"})

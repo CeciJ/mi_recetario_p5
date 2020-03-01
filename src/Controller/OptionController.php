@@ -16,15 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class OptionController extends AbstractController
 {
-    /**
-     * @Route("/", name="admin.option.index", methods={"GET"})
-     */
-    /* public function index(OptionRepository $optionRepository): Response
-    {
-        return $this->render('admin/option/index.html.twig', [
-            'options' => $optionRepository->findAll(),
-        ]);
-    } */
 
     /**
      * @Route("/new", name="admin.option.new", methods={"GET","POST"})
@@ -49,35 +40,10 @@ class OptionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin.option.show", methods={"GET"})
-     */
-    /* public function show(Option $option): Response
-    {
-        return $this->render('admin/option/show.html.twig', [
-            'option' => $option,
-        ]);
-    } */
-
-    /**
      * @Route("/{id}/edit", name="admin.option.edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Option $option, OptionRepository $optionRepo): Response
     {
-        /* $form = $this->createForm(OptionType::class, $option);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('admin.option.index', [
-                'id' => $option->getId(),
-            ]);
-        }
-
-        return $this->render('admin/option/edit.html.twig', [
-            'option' => $option,
-            'form' => $form->createView(),
-        ]); */
         $formEditOption = $this->createForm(OptionType::class, $option);
         $formEditOption->handleRequest($request);
 
@@ -93,7 +59,6 @@ class OptionController extends AbstractController
             $option = $optionRepo->find($id);
             $option->setName($newName);
 
-            //exit(\Doctrine\Common\Util\Debug::dump($dishType));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
@@ -104,14 +69,6 @@ class OptionController extends AbstractController
                 JsonResponse::HTTP_CREATED
             );
         }
-
-        /* if ($formEditOption->isSubmitted() && $formEditOption->isValid()) {
-            dump($request); die;
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin.all_options');
-        } */
 
         return $this->render('admin/option/edit.html.twig', [
             'formEditOption' => $formEditOption->createView(),

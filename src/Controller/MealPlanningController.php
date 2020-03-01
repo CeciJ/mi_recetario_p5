@@ -10,8 +10,6 @@ use Twig\Environment;
 use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
 use App\Form\ListSearchType;
-use App\Form\MealPlanningType;
-use Doctrine\Common\Util\Debug;
 use App\Entity\RecipeIngredients;
 use App\Repository\RecipeRepository;
 use App\Repository\MealPlanningRepository;
@@ -45,11 +43,9 @@ class MealPlanningController extends AbstractController
         $finalIngredients = explode(',', $listText);
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
 
-        // Configure Dompdf according to your needs
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
 
-        // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
         $dompdf->set_option('isPhpEnabled', true);
         $dompdf->set_option('isRemoteEnabled', true);
@@ -117,10 +113,6 @@ class MealPlanningController extends AbstractController
             'La liste a bien été envoyée par mail!'
         );
 
-        //return json
-        //$this->addFlash('success', 'Recette ajoutée avec succès');
-        //return($this->redirectToRoute('meal_planning.index'));
-
         return $this->render("meal_planning/index.html.twig", [
             'startDate' => $startDate,
             'endDate' => $endDate,
@@ -129,7 +121,6 @@ class MealPlanningController extends AbstractController
             'form' => $form->createView(),
             'finalIngredients' => $allIngredients,
             'listText' => 'list'
-            //'display' => 'list', 
         ]);
     }
 
@@ -150,12 +141,10 @@ class MealPlanningController extends AbstractController
             $finalList = $this->generateList($mealPlanningRepository, $search);
             $finalIngredients = $finalList['finalIngredients'];
             $mealPlannings = $finalList['mealPlannings'];
-            //dump($finalIngredients);
 
             return $this->render("meal_planning/index.html.twig", [
                 'current_menu' => 'recipes',
                 'form' => $form->createView(),
-                //'messageOK' => 'pour l instant c est bon',
                 'finalIngredients' => $finalIngredients,
                 'meal_plannings' => $mealPlannings,
                 'startDate' => $startDate,
@@ -164,22 +153,6 @@ class MealPlanningController extends AbstractController
             ]);
 
         }
-
-        dump('sans form');
-
-        /* if($form->isSubmitted()){
-            $startDate = $search->getStartPeriod();
-            //$startDate = $startDate->format('Y-m-d H:i:s');
-            $endDate = $search->getEndPeriod()->add(new DateInterval('PT23H59M59S'));
-            //$endDate = $endDate->format('Y-m-d H:i:s');
-            dump($search); 
-            //$mealPlannings = $mealPlanningRepository->findAllQuery($search);
-            //dump($mealPlannings);
-            $finalList = $this->generateList($mealPlanningRepository, $search);
-            dump($finalList); 
-            $finalIngredients = $finalList['finalIngredients'];
-            $mealPlannings = $finalList['mealPlannings'];
-        }  */
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
@@ -221,7 +194,6 @@ class MealPlanningController extends AbstractController
             $mealPlanning->setBeginAt($start);
             $mealPlanning->setRecipe($recipe);
 
-            //exit(\Doctrine\Common\Util\Debug::dump($mealPlanning));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($mealPlanning);
             $entityManager->flush();
@@ -267,12 +239,10 @@ class MealPlanningController extends AbstractController
             $newDate = $dataForNewDate[1];
             $date = explode('(', $newDate);
             $date = new DateTime($date[0]);
-            //$finalNewDate = $date::createFromFormat($newDate, )
 
             $mealPlanningToEdit = $mealPlanningRepo->find($mealPlanningId);
             $mealPlanningToEdit->setBeginAt($date);
             
-            //dump($mealPlanningToEdit); die();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($mealPlanningToEdit);
             $entityManager->flush();
@@ -283,7 +253,6 @@ class MealPlanningController extends AbstractController
                 ],
                 JsonResponse::HTTP_CREATED
             );
-            //exit(\Doctrine\Common\Util\Debug::dump($mealPlanningToEdit));
         }
     }
 
@@ -312,7 +281,6 @@ class MealPlanningController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($mealPlanning);
             $entityManager->flush();
-            //exit(\Doctrine\Common\Util\Debug::dump($data));
         }
 
         return new JsonResponse(
@@ -321,15 +289,12 @@ class MealPlanningController extends AbstractController
             ],
             JsonResponse::HTTP_CREATED
         );
-        //return $this->redirectToRoute('home');
     }
 
     private function generateList(MealPlanningRepository $mealPlanningRepository, ListSearch $search)
     {
-        //dump($search);
         
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
-        //dump($mealPlannings); 
 
         $allIngredients = [];
         foreach($mealPlannings as $meal){
@@ -337,14 +302,12 @@ class MealPlanningController extends AbstractController
             $ingredients = $recipe->getRecipeIngredients();
             $allIngredients[] = $ingredients;
         }
-        //dump($allIngredients);
         
         $tabNames = [];
         $tabUnique = [];
         $finalIngredients = [];
         $duplicatedIngredients = [];
         $repositoryWeight = $this->getDoctrine()->getRepository(CorrespondingWeightsUnities::class);
-        //$allCorrespondingIngredients = $repositoryWeight->findAll();
 
         $repoTest = $this->getDoctrine()->getRepository(RecipeIngredients::class);
 
@@ -354,12 +317,9 @@ class MealPlanningController extends AbstractController
                 $name = $ingredient->getNameIngredient(); // Entity Ingredient
                 $quantity = $ingredient->getQuantity();
                 $unit = $ingredient->getUnit(); // Entity Measure Unit
-                //dump($tabNames);
-                //dump($name);
                 
                 // Si l'ingrédient n'est pas encore dans la liste, on le stocke dans le tableau
                 if(!in_array($name->getName(), $tabNames)){
-                    dump('Pas dans la liste, ingrédient ajouté');
                     $tabNames[] = $name;
                     $tabUnique['name'] = $name;
                     $tabUnique['quantity'] = $quantity;
@@ -367,35 +327,19 @@ class MealPlanningController extends AbstractController
                     $finalIngredients[] = $tabUnique;
                 } 
                 else {
-                    dump('Déjà dans la liste!');
                     // Sinon on regarde l'unité de celui qui est déjà dans la liste, si c'est la même on ajoute la quantité
                     foreach($finalIngredients as $key => $finalIngredient){
                         if($name == $finalIngredient['name']){
-                            dump('Ingrédient en double');
-                            //dump($name);
-                            //dump($unit);
-                            //dump($finalIngredient['name']);
-                            //dump($finalIngredient['unit']);
                             if($unit == $finalIngredient['unit']){
                                 unset($finalIngredients[$key]);
-                                //dump($unit);
-                                //dump($finalIngredient['unit']);
                                 $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
                                 $finalIngredient['name'] = $name;
                                 $finalIngredient['unit'] = $unit;
-                                //dump($finalIngredient['quantity']);
                                 $finalIngredients[] = $finalIngredient;
                             } elseif ((($finalIngredient['unit'] == 'unité(s)') && ($unit = 'g')) || (($finalIngredient['unit'] == 'g') && ($unit = 'unité(s)'))){
-                                dump('ici');
                                 $ingredientToCheck = $repositoryWeight->findOneBy(['Ingredient' => $finalIngredient['name']->getName()]);
                                 if($ingredientToCheck){
-                                    dump('équivalence');
                                     if($finalIngredient['unit'] == 'unité(s)' && $unit = 'g'){
-                                        //dump($ingredientToCheck);
-                                        //dump($finalIngredient['quantity']);
-                                        //dump($finalIngredient['unit']);
-                                        //dump($quantity);
-                                        //dump($unit); 
                                         $quantity = ($quantity / $ingredientToCheck->getWeight());
                                         $finalIngredient['quantity'] = $finalIngredient['quantity'] + $quantity;
                                     } elseif ($finalIngredient['unit'] == 'g' && $unit = 'unité(s)'){
@@ -406,15 +350,11 @@ class MealPlanningController extends AbstractController
                                         $finalIngredients[] = $finalIngredient;
                                     } 
                                 } else {
-                                    dump('pas équivalence');
                                     $duplicatedIngredient = [
                                         'name' => $name,
                                         'quantity' => $quantity,
                                         'unit' => $unit
-                                    ];
-                                
-                                    dump($duplicatedIngredient);
-                                    //dump($finalIngredient);
+                                    ];                                
                                     $finalIngredients[] = $duplicatedIngredient;
                                 }
                             }
@@ -423,10 +363,6 @@ class MealPlanningController extends AbstractController
                 } 
             }
         }
-
-        dump($tabNames);
-        dump($finalIngredients);
-        dump(count($finalIngredients));
     
         foreach ($finalIngredients as $key => $value) {
             $name2[$key] = $value['name'];
@@ -436,15 +372,6 @@ class MealPlanningController extends AbstractController
         array_multisort($name2, SORT_ASC, SORT_STRING, $finalIngredients);
 
         $length = count($finalIngredients);
-
-        /* $tabNames2 = [];
-        for($i = 0; $i < $length; $i++){
-            if(!in_array($finalIngredients[$i]['name'], $tabNames2)){
-                $tabNames2[] = $finalIngredients[$i]['name'];
-            } else {
-                unset($finalIngredients[$i - 1]);
-            }
-        } */
 
         $finalList = [];
         $finalList['mealPlannings'] = $mealPlannings;
