@@ -13,7 +13,6 @@ use App\Form\DishTypeType;
 use App\Form\FoodTypeType;
 use App\Entity\MeasureUnit;
 use App\Entity\RecipeSearch;
-use App\Form\MeasureUnitType;
 use App\Form\RecipeSearchType;
 use App\Repository\OptionRepository;
 use App\Repository\RecipeRepository;
@@ -21,7 +20,6 @@ use App\Repository\DishTypeRepository;
 use App\Repository\FoodTypeRepository;
 use App\Controller\IngredientController;
 use App\Controller\MeasureUnitController;
-use App\Repository\MeasureUnitRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -110,17 +108,15 @@ class RecipeController extends AbstractController
      * @Route("/admin/all_options", name="admin.all_options") 
      * @return Response
      */
-    public function allOptionsAdmin(Request $request, DishTypeRepository $dishTypeRepository, FoodTypeRepository $foodTypeRepository, OptionRepository $optionRepository, MeasureUnitRepository $measureUnitRepository)
+    public function allOptionsAdmin(Request $request, DishTypeRepository $dishTypeRepository, DishTypeController $dishTypeController, FoodTypeRepository $foodTypeRepository, OptionRepository $optionRepository)
     {
         $dish_types = $dishTypeRepository->findAll();
         $food_types = $foodTypeRepository->findAll();
         $options = $optionRepository->findAll();
-        $measure_units = $measureUnitRepository->findAll();
 
         $dishType = new DishType();
         $formDishType = $this->createForm(DishTypeType::class, $dishType);
         $formDishType->handleRequest($request);
-
         if ($formDishType->isSubmitted() && $formDishType->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($dishType);
@@ -132,7 +128,6 @@ class RecipeController extends AbstractController
         $foodType = new FoodType();
         $formFoodType = $this->createForm(FoodTypeType::class, $foodType);
         $formFoodType->handleRequest($request);
-
         if ($formFoodType->isSubmitted() && $formFoodType->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($foodType);
@@ -144,22 +139,9 @@ class RecipeController extends AbstractController
         $option = new Option();
         $formOption = $this->createForm(OptionType::class, $option);
         $formOption->handleRequest($request);
-
         if ($formOption->isSubmitted() && $formOption->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($option);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin.all_options');
-        }
-
-        $measureUnit = new MeasureUnit();
-        $formMeasureUnit = $this->createForm(MeasureUnitType::class, $measureUnit);
-        $formMeasureUnit->handleRequest($request);
-
-        if ($formMeasureUnit->isSubmitted() && $formMeasureUnit->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($measureUnit);
             $entityManager->flush();
 
             return $this->redirectToRoute('admin.all_options');
@@ -169,12 +151,10 @@ class RecipeController extends AbstractController
             'dish_types' => $dish_types,
             'food_types' => $food_types,
             'options' => $options,
-            'measure_units' => $measure_units,
             'option' => $option,
             'formDishType' => $formDishType->createView(),
             'formFoodType' => $formFoodType->createView(),
             'formOption' => $formOption->createView(),
-            'formMeasureUnit' => $formMeasureUnit->createView()
         ]);
     }
 
@@ -193,28 +173,7 @@ class RecipeController extends AbstractController
         {
             $recipe = $form->getData();
             $recipeIngredients = $recipe->getRecipeIngredients();
-            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
-            $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
-
-            foreach($recipeIngredients as $recipeIngredient){
-                $ingredient = $recipeIngredient->getNameIngredient();
-                $measureUnit = $recipeIngredient->getUnit();
-                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
-                $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
-                if($ingredientToCheck){
-                    $ingredientToCheck->addRecipeIngredient($recipeIngredient);
-                    
-                } else {
-                    $entityManager = $ingController->getDoctrine()->getManager();
-                    $entityManager->persist($ingredient);  
-                }
-                if($unitToCheck){
-                    $unitToCheck->addRecipeIngredient($recipeIngredient);
-                } else {
-                    $entityManager = $unitController->getDoctrine()->getManager();
-                    $entityManager->persist($measureUnit);
-                }
-            }
+            $this->checkIngredientsUnits($recipeIngredients, $ingController, $unitController);
 
             // On enregistre les ingrédients complets de la recette
             $entityManagerRI = $recipeIngController->getDoctrine()->getManager();
@@ -239,7 +198,7 @@ class RecipeController extends AbstractController
      * @Route("/admin/recipe/{id}", name="admin.recipe.edit", methods="GET|POST") 
      * @return Response
      */
-    public function editAdmin(Recipe $recipe, Request $request, IngredientController $ingController, MeasureUnitController $unitController, RecipeIngredientsController $recipeIngController)
+    public function editAdmin(Recipe $recipe, Request $request, RecipeIngredientsController $recipeIngController, IngredientController $ingController, MeasureUnitController $unitController)
     {   
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
@@ -248,28 +207,7 @@ class RecipeController extends AbstractController
         {
             $recipe = $form->getData();
             $recipeIngredients = $recipe->getRecipeIngredients();
-            $repository = $this->getDoctrine()->getRepository(Ingredient::class);
-            $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
-
-            foreach($recipeIngredients as $recipeIngredient){
-                $ingredient = $recipeIngredient->getNameIngredient();
-                $measureUnit = $recipeIngredient->getUnit();
-                $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
-                $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
-                if($ingredientToCheck){
-                    $ingredientToCheck->addRecipeIngredient($recipeIngredient);
-                    
-                } else {
-                    $entityManager = $ingController->getDoctrine()->getManager();
-                    $entityManager->persist($ingredient);  
-                }
-                if($unitToCheck){
-                    $unitToCheck->addRecipeIngredient($recipeIngredient);
-                } else {
-                    $entityManager = $unitController->getDoctrine()->getManager();
-                    $entityManager->persist($measureUnit);
-                }
-            }
+            $this->checkIngredientsUnits($recipeIngredients, $ingController, $unitController);
 
             // On enregistre les ingrédients complets de la recette
             $entityManagerRI = $recipeIngController->getDoctrine()->getManager();
@@ -301,6 +239,31 @@ class RecipeController extends AbstractController
             $this->addFlash('success', 'Recette supprimée avec succès');
         }
         return($this->redirectToRoute('admin.recipe.index'));
+    }
+
+
+    private function checkIngredientsUnits($recipeIngredients, IngredientController $ingController, MeasureUnitController $unitController)
+    {
+        $repository = $this->getDoctrine()->getRepository(Ingredient::class);
+        $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
+        foreach($recipeIngredients as $recipeIngredient){
+            $ingredient = $recipeIngredient->getNameIngredient();
+            $measureUnit = $recipeIngredient->getUnit();
+            $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
+            $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);
+            if($ingredientToCheck){
+                $ingredientToCheck->addRecipeIngredient($recipeIngredient);
+            } else {
+                $entityManager = $ingController->getDoctrine()->getManager();
+                $entityManager->persist($ingredient);  
+            }
+            if($unitToCheck){
+                $unitToCheck->addRecipeIngredient($recipeIngredient);
+            } else {
+                $entityManager = $unitController->getDoctrine()->getManager();
+                $entityManager->persist($measureUnit);
+            }
+        }
     }
 
 }
