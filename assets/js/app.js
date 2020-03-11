@@ -6,11 +6,11 @@
  */
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
-// const $ = require('jquery');
-
 // IMPORT CSS FROM CSS FILE;
 require('../css/app.css');
+
 // require jQuery normally
 const $ = require('jquery');
 global.$ = global.jQuery = $;
+
 require('bootstrap');

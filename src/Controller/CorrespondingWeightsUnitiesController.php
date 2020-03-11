@@ -29,11 +29,14 @@ class CorrespondingWeightsUnitiesController extends AbstractController
             $ingredientName = $form->getData()->getIngredient();
             $repository = $this->getDoctrine()->getRepository(Ingredient::class);
             $ingredientToCheck = $repository->findOneBy(['name' => $ingredientName]);
+            $ingredient = new Ingredient;
             if(!$ingredientToCheck){
-                $ingredient = new Ingredient;
                 $ingredient->setName($ingredientName);
                 $entityManager = $ingController->getDoctrine()->getManager();
                 $entityManager->persist($ingredient); 
+                $ingredient->setWeight($correspondingWeightsUnity);
+            } else {
+                $ingredientToCheck->setWeight($correspondingWeightsUnity);
             }
 
             $entityManager = $this->getDoctrine()->getManager();

@@ -25,78 +25,8 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
     */
     public function compileIngredients(ListSearch $search, $tabNames, $allIngredients)
     {
-        dump($search); 
         $startDate = $search->getStartPeriod();
         $endDate = $search->getEndPeriod();
-
-        dump($tabNames);
-        dump($allIngredients);
-
-        //$query = $this->createQueryBuilder('ri');
-        
-/*         if(empty($endDate)){
-            $query = $query 
-            //Jointure sur Recipe
-            ->select('IDENTITY(ri)', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit as unit')
-            ->innerJoin('ri.recipe', 'r')
-            ->addSelect('r.id')
-            //Jointure sur Ingredient
-            ->innerJoin('ri.nameIngredient', 'i')
-            ->addSelect('i')
-            //Jointure sur Unit
-            ->innerJoin('ri.unit', 'u')
-            ->addSelect('u.id', 'u.unit')
-            //Jointure sur MealPlanning
-            ->innerJoin('r.mealPlannings', 'mp')
-            ->addSelect('mp.id', 'mp.beginAt', 'mp.endAt')
-            //Conditions
-            ->andWhere('ri.nameIngredient IN(:tabNames)')
-            //->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
-            ->andWhere('mp.beginAt >= :begin_at')
-            ->setParameter('begin_at', $startDate)
-            //->setParameter('end_at', $endDate)
-            ->setParameter('tabNames', $tabNames)
-            //->addGroupBy('ri');
-            ->addGroupBy('ri.nameIngredient');
-        }
-        else {
-            $query = $query 
-            //Jointure sur Recipe
-            ->select('ri', 'SUM(ri.quantity) as quantity', 'i.name', 'u.unit')
-            ->innerJoin('ri.recipe', 'r')
-            ->addSelect('r')
-            //Jointure sur Ingredient
-            ->innerJoin('ri.nameIngredient', 'i')
-            ->addSelect('i')
-            //Jointure sur Unit
-            ->innerJoin('ri.unit', 'u')
-            ->addSelect('u.id', 'u.unit')
-            //Jointure sur MealPlanning
-            ->innerJoin('r.mealPlannings', 'mp')
-            ->addSelect('mp.id', 'mp.beginAt', 'mp.endAt')
-            //Conditions
-            ->andWhere('ri.nameIngredient IN(:tabNames)')
-            ->andWhere('mp.beginAt BETWEEN :begin_at AND :end_at')
-            //->andWhere('mp.beginAt >= :begin_at')
-            ->setParameter('begin_at', $startDate)
-            ->setParameter('end_at', $endDate)
-            ->setParameter('tabNames', $tabNames)
-            //->addGroupBy('ri');
-            ->addGroupBy('ri.nameIngredient');
-        } */
-
-        //$ingredients = $query->getQuery()->execute(); 
-
-        //return $ingredients;
-
-        /* foreach($ingredients as $ingredient){
-            dump($ingredient);
-            $name = $ingredient[0]->getNameIngredient();
-            dump($name);
-            $unit = $ingredient[0]->getUnit();
-            dump($unit);
-        }
-        dump($ingredients); die; */
     }
 
     // /**

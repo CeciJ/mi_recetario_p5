@@ -2,12 +2,10 @@ console.log('Hello Webpack Encore! Edit me in assets/js/manageRecipe.js');
 
 var jQuery = require('jquery');
 var $ = require('jquery');
-//var algoliasearch = require('algoliasearch');
 var autocomplete = require('autocomplete.js');
 
 require('select2');
 require('bootstrap');
-//var autocomplete = require('jquery-ui/ui/widgets/autocomplete.js');
 $('select').select2();
 
 (function($) {
@@ -41,18 +39,11 @@ $('select').select2();
     var $collectionHolder;
     // setup an "add a tag" link
     var $addIngredientButton = $('<button type="button" class="add_ingredient_link btn btn-primary">Ajouter un ingrédient</button>');
-    var $newLinkDiv = $('<div></div>').append($addIngredientButton);
+    var $newLinkDiv = $('<div class="addNewIngredient"></div>').append($addIngredientButton);
 
     $(document).ready(function() {
-        // Get the ul that holds the collection of tags
         $collectionHolder = $('div.manageIngredients');
-
-        console.log($collectionHolder);
-
-        // add the "add a tag" anchor and li to the tags ul
         $collectionHolder.append($newLinkDiv);
-
-        // add a delete link to all of the existing tag form elements
         $collectionHolder.find('.rowIngredient').each(function() {
           addTagFormDeleteLink($(this));
         });
@@ -64,20 +55,18 @@ $('select').select2();
         var compteur = 0;
         $addIngredientButton.on('click', function(e) {
             addTagForm($collectionHolder, $newLinkDiv);
-            console.log($collectionHolder[0].children[1]);
           
             var divToAddClass = $collectionHolder[0].children[1].childNodes[compteur];
             $(divToAddClass).css('display', 'flex');
             compteur = compteur + 1;
 
             // AUTOCOMPLETE
-
             var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
 
             var inputsNames = document.querySelectorAll('[id^="recipe_recipeIngredients_"][id$="_nameIngredient_name"]'); 
             jQuery.each(inputsNames, function(k, val){
               var id = val.id;
-              var index = client.initIndex('dev_ingredients');
+              var index = client.initIndex('prod_ingredients');
               autocomplete('input#'+id, { hint: false }, [
                 {
                   source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
@@ -96,7 +85,7 @@ $('select').select2();
             var inputsUnits = document.querySelectorAll('[id^="recipe_recipeIngredients_"][id$="_unit_unit"]'); 
             jQuery.each(inputsUnits, function(k, val){
               var id = val.id;
-              var index = client.initIndex('dev_units');
+              var index = client.initIndex('prod_units');
               autocomplete('input#'+id, { hint: false }, [
                 {
                   source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
@@ -112,10 +101,6 @@ $('select').select2();
               });
             });  
             
-            $('#submitDishTypeEdit-1').click(function(){
-              console.log('click');
-              submitEditDishType(1);
-            });
         });
 
         $('.modal-trigger.add.dishType').click(function () {
@@ -142,17 +127,16 @@ $('select').select2();
       var newForm = prototype;
       newForm = newForm.replace(/__name__/g, index);
       $collectionHolder.data('index', index + 1);
-      var $newFormDiv = $('<div></div>').append(newForm);
+      var $newFormDiv = $('<div class="newAddedIngredient"></div>').append(newForm);
       $newLinkDiv.before($newFormDiv);
       addTagFormDeleteLink($newFormDiv);
     }
 
     function addTagFormDeleteLink($newFormDiv) {
-      var $removeFormButton = $('<button type="button" class="btn btn-perso deleteIngredient">Effacer ingrédient</button>');
+      var $removeFormButton = $('<button type="button" class="btn btn-perso deleteIngredient">Effacer</button>');
       $newFormDiv.append($removeFormButton);
   
       $removeFormButton.on('click', function(e) {
-          // remove the li for the tag form
           $newFormDiv.remove();
       });
     }

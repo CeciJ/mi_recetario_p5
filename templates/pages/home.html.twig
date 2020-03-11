@@ -57,13 +57,9 @@
                 
             </div>
             <div class="col-md-9 col-12" id='calendar-container'>
-                <div id="linksCalendar">
-                    <div id="calendarTrash" class="calendar-trash">
-                        <img src="{{ "throw.png" }}" id="throwPhoto" alt="poubelle-icon" title="Fais glisser la recette vers la poubelle pour la supprimer du calendrier" width="36" height="36"/>
-                    </div>
-                </div>
                 <div id="calendar">
                     {% include '@Calendar/calendar.html' %}
+                    <div id="calendarTrash"><p class="notificationDeleteMealPlanning"><img src="{{ "throw.png" }}" id="throwPhoto" alt="poubelle-icon" width="25" height="25"/>Cliquer sur la recette pour la supprimer du calendrier</p></div>
                 </div>
             </div>
         </div>
@@ -131,11 +127,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    {# {{ parent() }} #}
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
    {{ encore_entry_script_tags('app') }}
    {{ encore_entry_script_tags('home') }}
 {% endblock %}

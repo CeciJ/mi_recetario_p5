@@ -20,6 +20,9 @@ footer{
     opacity: 0.8;
     height: 50px;
     padding: 10px;
+    font-size: 11px;
+    line-height: 30px;
+    text-align: center;
 }
 .btn.btn-primary{
     background-color: #fbac03 !important;
@@ -61,6 +64,9 @@ footer{
 }
 .homepage .recipeCard a:hover{
     text-decoration: none;
+}
+.homepage #external-events{
+    margin-top: 20px;
 }
 .homepage #external-events h5 button{
     color: #212529;
@@ -109,15 +115,17 @@ footer{
 .homepage .drop-remove label{
     font-size:11px;
 }
-.homepage #linksCalendar{
-    display:flex;
-}
 .homepage #throwPhoto{
-    margin-top:15px; 
+    /*margin-top:15px;*/
     margin-bottom: 15px;
 }
 .homepage #calendar{
     margin-bottom: 30px;
+    margin-top: 20px;
+}
+.homepage .notificationDeleteMealPlanning{
+    font-size: 12px;
+    font-style: italic;
 }
 
 /*--LIST OF RECIPES--*/
@@ -207,6 +215,16 @@ h1.adminRecipe{
     background-color: white;
     border: 1px solid #fbac03 !important;
 }
+.btn.btn-primary.saveRecipe{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.formQuantity .form-group{
+    margin-bottom:1.4rem;
+}
+/* .btn.btn-perso.deleteIngredient{
+    margin-bottom: 25px;
+} */
 
 /*---MANAGE OPTIONS---*/
 .backRecipeList{
@@ -248,6 +266,23 @@ h1.adminRecipe{
 .addCorrespondance .form-group{
     width: 40%;
     margin-right: 5%;
+}
+
+/*---CREATE RECIPE---*/
+.qualityIngredient{
+    width: 90%;
+}
+.newAddedIngredient{
+    display: flex;
+    align-items: center;
+}
+.newAddedIngredient div{
+    display: flex;
+    align-items: baseline;
+}
+.newAddedIngredient > div > div{
+    display: flex;
+    flex-direction: column;
 }
 
 /*---MEAL PLANNING LIST---*/
@@ -298,6 +333,21 @@ h1.mealPlanningList{
     border-radius: 3px; 
 } */
 
+.errorPage{
+    margin-top: 5%;
+    padding: 5px;
+}
+.errorPageDiv{
+    display: flex;
+    width: 100%;
+    border: 1px dashed black;
+    padding: 10px;
+}
+.errorPageText{
+    display: flex;
+    flex-direction: column;
+}
+
 /*--RESPONSIVE--*/
 @media only screen and (max-width: 1000px) {
     .homepage .fc-header-toolbar{
@@ -321,7 +371,18 @@ h1.mealPlanningList{
         font-size: 13px;
     }
 } 
-@media only screen and (max-width: 692px) {
+@media all and (max-width: 768px) {
+    /* .formQuantity{
+        width: 15% !important;
+    }
+    .formUnit{
+        width: 24%
+    } */
+    .formQuantity .form-group{
+        margin-bottom: 1.5rem;
+    }
+} 
+@media all and (max-width: 692px) {
     .allShopList {
         border-right: none !important;
     }
@@ -357,7 +418,7 @@ h1.mealPlanningList{
         font-size: 1.3rem;
     }
     .homepage .fc-button .fc-icon{
-        font-size: 0.9rem;
+        font-size: 0.7rem;
     }
     .homepage .dropRemoveCalendar{
         font-size: 13px;
@@ -374,6 +435,9 @@ h1.mealPlanningList{
     }
     .homepage .card-text {
         font-size: 14px;
+    }
+    .homepage .notificationDeleteMealPlanning{
+        font-size: 11px;
     }
     /*--Index recipes--*/
     .select2.select2-container.select2-container--default{
@@ -458,6 +522,43 @@ h1.mealPlanningList{
         font-size: 13px;
     }
 
+    #addNewIngOnClick label, #addNewIngOnClick legend{
+        font-size: 13px;
+    }
+    .formQuantity input{
+        width: 70px;
+        margin-right: 10px;
+        margin-top: 3px;
+    }
+    .formUnit fieldset, .formIngredient fieldset{
+        margin-bottom: 0;
+    }
+    .formUnit input{
+        width: 70px;
+    }
+    .formIngredient input{
+        width: 170px;
+/*         margin-right: 18px;
+ */    }
+    .deleteIngredient{
+        font-size: 10px !important;
+        padding: 3px;
+        margin-left: auto;
+    }
+    .formAddNewRecipe .add_ingredient_link, .formEditRecipe .add_ingredient_link{
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    .editRecipe.backRecipeList{
+        margin-top: 10px;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+    .btn.btn-perso.deleteIngredient{
+        display: flex;
+        margin-top: 25px;
+    }
+
     /*--Admin options--*/
     .optionType{
         margin-right: 15px;
@@ -488,9 +589,15 @@ h1.mealPlanningList{
         font-size: 12px;
     }
     .homepage .fc-toolbar h2 {
-        font-size: 1.2rem;
+        font-size: 0.9rem;
     }
-
+    .fc-dayGridMonth-button, .fc-dayGridWeek-button{
+        padding-left: 4px;
+        padding-right: 4px;
+    }  
+    .homepage #external-events{
+        margin-top: 0px;
+    }
 
     .recipesIndex .recipeCard{
         width: 48%;
@@ -508,7 +615,7 @@ h1.mealPlanningList{
         font-size: 13px !important;
     }
     footer{
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .form-control{
@@ -595,6 +702,12 @@ h1.mealPlanningList{
         margin-top: 10px;
         font-size: 12px;
         margin-bottom: 0;
+    }
+    .btn.btn-perso.deleteIngredient{
+        display: flex;
+    }
+    .formQuantity .form-group {
+        margin-bottom: 1.1rem;
     }
 
     /*--All Options--*/
@@ -720,9 +833,6 @@ h1.mealPlanningList{
 @media only screen and (max-width: 350px) {
     .homepage .fc-header-toolbar {
         font-size: 11px !important;
-    }
-    .homepage .fc-toolbar h2 {
-        font-size: 1rem;
     }
     .optionType {
         margin-right: 0;

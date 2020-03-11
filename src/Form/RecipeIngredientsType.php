@@ -17,15 +17,18 @@ class RecipeIngredientsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity')
-            ->add('unit', MeasureUnitType::class)
+            ->add('quantity', null, ['attr' => ['class' => 'qualityIngredient']])
+            ->add('unit', MeasureUnitType::class, [
+                'attr' => ['class' => 'qualityIngredient'],
+                'label' => 'Unité (ex. kg)'
+            ])
             /* ->add('unit', CollectionType::class, [
                 'entry_type' => MeasureUnitType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'by_reference' => false,
             ]) */
-            ->add('nameIngredient', IngredientType::class)
+            ->add('nameIngredient', IngredientType::class, ['attr' => ['class' => 'qualityIngredient']])
             /* ->add('nameIngredient', CollectionType::class, [
                 'entry_type' => IngredientType::class,
                 'entry_options' => ['label' => false],

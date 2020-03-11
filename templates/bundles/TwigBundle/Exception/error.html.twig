@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <img src="/oups.jpg">
-    <h1>Oups ! Cette page n'a pas été trouvée...</h1>
-
-    <p>
-        Vérifie l'URL ou <a href="{{ path('home') }}">retourne à la page d'accueil</a>.
-    </p>
+    <div class="container errorPage">
+        <div class="errorPageDiv">
+            <img src="/oups.jpg">
+            <div class="errorPageText">
+                <h1>Désolée mais cette page n'a pas été trouvée !</h1>
+                <p>
+                    Vérifie l'URL ou <a href="{{ path('home') }}">retourne à la page d'accueil</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

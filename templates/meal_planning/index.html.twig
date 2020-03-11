@@ -37,8 +37,8 @@
                 <div class="col-md-5 col-11 allShopList">
                     <h2 class="shopListH2">Ma liste de courses</h2>
                     <div id="shopListDiv">
-                        {% for ingredient in finalIngredients %}
-                            <label><input class="inputList" type="checkbox" id="{{formatName(ingredient.name)}}" name="{{ingredient.name}}"><span>{{ ingredient.name }} : {{ ingredient.quantity|quantity(ingredient.quantity)|round(2, 'floor') }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
+                        {% for key, ingredient in finalIngredients %}
+                            <label><input class="inputList" type="checkbox" id="{{ key }}" name="{{ key }}"><span>{{ key }} : {{ingredient['quantity']|quantity(ingredient['quantity'])|round(1, 'ceil') }} {{unit(ingredient['unit'], ingredient['quantity'])}}</span></label><br/>
                         {% endfor %}
                     </div>
                     <div>

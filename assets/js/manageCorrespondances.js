@@ -18,7 +18,7 @@ var autocomplete = require('autocomplete.js');
 
             jQuery.each(inputsNames, function(k, val){
                     var id = val.id;
-                    var index = client.initIndex('dev_ingredients');
+                    var index = client.initIndex('prod_ingredients');
                     autocomplete('input#'+id, { hint: false }, [
                         {
                             source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),

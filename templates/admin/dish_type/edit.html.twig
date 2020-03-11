@@ -32,7 +32,6 @@
     {{ encore_entry_script_tags('manageRecipe') }}
     <script>
     function submitEditDishType(id){
-      console.log('submitEditType');
       var oldName = $('#editDishTypeName-'+id).val();
       var path = "/dishtype/" + id + "/edit";
       var inputName = $('#formDishType-'+oldName);

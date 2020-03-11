@@ -36,7 +36,6 @@
       <div class="col-md-4">{{ form_row(form.options) }}</div>
   </div>
   <div>{{ form_row(form.steps) }}</div>
-
   <div id="addNewIngOnClick" class="manageIngredients" data-prototype="{{ form_widget(form.recipeIngredients.vars.prototype)|e('html_attr') }}">
     {% for ingredient in form.recipeIngredients %}
       <div class="row rowIngredient form-row" style="display:flex; justify-content: space-between; align-items: center;">
@@ -49,6 +48,7 @@
     {% endfor %}
   </div>
   {{ form_rest(form) }}
-  <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+  
+  <button class="btn btn-primary saveRecipe">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}
 {% endblock %}
