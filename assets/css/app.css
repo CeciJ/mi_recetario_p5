@@ -911,3 +911,11 @@ h1.mealPlanningList{
 .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
     font-weight: bold;
 }
+
+.slick-slide {
+    height:300px !important;
+ }
+ 
+ .slick-slide img {
+    height:300px !important;
+ }
