@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  */
-//class Ingredient implements NormalizableInterface
 class Ingredient 
 {
     /**
@@ -90,7 +89,6 @@ class Ingredient
     {
         if ($this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients->removeElement($recipeIngredient);
-            // set the owning side to null (unless already changed)
             if ($recipeIngredient->getNameIngredient() === $this) {
                 $recipeIngredient->setNameIngredient(null);
             }
@@ -110,12 +108,5 @@ class Ingredient
 
         return $this;
     }
-
-    /* public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
-    {
-        return [
-            'name' => $this->getName(),
-        ];
-    } */
 
 }

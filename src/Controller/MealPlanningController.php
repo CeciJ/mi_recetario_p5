@@ -3,24 +3,19 @@
 namespace App\Controller;
 
 use DateTime;
-use DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twig\Environment;
 use App\Entity\ListSearch;
 use App\Entity\MealPlanning;
 use App\Form\ListSearchType;
-use App\Entity\RecipeIngredients;
 use App\Repository\RecipeRepository;
 use App\Repository\MealPlanningRepository;
-use App\Entity\CorrespondingWeightsUnities;
 use App\Helpers\ConverterHelper;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\RecipeIngredientsRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -38,10 +33,8 @@ class MealPlanningController extends AbstractController
         $search = new ListSearch();
         $startDay = new DateTime($startDate);
         $startDatePeriod = $search->setStartPeriod($startDay);
-        //$startDate = $startDatePeriod->format('Y-m-d');
         $endDay = new DateTime($endDate);
         $endDatePeriod = $search->setEndPeriod($endDay);
-        //$endDate = $endDatePeriod->format('Y-m-d');
 
         $finalIngredients = explode(',', $listText);
         $mealPlannings = $mealPlanningRepository->findAllQuery($search);
@@ -84,10 +77,8 @@ class MealPlanningController extends AbstractController
         $search = new ListSearch();
         $startDay = new DateTime($startDate);
         $startDatePeriod = $search->setStartPeriod($startDay);
-        //$startDate = $startDatePeriod->format('Y-m-d');
         $endDay = new DateTime($endDate);
         $endDatePeriod = $search->setEndPeriod($endDay);
-        //$endDate = $endDatePeriod->format('Y-m-d');
 
         $finalIngredients = explode(',', $listText);
 
@@ -102,7 +93,6 @@ class MealPlanningController extends AbstractController
         $message = (new \Swift_Message('Liste d\'ingrédients'))
             ->setFrom('cec.jourdan@gmail.com')
             ->setTo('cec.jourdan@gmail.com')
-            //->setReplyTo($contactMail->getEmail())
             ->setBody($renderer->render('emails/list.html.twig', [
                 'finalIngredients' => $finalIngredients,
                 'startDate' => $startDate,
@@ -133,12 +123,8 @@ class MealPlanningController extends AbstractController
     public function index(MealPlanningRepository $mealPlanningRepository, RecipeIngredientsRepository $recipeIngRepository, Request $request,  ConverterHelper $converter): Response
     {
         $search = new ListSearch();
-
         $form = $this->createForm(ListSearchType::class, $search);
         $form->handleRequest($request);
-        $startDate = new DateTime('now');
-        $endDate = new DateTime('now');
-        $endDate = $endDate->add(new DateInterval('P7D'));
 
         if($form->isSubmitted()){
             $finalList = $this->generateList($mealPlanningRepository, $search, $converter);
@@ -150,8 +136,8 @@ class MealPlanningController extends AbstractController
                 'form' => $form->createView(),
                 'finalIngredients' => $finalIngredients,
                 'meal_plannings' => $mealPlannings,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
+                'startDate' => $search->getStartPeriod(),
+                'endDate' => $search->getEndPeriod(),
                 'listText' => 'list'
             ]);
 
@@ -159,12 +145,7 @@ class MealPlanningController extends AbstractController
 
         return $this->render("meal_planning/index.html.twig", [
             'current_menu' => 'recipes',
-            'form' => $form->createView(),
-            /* 'meal_plannings' => $mealPlannings,
-            'finalIngredients' => $finalIngredients,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'listText' => 'list' */
+            'form' => $form->createView()
         ]);
        
     }
@@ -318,6 +299,11 @@ class MealPlanningController extends AbstractController
             if(array_key_exists($name, $finalIngredients)){
                 if($convertedIngredient->getUnit() == $finalIngredients[$name]['unit']){
                     $finalIngredients[$name]['quantity'] = $finalIngredients[$name]['quantity'] + $convertedIngredient->getQuantity();
+                } else {
+                    $finalIngredients[$name.$convertedIngredient->getId()] = [
+                        'quantity' => $convertedIngredient->getQuantity(),
+                        'unit' => $convertedIngredient->getUnit()
+                    ];
                 }
             } else {
                 $finalIngredients[$name] = [

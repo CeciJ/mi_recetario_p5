@@ -89,7 +89,6 @@ class CorrespondingWeightsUnities
     {
         if ($this->ingredients->contains($ingredient)) {
             $this->ingredients->removeElement($ingredient);
-            // set the owning side to null (unless already changed)
             if ($ingredient->getWeight() === $this) {
                 $ingredient->setWeight(null);
             }

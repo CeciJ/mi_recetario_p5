@@ -21,6 +21,7 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('unit', [$this, 'formatUnit']),
             new TwigFunction('formatName', [$this, 'formatName']),
+            new TwigFunction('formatDuplicatedNames', [$this, 'formatDuplicatedNames']),
         ];
     }
 
@@ -55,6 +56,20 @@ class AppExtension extends AbstractExtension
     public function formatName($name)
     {
         return $this->enleverCaracteresSpeciaux($name);
+    }
+
+    public function formatDuplicatedNames($name)
+    {
+        if(preg_match('~[0-9]~', $name)){
+            $nameFormat = str_split($name);
+            foreach($nameFormat as $key => $letter){
+                if(is_numeric($letter)){
+                    unset($nameFormat[$key]);
+                }
+            }
+            return implode($nameFormat);
+        }
+        return $name;
     }
 
     private function enleverCaracteresSpeciaux($text) {

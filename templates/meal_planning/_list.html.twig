@@ -1,8 +1,0 @@
-<h2 class="shopListH2">Ma liste de courses</h2>
-<div id="shopListDiv">
-{% if finalIngredients is defined %}
-{% for ingredient in finalIngredients %}
-    <input class="inputList" type="checkbox" id="{{ingredient.name}}" name="{{ingredient.name}}"><span>{{ ingredient.name}} : {{ ingredient.quantity|quantity(ingredient.quantity)|round(1) }} {{ unit(ingredient.unit, ingredient.quantity) }}</span></label><br>
-{% endfor %}
-{% endif %}
-</div>

@@ -1,4 +1,5 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/home.js');
+
 var $ = require('jquery');
 require('bootstrap');
 
@@ -6,7 +7,11 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 
+import 'bootstrap/js/dist/tooltip.js';
+import 'bootstrap/js/dist/popover.js';
+
 // FULLCALENDAR
+
 $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
     var containerEl = document.getElementById('external-events');
@@ -19,7 +24,7 @@ $(document).ready(function() {
         titleName = $('select option:selected').text();
     });
   
-    // initialize the external events  
+    // initialize the external events = recipes that can be dragged and dropped to calendar 
     new Draggable(containerEl, {
         itemSelector: '.fc-event',
         eventData: function(eventEl) {
@@ -51,7 +56,7 @@ $(document).ready(function() {
             today:    'Aujourd\'hui',
             month:    'mois',
             week:     'semaine',
-            day:      'jour'            
+            day:      'jour',
         },
         droppable: true, // this allows things to be dropped onto the calendar
         eventSources: [
@@ -106,7 +111,11 @@ $(document).ready(function() {
                             eventSources[0].refetch();
                         }
                     }); 
-                    alert('Recette ajoutée avec succès !');
+                    $('.successMsgNewMealPlanning').css('display', 'block');
+                    setTimeout(function(){ 
+                        $('.successMsgNewMealPlanning').css('display', 'none'); }, 
+                        3000
+                    );
                 }
             });
         },
@@ -136,7 +145,11 @@ $(document).ready(function() {
                     id: idMealPlanning 
                 },
                 success: function (event) {   
-                    alert('Menu décalé avec succès !');
+                    $('.successMsgEditMealPlanning').css('display', 'block');
+                    setTimeout(function(){ 
+                        $('.successMsgEditMealPlanning').css('display', 'none'); }, 
+                        3000
+                    );
                 }
             });
   
@@ -170,20 +183,24 @@ $(document).ready(function() {
                     },
                     success: function (event) {                            
                         eventSources[0].refetch();
-                        alert('Menu effacé avec succès !');
+                        $('.successMsgDeleteMealPlanning').css('display', 'block');
+                        setTimeout(function(){ 
+                            $('.successMsgDeleteMealPlanning').css('display', 'none'); }, 
+                            3000
+                        );
                     }
                 });
             }
         },
-        eventReceive: function(event) {
-            //event.view.el.style.color = 'white';
+        eventMouseEnter: function( mouseEnterInfo ) {
+            $(mouseEnterInfo.el).tooltip({ title: mouseEnterInfo.el.text });
         }
     });
   
     calendar.render();
-  
+
     $('#addButtonModal').click(function(e){
-    // We don't want this to act as a link so cancel the link action
+        // We don't want this to act as a link so cancel the link action
         e.preventDefault();
   
         doSubmit();
@@ -208,11 +225,19 @@ $(document).ready(function() {
                 title: titleName,
             },
             success: function (data, response, event, date) {
-                alert('Recette ajoutée avec succès !');
+                $('.successMsgNewMealPlanning').css('display', 'block');
                 eventSources[0].refetch();
+                setTimeout(function(){ 
+                    $('.successMsgNewMealPlanning').css('display', 'none'); }, 
+                    3000
+                );
             },
             error: function (data) {
-                alert('Erreur dans l\'ajout de la recette');
+                $('.failMsgMealPlanning').css('display', 'block');
+                setTimeout(function(){ 
+                    $('.failMsgMealPlanning').css('display', 'none');}, 
+                    3000
+                );
             }
         });
     }
@@ -232,9 +257,12 @@ $(document).ready(function() {
             },
             success: function (event) {                            
                 eventSources[0].refetch();
-                alert('Menu effacé avec succès !');
+                $('.successMsgDeleteMealPlanning').css('display', 'block');
+                setTimeout(function(){ 
+                    $('.successMsgDeleteMealPlanning').css('display', 'none');}, 
+                    3000
+                );
             }
         });
     }
-
 });

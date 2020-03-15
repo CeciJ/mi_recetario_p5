@@ -88,14 +88,6 @@ class RecipeIngredients
         return $this;
     }
 
-    /*
-    public function __toString() 
-    {
-        return $this->nameIngredient;
-    }
-    */
-    
-
     public function getNameIngredient(): ?Ingredient
     {
         return $this->nameIngredient;
@@ -107,21 +99,5 @@ class RecipeIngredients
 
         return $this;
     }
-
-    public function addNameIngredient(Ingredient $nameIngredientRecipe): self
-    {
-        $nameIngredientRecipe->setRecipeIngredient($this);
-        return $this;
-    }
-
-    public function removeNameIngredient(Ingredient $nameIngredient): self
-    {
-        if ($this->nameIngredient->contains($nameIngredient)) {
-            $this->nameIngredient->removeElement($nameIngredient);
-            $nameIngredient->removeRecipeIngredient($this);
-        }
-
-        return $this;
-    } 
 
 }

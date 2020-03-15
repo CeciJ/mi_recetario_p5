@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,7 +20,8 @@ class ListSearch
         $fecha = new DateTime();
         $dateStart = $fecha->format('d-m-Y');
         $this->startPeriod = new \DateTime($dateStart);
-        $this->endPeriod = new \DateTime();
+        $forEndPeriod = new \DateTime();
+        $this->endPeriod = $forEndPeriod->add(new DateInterval('P7D'));
     }
 
     public function getStartPeriod(): ?\DateTime

@@ -35,10 +35,10 @@
 
             <div class="row">
                 <div class="col-md-5 col-11 allShopList">
-                    <h2 class="shopListH2">Ma liste de courses</h2>
+                    <h2 class="shopListH2">Ma liste de courses très pratique</h2>
                     <div id="shopListDiv">
                         {% for key, ingredient in finalIngredients %}
-                            <label><input class="inputList" type="checkbox" id="{{ key }}" name="{{ key }}"><span>{{ key }} : {{ingredient['quantity']|quantity(ingredient['quantity'])|round(1, 'ceil') }} {{unit(ingredient['unit'], ingredient['quantity'])}}</span></label><br/>
+                            <label><input class="inputList" type="checkbox" id="{{ formatName(key) }}" name="{{ key }}"><span>{{ formatDuplicatedNames(key) }} : {{ingredient['quantity']|quantity(ingredient['quantity'])|round(1, 'ceil') }} {{unit(ingredient['unit'], ingredient['quantity'])}}</span></label><br/>
                         {% endfor %}
                     </div>
                     <div>
@@ -65,7 +65,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="5">Aucun menu plannifié</td>
+                                        <td colspan="5">Aucun menu planifié</td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}

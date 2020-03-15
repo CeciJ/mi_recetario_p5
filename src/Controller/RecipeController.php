@@ -248,6 +248,7 @@ class RecipeController extends AbstractController
         $repositoryUnits = $this->getDoctrine()->getRepository(MeasureUnit::class);
         foreach($recipeIngredients as $recipeIngredient){
             $ingredient = $recipeIngredient->getNameIngredient();
+            $ingredient->setName(ucfirst($recipeIngredient->getNameIngredient())); 
             $measureUnit = $recipeIngredient->getUnit();
             $ingredientToCheck = $repository->findOneBy(['name' => $ingredient->getName()]);
             $unitToCheck = $repositoryUnits->findOneBy(['unit' => $measureUnit->getUnit()]);

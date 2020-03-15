@@ -1,5 +1,4 @@
 console.log('Hello Webpack Encore! Edit me in assets/js/shopList.js');
-import $ from 'jquery';
 
 require('jquery-ui');
 require('jquery-ui/ui/widgets/datepicker.js');
@@ -52,7 +51,7 @@ require('bootstrap');
                 list.push(item);
             }
 
-            // List if click to discard some ingredients
+            // Update list if click to discard some ingredients
             $('.inputList').click(function(e){
             
                 list.length = 0;
@@ -78,6 +77,7 @@ require('bootstrap');
             });
         
             // SAVE TO PDF
+            
             var buttonExists = document.getElementById("saveToPdfButton");
             if(buttonExists){
                 buttonExists.addEventListener('click', function(e){

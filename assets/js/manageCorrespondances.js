@@ -1,4 +1,3 @@
-// Autocomplete
 console.log('Hello Webpack Encore! Edit me in assets/js/manageCorrespondances.js');
 
 var jQuery = require('jquery');
@@ -10,10 +9,9 @@ var autocomplete = require('autocomplete.js');
     'use strict';
 
     $(function() {
+        // AUTOCOMPLETE
         $(document).ready(function() {
-            // AUTOCOMPLETE
             var client = algoliasearch('D4T2HAD5AA', 'fc16edcf60c2a963d29fde015c227872');
-            //var inputsNames = document.querySelectorAll('[id^="recipe_recipeIngredients_"][id$="_nameIngredient_name"]'); 
             var inputsNames = document.querySelectorAll('#corresponding_weights_unities_Ingredient'); 
 
             jQuery.each(inputsNames, function(k, val){

@@ -6,8 +6,6 @@ use App\Entity\Option;
 use App\Entity\Recipe;
 use App\Entity\DishType;
 use App\Entity\FoodType;
-use App\Entity\MeasureUnit;
-use App\Entity\RecipeIngredients;
 use App\Form\RecipeIngredientsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -61,8 +59,7 @@ class RecipeType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-/*                 'attr' => ['class' => 'testAdd']
- */            ]);
+            ]);
         ;
     }
 

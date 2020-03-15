@@ -76,7 +76,6 @@ class MeasureUnit
     {
         if ($this->recipeIngredients->contains($recipeIngredient)) {
             $this->recipeIngredients->removeElement($recipeIngredient);
-            // set the owning side to null (unless already changed)
             if ($recipeIngredient->getUnit() === $this) {
                 $recipeIngredient->setUnit(null);
             }

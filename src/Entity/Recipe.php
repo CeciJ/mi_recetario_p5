@@ -106,13 +106,15 @@ class Recipe
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="recipe", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="recipe", fetch="EAGER", orphanRemoval=true, cascade={"persist"})
      */
     private $pictures;
 
     /**
      * @Assert\All({
-     *   @Assert\Image(mimeTypes="image/jpeg")
+     *   @Assert\Image(
+     *      mimeTypes="image/jpeg",
+     *      mimeTypesMessage="Images acceptées en format .jpg")
      * })
      */
     private $pictureFiles;

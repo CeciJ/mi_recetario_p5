@@ -6,12 +6,14 @@ var autocomplete = require('autocomplete.js');
 
 require('select2');
 require('bootstrap');
+
 $('select').select2();
 
 (function($) {
   'use strict';
 
   $(function() {
+
     // DELETE IMAGES IN RECIPE FORM
     document.querySelectorAll('[data-delete]').forEach(a => {
         a.addEventListener('click', e => {
@@ -35,7 +37,7 @@ $('select').select2();
         })
     });
 
-    // ADD RECIPE INGREDIENTS IN RECIPE FORM
+    // ADD DYNAMICALLY RECIPE INGREDIENTS IN RECIPE FORM
     var $collectionHolder;
     // setup an "add a tag" link
     var $addIngredientButton = $('<button type="button" class="add_ingredient_link btn btn-primary">Ajouter un ingrédient</button>');

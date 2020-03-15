@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\Listener;
 
 use App\Entity\MealPlanning;
 use CalendarBundle\Entity\Event;
@@ -27,8 +27,6 @@ class CalendarListener
         $end = $calendar->getEnd();
         $filters = $calendar->getFilters();
 
-        // Modify the query to fit to your entity and needs
-        // Change booking.beginAt by your start date property
         $mealPlannings = $this->mealPlanningRepository
             ->createQueryBuilder('mealPlanning')
             ->where('mealPlanning.beginAt BETWEEN :start and :end')
@@ -39,7 +37,6 @@ class CalendarListener
         ;
 
         foreach ($mealPlannings as $mealPlanning) {
-            // this create the events with your data (here booking data) to fill calendar
             $mealPlanningEvent = new Event(
                 $mealPlanning->getTitle(),
                 $mealPlanning->getBeginAt(),
@@ -59,11 +56,6 @@ class CalendarListener
             ]);
             $mealPlanningEvent->addOption(
                 'url',
-                /*
-                $this->router->generate('recipe.show', [
-                    'id' => $mealPlanning->getId(),
-                ])
-                */
                 $this->router->generate('meal_planning.show', [
                     'id' => $mealPlanning->getId(),
                 ])
@@ -74,6 +66,4 @@ class CalendarListener
             $calendar->addEvent($mealPlanningEvent);
         }
     }
-
-    // ...
 }

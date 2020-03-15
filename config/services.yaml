@@ -28,7 +28,7 @@ services:
         tags: 
         - { name: doctrine.event_subscriber }
 
-    App\EventListener\CalendarListener:
+    App\Listener\CalendarListener:
         tags:
             - { name: 'kernel.event_listener', event: 'calendar.set_data', method: load }
 

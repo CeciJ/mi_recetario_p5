@@ -1,6 +1,7 @@
 <?php
 namespace App\Listener;
 
+use App\Entity\Picture;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;

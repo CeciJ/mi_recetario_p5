@@ -20,7 +20,13 @@
         </div>
 
         <h2 class="home calendar">Mon calendrier de recettes</h2>
-        <div class="row">
+        <p class="notificationAddMealPlanning"><i class="fas fa-info-circle"></i> Cliquer sur la date pour ajouter une recette</p>
+        <p class="alert alert-success successMsgNewMealPlanning">La recette a bien été ajoutée !</p>
+        <p class="alert alert-success successMsgEditMealPlanning">La recette a bien été décalée !</p>
+        <p class="alert alert-success successMsgDeleteMealPlanning">La recette a bien été supprimée !</p>
+        <p class="alert alert-danger failMsgMealPlanning">Une erreur s'est produite. Merci de ré-essayer plus tard.</p>
+
+        <div class="calendarStructure row">
             <div class="col-md-3 col-12" id='external-events'>
                 <div id="accordion">
                     {% for categorie in foodCategories %}
@@ -58,8 +64,7 @@
             </div>
             <div class="col-md-9 col-12" id='calendar-container'>
                 <div id="calendar">
-                    {% include '@Calendar/calendar.html' %}
-                    <div id="calendarTrash"><p class="notificationDeleteMealPlanning"><img src="{{ "throw.png" }}" id="throwPhoto" alt="poubelle-icon" width="25" height="25"/>Cliquer sur la recette pour la supprimer du calendrier</p></div>
+                    <div id="calendarTrash"><p class="notificationDeleteMealPlanning"><i class="fas fa-trash-alt"></i> Cliquer sur la recette pour la supprimer du calendrier</p></div>
                 </div>
             </div>
         </div>
@@ -123,6 +128,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/list@4.1.0/main.min.css">
     {{ parent() }}
 {% endblock %}
 
