@@ -616,6 +616,16 @@ h1.mealPlanningList{
     .homepage .fc-button .fc-icon{
         font-size: 0.7rem;
     }
+    .successMsgNewMealPlanning, .successMsgEditMealPlanning, .successMsgDeleteMealPlanning{
+        position: relative;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.7rem;
+        border-radius: 0.25rem;
+        font-size: 11px;
+        display: none;
+        margin-top: 10px;   
+    }
+
     .recipeCard img {
         width: 100%;
         height: 100px;
