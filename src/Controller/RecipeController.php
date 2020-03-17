@@ -29,7 +29,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Algolia\SearchBundle\SearchService;
 use Algolia\SearchBundle\SearchServiceInterface;
 
-
 class RecipeController extends AbstractController 
 {
 

@@ -40,47 +40,36 @@ require('bootstrap');
         });
 
         // CHECK INGREDIENTS
-        $(document).ready(function() {
+        function generateListForMailAndPdf(ingredients){
             var list = [];
-            var ingredients = document.querySelectorAll('.inputList');
-            // List with all ingredients 
-            var length = ingredients.length;
-            var i = 0;
-            for(i = 0; i < length; i++){
-                var item = ingredients[i].nextSibling.innerText;
-                list.push(item);
-            }
-
-            // Update list if click to discard some ingredients
-            $('.inputList').click(function(e){
-            
-                list.length = 0;
-                $(this).addClass("checked");
-                var span = this.nextSibling;
-                var content = span.innerText;
-                $(span).css('text-decoration', 'line-through');
-                $(span).css('color', 'grey');
-
-                var i;
-                if(list.length == 0){
-                    for (i = 0; i < ingredients.length; i++) {
-                        if(!ingredients[i].classList.contains('checked') /* && !list.includes(ingredients[i]) */){
-                            list.push(ingredients[i].nextSibling.innerText);
-                        }
+            var i;
+            if(list.length == 0){
+                for (i = 0; i < ingredients.length; i++) {
+                    if(!ingredients[i].classList.contains('checked')){
+                        list.push(ingredients[i].nextSibling.innerText);
                     }
-                } 
-                if(list.includes(this.nextSibling.innerText)){
-                    var index = list.indexOf(this.nextSibling.innerText);
-                    list.splice(index, 1);
                 }
+            } 
+            return list;
+        }
 
+        $(document).ready(function() {
+
+            var ingredients = document.querySelectorAll('.inputList');
+
+            $('.inputList').click(function(e){
+                $(this).toggleClass("checked");
+                var span = this.nextSibling;
+                $(span).toggleClass("ingredientChecked");
             });
-        
+
             // SAVE TO PDF
             
             var buttonExists = document.getElementById("saveToPdfButton");
             if(buttonExists){
                 buttonExists.addEventListener('click', function(e){
+                    var list = generateListForMailAndPdf(ingredients);
+                    console.log(list);
                     var start = document.getElementById("startPeriod").value;
                     var end = document.getElementById("endPeriod").value;
                 
@@ -98,9 +87,10 @@ require('bootstrap');
 
                 var buttonMail = document.getElementById('sendMailButton');
                 buttonMail.addEventListener('click', function(e){
+                    var list = generateListForMailAndPdf(ingredients);
+                    
                     var start = document.getElementById("startPeriod").value;
                     var end = document.getElementById("endPeriod").value;
-                
                     
                     var startDate = start+'T00:00:00Z';
                     var endDate = end+'T00:00:00Z';

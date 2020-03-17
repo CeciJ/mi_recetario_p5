@@ -2,7 +2,7 @@
     <h2>Mes repas</h2>
     <ul>
         {% for meal_planning in meal_plannings %}
-            <li>{{meal_planning.beginAt|date('l d-m-Y')}} - {{meal_planning.title}}</li>
+            <li>{{meal_planning.beginAt|date('d-m-Y')}} - {{meal_planning.title}}</li>
         {% endfor %}
     </ul>
 

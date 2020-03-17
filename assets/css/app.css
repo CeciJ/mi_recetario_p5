@@ -331,6 +331,10 @@ h1.mealPlanningList{
 .form-row-period{
     display: flex;
 }
+.ingredientChecked{
+    text-decoration: line-through;
+    color: grey;
+}
 
 /*Recipe details*/
 /* #contentRecipe{
@@ -446,7 +450,7 @@ h1.mealPlanningList{
         margin-bottom: 5px !important;
     }
     .homepage h5.card-title {
-        font-size: 18px;
+        font-size: 15px;
     }
     .homepage .card-text {
         font-size: 14px;
@@ -522,6 +526,9 @@ h1.mealPlanningList{
         border: 0 !important;
         border-left: 5px solid #fbac03 !important;
         border-radius: 25px;
+    }
+    .homepage div.card-body{
+        padding: 1rem;
     }
 
     /*--Admin recipe--*/
