@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Consulter les unités enregistrées en base de données' %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 recipeManagement">
+
+        <a href="{{ path('admin.recipe.index') }}" class="btn btn-primary backRecipeList">Revenir à la liste de recettes</a>
+
+        <h1 class="adminRecipe">Unités de mesure en base de données</h1>
+
+        <ul class="listUnits">
+            {% for unit in units %}
+                <li class="unit">{{ unit.unit }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    
+{% endblock %}

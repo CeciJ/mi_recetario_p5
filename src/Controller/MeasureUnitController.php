@@ -16,7 +16,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class MeasureUnitController extends AbstractController
 {
-    
+
+    /**
+     * @Route("/", name="admin.measure_unit.index", methods={"GET", "POST"})
+     */
+    public function index(Request $request, MeasureUnitRepository $measureUnitRepository): Response
+    {
+        return $this->render('admin/measure_unit/index.html.twig', [
+            'units' => $measureUnitRepository->findAllDistinct(),
+        ]);
+    }
+
     /**
      * @Route("/new", name="admin.measure_unit.new", methods={"GET","POST"})
      */
