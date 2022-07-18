@@ -20,7 +20,7 @@
         "autocomplete.js": "^0.37.1",
         "bootstrap": "4.4.1",
         "jquery": "^3.5.0",
-        "jquery-ui": "^1.12.1",
+        "jquery-ui": "^1.13.2",
         "lodash": "^4.17.19",
         "popper.js": "^1.16.0",
         "select2": "^4.0.8",
